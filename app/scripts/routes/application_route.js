@@ -1,7 +1,11 @@
 App.ApplicationRoute = Ember.Route.extend({
     // admittedly, this should be in IndexRoute and not in the
     // top level ApplicationRoute; we're in transition... :-)
-    model: function () {
-        return ['red', 'yellow', 'blue'];
+    // model: function () {
+    //     return ['red', 'yellow', 'blue'];
+    // }
+    setupController: function(controller, model) {
+        this.controllerFor('requirements').set('model', this.store.find('requirement'));
+        this._super.apply(this, arguments);
     }
 });

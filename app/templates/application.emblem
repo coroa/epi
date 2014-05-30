@@ -1,0 +1,14 @@
+#main.container
+  .row
+    .sidebar-nav.col-md-2
+      strong Vaccines
+      ul.nav.nav-pills.nav-stacked
+        each req in controllers.requirements
+          link-to "requirement" req tagName="li" href=false
+            link-to "requirement" req
+              = req.name
+        li.text-center
+          link-to "add"
+            span.glyphicon.glyphicon-plus
+    .col-md-10
+      = outlet
