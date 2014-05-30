@@ -31,6 +31,10 @@ module.exports = function (grunt) {
                 files: '<%= yeoman.app %>/templates/**/*.hbs',
                 tasks: ['emberTemplates']
             },
+            emblem: {
+                files: '<%= yeoman.app %>/templates/**/*.emblem',
+                tasks: ['emblem']
+            },
             compass: {
                 files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
                 tasks: ['compass:server']
@@ -295,20 +299,42 @@ module.exports = function (grunt) {
         concurrent: {
             server: [
                 'emberTemplates',
+                'emblem',
                 'compass:server'
             ],
             test: [
                 'emberTemplates',
+                'emblem',
                 'compass'
             ],
             dist: [
                 'emberTemplates',
+                'emblem',
                 'compass:dist',
                 'imagemin',
                 'svgmin',
                 'htmlmin'
             ]
         },
+
+        emblem: {
+            compile: {
+                files: {
+                    '.tmp/scripts/compiled-emblem-templates.js': '<%= yeoman.app %>/templates{,*/}*.emblem'
+                    // 'path/to/another.js': ['path/to/sources/*.emblem', 'path/to/more/*.emblem'] //compile and concat into single file
+                },
+                options: {
+                    root: 'app/templates/',
+                    dependencies: {
+                        jquery: 'app/bower_components/jquery/jquery.js',
+                        ember: 'app/bower_components/ember/ember.js',
+                        emblem: 'app/bower_components/emblem/dist/emblem.js',
+                        handlebars: 'app/bower_components/handlebars/handlebars.js'
+                    }
+                }
+            }
+        },
+
         emberTemplates: {
             options: {
                 templateName: function (sourceFile) {

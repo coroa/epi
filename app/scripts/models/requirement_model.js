@@ -9,7 +9,15 @@ App.Requirement = DS.Model.extend({
     target_percent: attr('number'),
     wastage_rate: attr('number'),
     safety_stock: attr('number'),
-    inuse: attr('boolean')
+    inuse: attr('boolean'),
+    vaccine_schedule_factor: function() {
+        return +(this.get('vaccine_volume') * this.get('doses_series') *
+                 (this.get('target_percent') / 100)).toFixed(2);
+    }.property('vaccine_volume', 'doses_series', 'target_percent'),
+    diluent_schedule_factor: function() {
+        return +(this.get('diluent_volume') * this.get('doses_series') *
+                 (this.get('target_percent') / 100)).toFixed(2);
+    }.property('diluent_volume', 'doses_series', 'target_percent')
 });
 
 App.Requirement.FIXTURES = [

@@ -1,0 +1,59 @@
+.col-sm-8
+  h1
+    = name
+    small  ({{doses_per_vial}} doses per vial)
+
+  h2 Schedule Parameters
+
+  form.form-horizontal role="form"
+    .row
+      .col-sm-3.col-sm-offset-6.text-center style="font-size: x-small" Vaccine
+      .col-sm-3.text-center style="font-size: x-small" Diluent
+    .form-group
+      label.col-sm-6.control-label
+        ' Volume per dose
+        small (cm<sup>3</sup>/dose)
+      .col-sm-3 = input type="text" value=vaccine_volume class="form-control"
+      .col-sm-3 = input type="text" value=diluent_volume class="form-control"
+    .form-group
+      label.col-sm-6.control-label Doses to complete schedule
+      .col-sm-4.col-sm-offset-1
+        = input type="text" value=doses_series class="form-control"
+    .form-group
+      label.col-sm-6.control-label
+        ' Immunization target
+        small % of Total Population
+      .col-sm-4.col-sm-offset-1.input-group
+        = input type="text" value=target_percent class="form-control"
+        span.input-group-addon %
+
+    .row
+      .col-sm-3.col-sm-offset-6.text-center style="font-size: x-small" Vaccine
+      .col-sm-3.text-center style="font-size: x-small" Diluent
+    .form-group
+      label.col-sm-6.control-label
+        ' Storage factor
+        small Formula
+      .col-sm-3.text-center = vaccine_schedule_factor
+      .col-sm-3.text-center = diluent_schedule_factor
+
+
+  h2 Storage Parameters
+
+  form.form-horizontal role="form"
+    .form-group
+      label.col-sm-6.control-label
+        ' Wastage rate
+      .col-sm-offset-1.col-sm-4.input-group
+        = input type="text" value=wastage_rate class="form-control"
+        span.input-group-addon %
+    .form-group
+      label.col-sm-6.control-label
+        ' Safety stock
+      .col-sm-offset-1.col-sm-4.input-group
+        = input type="text" value=safety_stock class="form-control"
+        span.input-group-addon %
+
+  
+
+.col-sm-4 figures
