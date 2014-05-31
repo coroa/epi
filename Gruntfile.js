@@ -94,6 +94,7 @@ module.exports = function (grunt) {
         },
         open: {
             server: {
+                app: 'chromium',
                 path: 'http://localhost:<%= connect.options.port %>'
             }
         },
