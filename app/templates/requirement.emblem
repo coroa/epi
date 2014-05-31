@@ -1,7 +1,8 @@
 .col-sm-8
   h1
-    = name
-    small  ({{doses_per_vial}} doses per vial)
+    with vaccine
+      = name
+      small  ({{doses_per_vial}} doses per vial)
 
   h2 Schedule Parameters
 
@@ -13,12 +14,12 @@
       label.col-sm-6.control-label
         ' Volume per dose
         small (cm<sup>3</sup>/dose)
-      .col-sm-3 = input type="text" value=vaccine_volume class="form-control"
-      .col-sm-3 = input type="text" value=diluent_volume class="form-control"
+      .col-sm-3 = input type="text" value=vaccine_volume classBinding=":form-control isVaccineVolumeCustom:btn-warning:btn-success"
+      .col-sm-3 = input type="text" value=diluent_volume classBinding=":form-control isDiluentVolumeCustom:btn-warning:btn-success"
     .form-group
       label.col-sm-6.control-label Doses to complete schedule
       .col-sm-4.col-sm-offset-1
-        = input type="text" value=doses_series class="form-control"
+        = input type="text" value=doses_series classBinding=":form-control isDosesSeriesCustom:btn-warning:btn-success"
     .form-group
       label.col-sm-6.control-label
         ' Immunization target
@@ -45,7 +46,7 @@
       label.col-sm-6.control-label
         ' Wastage rate
       .col-sm-offset-1.col-sm-4.input-group
-        = input type="text" value=wastage_rate class="form-control"
+        = input type="text" value=wastage_rate classBinding=":form-control isWastageRateCustom:btn-warning:btn-success"
         span.input-group-addon %
     .form-group
       label.col-sm-6.control-label

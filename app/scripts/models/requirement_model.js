@@ -1,8 +1,8 @@
 var attr = DS.attr;
 
 App.Requirement = DS.Model.extend({
-    name: attr('string'),
-    doses_per_vial: attr('number'),
+    type: attr('string'),
+    vaccine: DS.belongsTo('vaccine'),
     vaccine_volume: attr('number'),
     diluent_volume: attr('number'),
     doses_series: attr('number'),
@@ -10,6 +10,7 @@ App.Requirement = DS.Model.extend({
     wastage_rate: attr('number'),
     safety_stock: attr('number'),
     inuse: attr('boolean'),
+
     vaccine_schedule_factor: function() {
         return +(this.get('vaccine_volume') * this.get('doses_series') *
                  (this.get('target_percent') / 100)).toFixed(2);
@@ -22,8 +23,8 @@ App.Requirement = DS.Model.extend({
 
 App.Requirement.FIXTURES = [
     { id: 1,
-      name: 'BCG',
-      doses_per_vial: 20,
+      type: 'routine',
+      vaccine: 1,
       vaccine_volume: 1.2,
       diluent_volume: 1.1,
       doses_series: 1,
@@ -32,8 +33,8 @@ App.Requirement.FIXTURES = [
       safety_stock: 25,
       inuse: true },
     { id: 2,
-      name: 'OPV',
-      doses_per_vial: 10,
+      type: 'routine',
+      vaccine: 3,
       vaccine_volume: 2.0,
       diluent_volume: 0,
       doses_series: 3,
