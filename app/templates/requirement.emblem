@@ -10,9 +10,10 @@
     .row
       .col-sm-3.col-sm-offset-6.text-center style="font-size: x-small" Vaccine
       .col-sm-3.text-center style="font-size: x-small" Diluent
-    labelled-input2 value1=vaccine_volume isCustom1=isVaccineVolumeCustom value2=diluent_volume isCustom2=isDiluentVolumeCustom
-      ' Volume per dose 
-    labelled-input value=doses_series isCustom=isDosesSeriesCustom
+    labelled-input2 value1=vaccine_volume default1=vaccine.vaccine_volume value2=diluent_volume default2=vaccine.diluent_volume
+      ' Volume per dose
+      small (in cm<sup>3</sup>)
+    labelled-input value=doses_series default=vaccine.doses_series
       ' Doses to complete schedule
     labelled-input value=target_percent addon="%"
       ' Immunization target
@@ -32,19 +33,10 @@
   h2 Storage Parameters
 
   form.form-horizontal role="form"
-    .form-group
-      label.col-sm-6.control-label
-        ' Wastage rate
-      .col-sm-offset-1.col-sm-4.input-group
-        = input type="text" value=wastage_rate classBinding=":form-control isWastageRateCustom:btn-warning:btn-success"
-        span.input-group-addon %
-    .form-group
-      label.col-sm-6.control-label
-        ' Safety stock
-      .col-sm-offset-1.col-sm-4.input-group
-        = input type="text" value=safety_stock class="form-control"
-        span.input-group-addon %
-
+    labelled-input value=wastage_rate default=vaccine.wastage_rate addon="%"
+      ' Wastage rate
+    labelled-input value=safety_stock addon="%"
+      ' Safety stock
   
 
 .col-sm-4

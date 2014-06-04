@@ -1,5 +1,0 @@
-label.col-sm-6.control-label
-  = yield
-.col-sm-4.col-sm-offset-1.input-group
-  = input type="text" value=value classBinding=":form-control isCustom:btn-warning:btn-success"
-  span.input-group-addon = addon

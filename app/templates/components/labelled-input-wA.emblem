@@ -1,0 +1,8 @@
+label.col-sm-6.control-label for=labelFor
+  = yield
+.col-sm-4.col-sm-offset-1.input-group
+  = view inputView
+  if isCustom
+    span.glyphicon.glyphicon-remove.form-control-feedback.has-addon click="reset"
+  span.input-group-addon = addon
+

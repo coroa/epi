@@ -11,3 +11,20 @@ label small {
     font-size: smaller;
     display: block;
 }
+
+// workaround
+
+.has-feedback .form-control-feedback {
+    position: absolute;
+    top: 1px;
+    right: 15px;
+    display: block;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+}
+
+.has-feedback .form-control-feedback.has-addon {
+    right: 52px;
+}
