@@ -1,0 +1,5 @@
+label.col-sm-6.control-label
+  = yield
+.col-sm-4.col-sm-offset-1.input-group
+  = input type="text" value=value class="form-control"
+  span.input-group-addon = addon

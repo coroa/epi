@@ -1,0 +1,11 @@
+.form-group.has-feedback
+  label.col-sm-6.control-label
+    = yield
+  .col-sm-3
+    = input type="text" value=value1 classBinding=":form-control isCustom1:btn-warning:btn-success"
+    if isCustom1
+      span.glyphicon.glyphicon-remove.form-control-feedback
+  .col-sm-3
+    = input type="text" value=value2 classBinding=":form-control isCustom2:btn-warning:btn-success"
+    if isCustom2
+      span.glyphicon.glyphicon-remove.form-control-feedback

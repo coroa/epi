@@ -10,23 +10,13 @@
     .row
       .col-sm-3.col-sm-offset-6.text-center style="font-size: x-small" Vaccine
       .col-sm-3.text-center style="font-size: x-small" Diluent
-    .form-group
-      label.col-sm-6.control-label
-        ' Volume per dose
-        small (cm<sup>3</sup>/dose)
-      .col-sm-3 = input type="text" value=vaccine_volume classBinding=":form-control isVaccineVolumeCustom:btn-warning:btn-success"
-      .col-sm-3 = input type="text" value=diluent_volume classBinding=":form-control isDiluentVolumeCustom:btn-warning:btn-success"
-    .form-group
-      label.col-sm-6.control-label Doses to complete schedule
-      .col-sm-4.col-sm-offset-1
-        = input type="text" value=doses_series classBinding=":form-control isDosesSeriesCustom:btn-warning:btn-success"
-    .form-group
-      label.col-sm-6.control-label
-        ' Immunization target
-        small % of Total Population
-      .col-sm-4.col-sm-offset-1.input-group
-        = input type="text" value=target_percent class="form-control"
-        span.input-group-addon %
+    labelled-input2 value1=vaccine_volume isCustom1=isVaccineVolumeCustom value2=diluent_volume isCustom2=isDiluentVolumeCustom
+      ' Volume per dose 
+    labelled-input value=doses_series isCustom=isDosesSeriesCustom
+      ' Doses to complete schedule
+    labelled-input value=target_percent addon="%"
+      ' Immunization target
+      small % of Total Population
 
     .row
       .col-sm-3.col-sm-offset-6.text-center style="font-size: x-small" Vaccine
@@ -57,4 +47,6 @@
 
   
 
-.col-sm-4 figures
+.col-sm-4
+  strong Chart
+  horizontal-bar-epi-chart data=data selectedSortType="label" minBarThickness=100 marginLeft=100 marginRight=0 labelWidth=100
