@@ -28,3 +28,21 @@ label small {
 .has-feedback .form-control-feedback.has-addon {
     right: 52px;
 }
+
+.form-group.has-header-label {
+    margin-top: 30px;
+}
+
+.header-label {
+    position: relative;
+    height: 0px;
+    top: -15px;
+    font-size: x-small;
+
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+.form-group > .header-label {
+    margin-top: 20px;
+}

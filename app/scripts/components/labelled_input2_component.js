@@ -24,7 +24,7 @@ var make_input_view = function(which) {
     };
 
 App.LabelledInput2Component = Ember.Component.extend({
-    classNames: ['form-group'],
+    classNames: ['form-group', 'has-header-label'],
     labelFor1: null,
     labelFor2: null,
     isCustom1: make_is_custom("1"),

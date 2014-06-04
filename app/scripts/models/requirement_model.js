@@ -13,11 +13,11 @@ App.Requirement = DS.Model.extend({
 
     vaccine_schedule_factor: function() {
         return +(this.get('vaccine_volume') * this.get('doses_series') *
-                 (this.get('target_percent') / 100)).toFixed(2);
+                 (this.get('target_percent') / 100)).toFixed(3);
     }.property('vaccine_volume', 'doses_series', 'target_percent'),
     diluent_schedule_factor: function() {
         return +(this.get('diluent_volume') * this.get('doses_series') *
-                 (this.get('target_percent') / 100)).toFixed(2);
+                 (this.get('target_percent') / 100)).toFixed(3);
     }.property('diluent_volume', 'doses_series', 'target_percent')
 });
 

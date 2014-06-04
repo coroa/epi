@@ -7,9 +7,6 @@
   h2 Schedule Parameters
 
   form.form-horizontal role="form"
-    .row
-      .col-sm-3.col-sm-offset-6.text-center style="font-size: x-small" Vaccine
-      .col-sm-3.text-center style="font-size: x-small" Diluent
     labelled-input2 value1=vaccine_volume default1=vaccine.vaccine_volume value2=diluent_volume default2=vaccine.diluent_volume
       ' Volume per dose
       small (in cm<sup>3</sup>)
@@ -19,15 +16,16 @@
       ' Immunization target
       small % of Total Population
 
-    .row
-      .col-sm-3.col-sm-offset-6.text-center style="font-size: x-small" Vaccine
-      .col-sm-3.text-center style="font-size: x-small" Diluent
-    .form-group
+    .form-group.has-header-label
       label.col-sm-6.control-label
         ' Storage factor
         small Formula
-      .col-sm-3.text-center = vaccine_schedule_factor
-      .col-sm-3.text-center = diluent_schedule_factor
+      .col-sm-3.text-center
+        span.header-label Vaccine
+        = vaccine_schedule_factor
+      .col-sm-3.text-center
+        span.header-label Diluent
+        = diluent_schedule_factor
 
 
   h2 Storage Parameters
