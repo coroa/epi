@@ -27,6 +27,14 @@ module.exports = function (grunt) {
     grunt.initConfig({
         yeoman: yeomanConfig,
         watch: {
+            replace: {
+                files: '<%= yeoman.app %>/index.html',
+                tasks: ['replace:app']
+            },
+            copy: {
+                files: '<%= yeoman.app %>/scripts/{,*/}*.js',
+                tasks: ['copy:scripts']
+            },
             emberTemplates: {
                 files: '<%= yeoman.app %>/templates/**/*.hbs',
                 tasks: ['emberTemplates']
@@ -35,12 +43,21 @@ module.exports = function (grunt) {
                 files: '<%= yeoman.app %>/templates/**/*.emblem',
                 tasks: ['emblem']
             },
+            coffee: {
+                files: ['<%= yeoman.app %>/scripts/{,*/}*.coffee'],
+                tasks: ['coffee:dist']
+            },
+            coffeeTest: {
+                files: ['test/spec/{,*/}*.coffee'],
+                tasks: ['coffee:test']
+            },
             compass: {
                 files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
                 tasks: ['compass:server']
             },
             neuter: {
-                files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
+                files: ['.tmp/scripts/{,*/}*.js',
+                        '!.tmp/scripts/combined-scripts.js'],
                 tasks: ['neuter']
             },
             livereload: {
@@ -48,8 +65,9 @@ module.exports = function (grunt) {
                     livereload: LIVERELOAD_PORT
                 },
                 files: [
-                    '.tmp/scripts/*.js',
-                    '<%= yeoman.app %>/*.html',
+                    '.tmp/scripts/combined-scripts.js',
+                    '.tmp/scripts/compiled{,-ember}-templates.js',
+                    './tmp/*.html',
                     '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
                     '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
@@ -129,6 +147,26 @@ module.exports = function (grunt) {
                     run: true,
                     urls: ['http://localhost:<%= connect.options.port %>/index.html']
                 }
+            }
+        },
+        coffee: {
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= yeoman.app %>/scripts',
+                    src: '{,*/}*.coffee',
+                    dest: '.tmp/scripts',
+                    ext: '.js'
+                }]
+            },
+            test: {
+                files: [{
+                    expand: true,
+                    cwd: 'test/spec',
+                    src: '{,*/}*.coffee',
+                    dest: '.tmp/spec',
+                    ext: '.js'
+                }]
             }
         },
         compass: {
@@ -265,15 +303,27 @@ module.exports = function (grunt) {
         },
         // Put files not handled in other tasks here
         copy: {
+            scripts: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= yeoman.app %>/scripts',
+                        dest: '.tmp/scripts/',
+                        src: [
+                            '{,*/}*.js'
+                        ]
+                    }
+                ]
+            },
             fonts: {
                 files: [
-                    { 
+                    {
                         expand: true,
                         flatten: true,
                         filter: 'isFile',
                         cwd: '<%= yeoman.app %>/bower_components/',
                         dest: '<%= yeoman.app %>/styles/fonts/',
-                        src: [ 
+                        src: [
                             'bootstrap-sass/dist/fonts/**', // Bootstrap
                             'font-awesome/fonts/**' // Font-Awesome
                         ]
@@ -301,16 +351,19 @@ module.exports = function (grunt) {
             server: [
                 'emberTemplates',
                 'emblem',
+                'coffee:dist',
                 'compass:server'
             ],
             test: [
                 'emberTemplates',
                 'emblem',
+                'coffee',
                 'compass'
             ],
             dist: [
                 'emberTemplates',
                 'emblem',
+                'coffee',
                 'compass:dist',
                 'imagemin',
                 'svgmin',
@@ -321,8 +374,7 @@ module.exports = function (grunt) {
         emblem: {
             compile: {
                 files: {
-                    '.tmp/scripts/compiled-emblem-templates.js': '<%= yeoman.app %>/templates{,*/}*.emblem'
-                    // 'path/to/another.js': ['path/to/sources/*.emblem', 'path/to/more/*.emblem'] //compile and concat into single file
+                    '.tmp/scripts/compiled-emblem-templates.js': '<%= yeoman.app %>/templates/**/*.emblem'
                 },
                 options: {
                     root: 'app/templates/',
@@ -352,11 +404,12 @@ module.exports = function (grunt) {
         neuter: {
             app: {
                 options: {
+                    template: "{%= src %}",
                     filepathTransform: function (filepath) {
-                        return yeomanConfig.app + '/' + filepath;
+                        return '.tmp/' + filepath;
                     }
                 },
-                src: '<%= yeoman.app %>/scripts/app.js',
+                src: ['.tmp/scripts/app.js'],
                 dest: '.tmp/scripts/combined-scripts.js'
             }
         }
@@ -376,6 +429,7 @@ module.exports = function (grunt) {
             'clean:server',
             'replace:app',
             'concurrent:server',
+            'copy:scripts',
             'neuter:app',
             'copy:fonts',
             'connect:livereload',
@@ -389,6 +443,7 @@ module.exports = function (grunt) {
         'replace:app',
         'concurrent:test',
         'connect:test',
+        'copy:scripts',
         'neuter:app',
         'mocha'
     ]);
@@ -398,6 +453,7 @@ module.exports = function (grunt) {
         'replace:dist',
         'useminPrepare',
         'concurrent:dist',
+        'copy:scripts',
         'neuter:app',
         'concat',
         'cssmin',
