@@ -10,7 +10,7 @@
     labelled-input2 value1=vaccine_volume default1=vaccine.vaccine_volume value2=diluent_volume default2=vaccine.diluent_volume
       ' Volume per dose
       small (in cm<sup>3</sup>)
-    labelled-input value=doses_series default=vaccine.doses_series
+    labelled-input value=doses_course default=vaccine.doses_course
       ' Doses to complete schedule
     labelled-input value=target_percent addon="%"
       ' Immunization target

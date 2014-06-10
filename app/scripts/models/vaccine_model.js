@@ -9,7 +9,7 @@ App.Vaccine = DS.Model.extend({
     doses_per_vial: attr('number'),
     vaccine_volume: attr('number'),
     diluent_volume: attr('number'),
-    doses_series: attr('number'),
+    doses_course: attr('number'),
     wastage_rate: attr('number')
 });
 
@@ -24,7 +24,7 @@ App.Vaccine.FIXTURES = [
       doses_per_vial: 10,
       vaccine_volume: 1.2,
       diluent_volume: 1.1,
-      doses_series: 1,
+      doses_course: 1,
       wastage_rate: 60
     },
     { id: 2,
@@ -37,7 +37,7 @@ App.Vaccine.FIXTURES = [
       doses_per_vial: 20,
       vaccine_volume: 1.2,
       diluent_volume: 1.1,
-      doses_series: 1,
+      doses_course: 1,
       wastage_rate: 60
     },
     { id: 3,
@@ -49,7 +49,7 @@ App.Vaccine.FIXTURES = [
       doses_per_vial: 20,
       vaccine_volume: 2.0,
       diluent_volume: 0,
-      doses_series: 3,
+      doses_course: 3,
       wastage_rate: 25
     }
 ];
