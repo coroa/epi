@@ -6,19 +6,19 @@ App.Requirement = DS.Model.extend({
     vaccine_volume: attr('number'),
     diluent_volume: attr('number'),
     doses_course: attr('number'),
-    target_percent: attr('number'),
+    elligible_percent: attr('number'),
     wastage_rate: attr('number'),
     safety_stock: attr('number'),
     inuse: attr('boolean'),
 
-    vaccine_schedule_factor: function() {
+    vaccine_volume_per_course: function() {
         return +(this.get('vaccine_volume') * this.get('doses_course') *
-                 (this.get('target_percent') / 100)).toFixed(3);
-    }.property('vaccine_volume', 'doses_course', 'target_percent'),
-    diluent_schedule_factor: function() {
+                 (this.get('elligible_percent') / 100)).toFixed(3);
+    }.property('vaccine_volume', 'doses_course', 'elligible_percent'),
+    diluent_volume_per_course: function() {
         return +(this.get('diluent_volume') * this.get('doses_course') *
-                 (this.get('target_percent') / 100)).toFixed(3);
-    }.property('diluent_volume', 'doses_course', 'target_percent')
+                 (this.get('elligible_percent') / 100)).toFixed(3);
+    }.property('diluent_volume', 'doses_course', 'elligible_percent')
 });
 
 App.Requirement.FIXTURES = [
@@ -28,7 +28,7 @@ App.Requirement.FIXTURES = [
       vaccine_volume: 1.2,
       diluent_volume: 1.1,
       doses_course: 1,
-      target_percent: 3.1,
+      elligible_percent: 3.1,
       wastage_rate: 60,
       safety_stock: 25,
       inuse: true },
@@ -38,7 +38,7 @@ App.Requirement.FIXTURES = [
       vaccine_volume: 2.0,
       diluent_volume: 0,
       doses_course: 3,
-      target_percent: 3.1,
+      elligible_percent: 3.1,
       wastage_rate: 25,
       safety_stock: 25,
       inuse: true }

@@ -1,18 +1,19 @@
-#main.container
-  .row
-    .sidebar-nav.col-md-2
-      each controllers.requirements.types
-        strong = type
-        ul.nav.nav-pills.nav-stacked
-          each req in vaccines
-            link-to "requirement" req tagName="li" href=false
-              link-to "requirement" req
-                with req.vaccine
-                  = name
-                  span.badge.pull-right = doses_per_vial
-          li.text-center
-            link-to "add"
-              span.glyphicon.glyphicon-plus
+nav.navbar.navbar-default.navbar-fixed-top role="navigation"
+  .container-fluid
+    .navbar-header
+      button.navbar-toggle type="button" data-toggle="collapse" data-target="#bs-navbar-collapse"
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      link-to "index" class="navbar-brand"
+        | EPI
 
-    .col-md-10
-      = outlet
+    #bs-navbar-collapse.collapse.navbar-collapse
+      ul.nav.navbar-nav
+        each steps
+          link-to route tagName="li" href=false
+            a href="#" = name
+      
+#main.container
+  outlet

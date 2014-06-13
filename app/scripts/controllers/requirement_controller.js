@@ -1,5 +1,20 @@
 App.RequirementController = Ember.ObjectController.extend({
-    needs: ['requirements'],
+    needs: ['requirements', 'vaccines'],
+    presentation_disabled: function() {
+        return this.get('vaccine_initials') === undefined;
+    }.property('vaccine_initials'),
+    forms_disabled: function() {
+        return this.get('vaccine_initials') == undefined ||
+            this.get('vaccine_id') == undefined;
+    }.property('vaccine_initials', 'vaccine_id'),
+    update_vaccine: function() {
+        if (this.get('vaccine_id') !== undefined) {
+            var _ = this;
+            this.store.find('vaccine',
+                            this.get('vaccine_id')).then(function(x) {
+                                _.set("vaccine", x); });
+        }
+    }.observes('vaccine.id'),
     data: function() {
         var reqs = this.get("controllers.requirements");
         var ret = reqs.map(function(req, index, en) {

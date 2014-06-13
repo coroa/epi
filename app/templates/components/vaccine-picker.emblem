@@ -1,0 +1,18 @@
+.btn-group class=isInitialsVisible:open
+  button.btn.btn-default.dropdown-toggle type="button" click="toggleInitialsVisible"
+    curInitials
+    '
+    span.caret
+  ul#initials.dropdown-menu role="menu"
+    each ini in initials
+      li: a href="#" click="setInitials ini": ini
+.btn-group class=isVaccineDetailsVisible:open
+  button.btn.btn-default.dropdown-toggle type="button" click="toggleVaccineDetailsVisible"
+    vaccine.doses_per_vial
+    '
+    span.caret
+  ul#details.dropdown-menu keyDown="handleKey" role="menu"
+    li.dropdown-header role="presentation" Select the presentation
+    each filteredVaccines
+      li: a href="#" click="setVaccine this": doses_per_vial
+  

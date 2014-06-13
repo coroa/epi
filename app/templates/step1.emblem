@@ -1,0 +1,37 @@
+each controllers.requirements.services
+  h2 = type
+  .table-responsive
+    form role="form"
+      table.table.table-striped.table-condensed.vaccine-table
+        colgroup
+          col width="100"
+          col width="100"
+          col width="100"
+          col width="100"
+          col width="100"
+          col width="100"
+          col width="100"
+          col width="100"
+        tr
+          th rowspan="2" Vaccine
+          th rowspan="2" % of total population elligible
+          th rowspan="2" % vaccine wastage
+          th colspan="2" Volume per vial
+          th rowspan="2" Number of vaccine doses per course
+          th colspan="2" Volume per course of doses
+        tr
+          th Vaccine
+          th Diluent
+          th Vaccine
+          th Diluent
+        each vaccines: tr
+          / td: Ember.Select content=controllers.vaccines.vaccine_initials value=vaccine_initials prompt="Antigen ..."
+            td: Ember.Select content=vaccines optionValuePath="content.id" optionLabelPath="content.doses_per_vial" value=vaccine_id prompt="Presentation ..." disabled=presentation_disabled
+          td: vaccine-picker initials=controllers.vaccines.vaccineInitials vaccine=vaccine vaccines=controllers.vaccines
+          td: input value=elligible_percent class="form-control" disabled=forms_disabled
+          td: input value=wastage_rate class="form-control" disabled=forms_disabled
+          td: input value=vaccine_volume class="form-control" disabled=forms_disabled
+          td: input value=diluent_volume class="form-control" disabled=forms_disabled
+          td: input value=doses_course class="form-control" disabled=forms_disabled
+          td: vaccine_volume_per_course
+          td: diluent_volume_per_course

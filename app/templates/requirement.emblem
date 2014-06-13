@@ -1,7 +1,7 @@
 .col-sm-8
   h1
     with vaccine
-      = name
+      = initials
       small  ({{doses_per_vial}} doses per vial)
 
   h2 Schedule Parameters

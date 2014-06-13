@@ -1,22 +1,15 @@
-var make_filter_func = function(X) {
-    return function() {
-        return this.filterBy('type', X);
-    }.property('@each.type');
-};
-
 App.RequirementsController = Ember.ArrayController.extend({
     itemController: 'requirement',
+    sortProperties: ['created_at'],
 
-    routine: make_filter_func('routine'),
-    school: make_filter_func('school'),
-    sia: make_filter_func('sia'),
-
-    types: function() {
+    services: function() {
         return [ { type: 'Routine Immunization',
-                   vaccines: this.get('routine') },
+                   vaccines: this.filterBy('type', 'routine') },
                  { type: 'School Immunization',
-                   vaccines: this.get('school') },
+                   vaccines: this.filterBy('type', 'school') },
                  { type: 'S. Immunization A.',
-                   vaccines: this.get('sia') } ];
-    }.property('routine', 'school', 'sia')
+                   vaccines: this.filterBy('type', 'sia') },
+                 { type: 'Other Immunization',
+                   vaccines: this.filterBy('type', 'other') } ];
+    }.property('@each.type')
 });
