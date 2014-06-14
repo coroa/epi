@@ -11,9 +11,6 @@ App.RequirementController = Ember.ObjectController.extend({
     vaccineId: function(key, value, oldValue) {
         if (arguments.length > 1) {
             // setter
-
-            // there must be a reset functionality for the unchanged
-            // parameter values
             this.set('vaccine', this.get('vaccines')
                      .findBy('id', value).get('content'));
             return value;

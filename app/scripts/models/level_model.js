@@ -37,7 +37,7 @@ App.Level = DS.Model.extend({
                         it.get('temperature') == temperature);
             });
 
-            if (group === undefined) {
+            if (Em.isNone(group)) {
                 group = Em.Object.create(
                     { service: service,
                       temperature: temperature,
@@ -79,7 +79,7 @@ App.Level = DS.Model.extend({
                         it.get('temperature') == temperature);
             });
 
-            if (group === undefined) return accum;
+            if (Em.isNone(group)) return accum;
 
             group.decrementProperty('storage_volume', storage_volume);
             group.decrementProperty('items');

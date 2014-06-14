@@ -4,7 +4,7 @@ App.VaccinePickerComponent = Ember.Component.extend({
     curInitials: Ember.computed.oneWay('vaccine.initials'),
     filteredVaccines: function() {
         var curInitials = this.get('curInitials');
-        if (curInitials !== undefined) {
+        if (!Em.isNone(curInitials)) {
             // return controller.filterBy('initials', curInitials);
             return this.get('vaccines').store.filter(
                 'vaccine',

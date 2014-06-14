@@ -1,6 +1,6 @@
 App.RequirementsController = Ember.ArrayController.extend({
     itemController: 'requirement',
-    sortProperties: ['created_at'],
+    sortProperties: ['id'],
 
     routineService: Em.computed.filterBy('@this', 'service',
                                          App.Enums.service.ROUTINE),
@@ -12,18 +12,12 @@ App.RequirementsController = Ember.ArrayController.extend({
                                        App.Enums.service.OTHER),
 
     services: function() {
-        return [ { serviceLabel:
-                   App.Enums.service.options[App.Enums.service.ROUTINE].label,
-                   vaccines: this.get('routineService') },
-                 { serviceLabel:
-                   App.Enums.service.options[App.Enums.service.SCHOOL].label,
-                   vaccines: this.get('schoolService') },
-                 { serviceLabel:
-                   App.Enums.service.options[App.Enums.service.SIA].label,
-                   vaccines: this.get('siaService') },
-                 { serviceLabel:
-                   App.Enums.service.options[App.Enums.service.OTHER].label,
-                   vaccines: this.get('otherService') } ];
+        return  ['routine','school','sia','other'].map(function(service) {
+            var id = App.Enums.service[service.toUpperCase()];
+            return { id: id,
+                     label: App.Enums.service.options[id].label,
+                     vaccines: this.get(service + 'Service') };
+        }, this);
     }.property('routineService', 'schoolService',
                'siaService', 'otherService')
 });

@@ -1,0 +1,26 @@
+each service in controllers.requirements.services 
+  h2 = service.label
+  .table-responsive
+    form.has-feedback role="form"
+      table.table.table-condensed.vaccine-table
+        colgroup
+          col width="100"
+          col width="100"
+          col width="100"
+          col width="100"
+          col width="100"
+          col width="100"
+          col width="100"
+          col width="100"
+          col width="100"
+        tr
+          th Vaccine
+          th
+          th Temperature of storage
+          th Category of packing
+          th Warm diluent
+          th % reserve safety/leadtime stock
+          th supply interval
+          th No. times vaccines received in 1 year
+        each service.vaccines
+          vaccine-level-param-set vaccine=this

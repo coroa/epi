@@ -5,13 +5,15 @@ Ember.computed.fallback = function(path, fallbackPath) {
         if (arguments.length === 1) {
             // getter
             var val = this.get(path);
-            return (val !== undefined && val !== null)
+            return !Em.isNone(val)
                 ? val
                 : this.get(fallbackPath);
-        } else {
+        } else if(newValue != cachedValue) {
             // setter
             this.set(path, newValue);
             return newValue;
+        } else {
+            return cachedValue;
         }
     }).property(path, fallbackPath);
 };
@@ -64,7 +66,9 @@ App.Requirement.FIXTURES = [
       elligible_percent: 3.1,
       wastage_rate: null,
       safety_stock: 25,
-      inuse: true },
+      inuse: true,
+      levelParamSets: [ 1, 2, 3, 4, 5 ]
+    },
     { id: 2,
       service: 0,
       vaccine: 3,
@@ -74,5 +78,7 @@ App.Requirement.FIXTURES = [
       elligible_percent: 3.1,
       wastage_rate: 25,
       safety_stock: 25,
-      inuse: true }
+      inuse: true,
+      levelParamSets: [ 6, 7, 8, 9, 10 ]
+    }
 ];

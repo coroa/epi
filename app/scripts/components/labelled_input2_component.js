@@ -33,7 +33,7 @@ App.LabelledInput2Component = Ember.Component.extend({
     init: function() {
         this.set('layoutName',
                  "components/labelled-input2-"
-                 + (this.get('addon') !== undefined ? 'wA' : 'woA'));
+                 + (!Em.isNone(this.get('addon')) ? 'wA' : 'woA'));
         this._super.apply(this, arguments);
     },
     inputView1: make_input_view('1'),

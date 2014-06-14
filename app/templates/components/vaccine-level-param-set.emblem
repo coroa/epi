@@ -1,0 +1,13 @@
+each wrappedLevelParamSets: tr
+  if showVaccine
+    td rowspan=numberOfLevels
+      button.btn.btn-default type="button": parentView.vaccine.initials
+      button.btn.btn-default type="button": parentView.vaccine.doses_per_vial
+  with level
+    td: levelLabel
+    td: Ember.Select content=temperatures optionLabelPath="content.label" optionValuePath="content.id" value=temperature class="form-control"
+    td: Ember.Select content=packing optionLabelPath="content.label" optionValuePath="content.id" value=packing class="form-control"
+    td: = input type="checkbox" value=warm_diluent
+    td: = input type="text" value=safety_stock
+    td: = input type="text" value=supply_intervall
+    td reorder_freq
