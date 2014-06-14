@@ -1,0 +1,133 @@
+var attr = DS.attr;
+
+App.LevelParamSet = DS.Model.extend({
+    requirement: DS.belongsTo('requirement'),
+    level: DS.belongsTo('level'),
+    temperature: attr('number'),
+    warm_diluent: attr('boolean'),
+    packing: attr('number'),
+    safety_stock: attr('number'),
+    reorder_freq: attr('number'),
+
+    service: function() {
+        return this.get('requirement.service');
+    }.property('requirement.service'),
+
+    supply_interval: function(key, value, prevValue) {
+        if (arguments.length > 1) {
+            if (value <= 0) return;
+            this.set('reorder_freq', 52.0/value);
+        }
+
+        return (52.0 / this.get('reorder_freq'));
+    }.property('reorder_freq'),
+
+    storage_volume_vaccine: function() {
+        return this.get('requirement.country.vaccine_volume_per_course') *
+            App.Enums.packing.options[this.get('packing')].factor *
+            (1 + this.get('safety_stock') / 100) *
+            (1 / this.get('reorder_freq'));
+    }.property('requirement.country.vaccine_volume_per_course',
+               'packing', 'safety_stock', 'reorder_freq'),
+
+    storage_volume_diluent: function() {
+        return this.get('requirement.country.diluent_volume_per_course') *
+            App.Enums.packing.options[this.get('packing')].factor *
+            (1 + this.get('safety_stock') / 100) *
+            (1 / this.get('reorder_freq'));
+    }.property('requirement.country.diluent_volume_per_course',
+               'packing', 'safety_stock', 'reorder_freq')
+
+});
+
+App.LevelParamSet.Fixtures = [
+    { id: 1,
+      requirement: 1,
+      level: 1,
+      temperature: 0,
+      warm_diluent: false,
+      packing: 1,
+      safety_stock: 25,
+      reorder_freq: 4
+    },
+    { id: 2,
+      requirement: 1,
+      level: 2,
+      temperature: 0,
+      warm_diluent: false,
+      packing: 1,
+      safety_stock: 25,
+      reorder_freq: 4
+    },
+    { id: 3,
+      requirement: 1,
+      level: 3,
+      temperature: 0,
+      warm_diluent: false,
+      packing: 1,
+      safety_stock: 25,
+      reorder_freq: 4
+    },
+    { id: 4,
+      requirement: 1,
+      level: 4,
+      temperature: 0,
+      warm_diluent: false,
+      packing: 1,
+      safety_stock: 25,
+      reorder_freq: 4
+    },
+    { id: 5,
+      requirement: 1,
+      level: 5,
+      temperature: 0,
+      warm_diluent: false,
+      packing: 1,
+      safety_stock: 25,
+      reorder_freq: 4
+    },
+    { id: 6,
+      requirement: 2,
+      level: 1,
+      temperature: 0,
+      warm_diluent: false,
+      packing: 1,
+      safety_stock: 25,
+      reorder_freq: 4
+    },
+    { id: 7,
+      requirement: 2,
+      level: 2,
+      temperature: 0,
+      warm_diluent: false,
+      packing: 1,
+      safety_stock: 25,
+      reorder_freq: 4
+    },
+    { id: 8,
+      requirement: 2,
+      level: 3,
+      temperature: 0,
+      warm_diluent: false,
+      packing: 1,
+      safety_stock: 25,
+      reorder_freq: 4
+    },
+    { id: 9,
+      requirement: 2,
+      level: 4,
+      temperature: 0,
+      warm_diluent: false,
+      packing: 1,
+      safety_stock: 25,
+      reorder_freq: 4
+    },
+    { id: 10,
+      requirement: 2,
+      level: 5,
+      temperature: 0,
+      warm_diluent: false,
+      packing: 1,
+      safety_stock: 25,
+      reorder_freq: 4
+    }];

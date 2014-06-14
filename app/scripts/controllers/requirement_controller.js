@@ -1,20 +1,27 @@
 App.RequirementController = Ember.ObjectController.extend({
     needs: ['requirements', 'vaccines'],
-    presentation_disabled: function() {
-        return this.get('vaccine_initials') === undefined;
-    }.property('vaccine_initials'),
-    forms_disabled: function() {
-        return this.get('vaccine_initials') == undefined ||
-            this.get('vaccine_id') == undefined;
-    }.property('vaccine_initials', 'vaccine_id'),
-    update_vaccine: function() {
-        if (this.get('vaccine_id') !== undefined) {
-            var _ = this;
-            this.store.find('vaccine',
-                            this.get('vaccine_id')).then(function(x) {
-                                _.set("vaccine", x); });
+    isFormsDisabled: true,
+    vaccineInitials: Em.computed.oneWay('vaccine.initials'),
+    vaccines: function() {
+        return this.get('controllers.vaccines')
+            .filterBy('initials', this.get('vaccineInitials'));
+    }.property('vaccineInitials',
+               'controllers.vaccines.@each.initials'),
+
+    vaccineId: function(key, value, oldValue) {
+        if (arguments.length > 1) {
+            // setter
+
+            // there must be a reset functionality for the unchanged
+            // parameter values
+            this.set('vaccine', this.get('vaccines')
+                     .findBy('id', value).get('content'));
+            return value;
         }
-    }.observes('vaccine.id'),
+
+        return this.get('vaccine.id');
+    }.property('vaccine'),
+
     data: function() {
         var reqs = this.get("controllers.requirements");
         var ret = reqs.map(function(req, index, en) {
@@ -27,5 +34,11 @@ App.RequirementController = Ember.ObjectController.extend({
         return ret;
     }.property('controllers.requirements.@each.vaccine.name',
                'controllers.requirements.@each.vaccine_schedule_factor',
-               'controllers.requirements.@each.type')
+               'controllers.requirements.@each.serviceLabel'),
+
+    actions: {
+        'reset': function(field) {
+            this.set(field, null);
+        }
+    }
 });

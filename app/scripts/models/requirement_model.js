@@ -1,39 +1,72 @@
 var attr = DS.attr;
 
+Ember.computed.fallback = function(path, fallbackPath) {
+    return Ember.computed(function(key, newValue, cachedValue) {
+        if (arguments.length === 1) {
+            // getter
+            var val = this.get(path);
+            return (val !== undefined && val !== null)
+                ? val
+                : this.get(fallbackPath);
+        } else {
+            // setter
+            this.set(path, newValue);
+            return newValue;
+        }
+    }).property(path, fallbackPath);
+};
+
 App.Requirement = DS.Model.extend({
-    type: attr('string'),
+    service: attr('number'),
     vaccine: DS.belongsTo('vaccine'),
     vaccine_volume: attr('number'),
     diluent_volume: attr('number'),
     doses_course: attr('number'),
     elligible_percent: attr('number'),
     wastage_rate: attr('number'),
-    safety_stock: attr('number'),
-    inuse: attr('boolean'),
+    levelParamSets: DS.hasMany('levelParamSet'),
+
+    vaccine_volume2: Em.computed.fallback('vaccine_volume',
+                                          'vaccine.vaccine_volume'),
+    vaccine_volume_isCustom: Em.computed.notEmpty('vaccine_volume'),
+    diluent_volume2: Em.computed.fallback('diluent_volume',
+                                          'vaccine.diluent_volume'),
+    diluent_volume_isCustom: Em.computed.notEmpty('diluent_volume'),
+    wastage_rate2: Em.computed.fallback('wastage_rate',
+                                        'vaccine.wastage_rate'),
+    wastage_rate_isCustom: Em.computed.notEmpty('wastage_rate'),
+
+    wastage_factor: function() {
+        return 1./(1-this.get('wastage_rate2')/100);
+    }.property('wastage_rate2'),
 
     vaccine_volume_per_course: function() {
-        return +(this.get('vaccine_volume') * this.get('doses_course') *
-                 (this.get('elligible_percent') / 100)).toFixed(3);
-    }.property('vaccine_volume', 'doses_course', 'elligible_percent'),
+        return +(this.get('vaccine_volume2') * this.get('doses_course') *
+                 (this.get('elligible_percent') / 100) *
+                 this.get('wastage_factor')).toFixed(3);
+    }.property('vaccine_volume2', 'doses_course', 'elligible_percent',
+               'wastage_factor'),
     diluent_volume_per_course: function() {
-        return +(this.get('diluent_volume') * this.get('doses_course') *
-                 (this.get('elligible_percent') / 100)).toFixed(3);
-    }.property('diluent_volume', 'doses_course', 'elligible_percent')
+        return +(this.get('diluent_volume2') * this.get('doses_course') *
+                 (this.get('elligible_percent') / 100) *
+                this.get('wastage_factor')).toFixed(3);
+    }.property('diluent_volume2', 'doses_course', 'elligible_percent',
+               'wastage_factor')
 });
 
 App.Requirement.FIXTURES = [
     { id: 1,
-      type: 'routine',
+      service: 0,
       vaccine: 1,
-      vaccine_volume: 1.2,
-      diluent_volume: 1.1,
+      vaccine_volume: null,
+      diluent_volume: null,
       doses_course: 1,
       elligible_percent: 3.1,
-      wastage_rate: 60,
+      wastage_rate: null,
       safety_stock: 25,
       inuse: true },
     { id: 2,
-      type: 'routine',
+      service: 0,
       vaccine: 3,
       vaccine_volume: 2.0,
       diluent_volume: 0,
