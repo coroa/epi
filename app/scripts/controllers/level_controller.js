@@ -1,0 +1,1 @@
+App.LevelController = Ember.ObjectController;

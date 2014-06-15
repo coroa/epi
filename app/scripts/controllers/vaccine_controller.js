@@ -1,2 +1,1 @@
-App.VaccineController = Ember.ObjectController.extend({
-});
+App.VaccineController = Ember.ObjectController;

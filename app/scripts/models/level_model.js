@@ -17,19 +17,12 @@ App.Level = DS.Model.extend({
     Em.reduceComputed('paramSets.@each.{service,storage_volume_vaccine,storage_volume_diluent,temperature,packing,warm_diluent}',{
         initialValue: [],
         addedItem: function(accum, item, changeMeta, instanceMeta) {
-            if (item.get('packing') ==
-                App.Enums.packing.PASSIVECOOLED)
-            {
-                return accum;
-            }
-
             var service = item.get('service'),
                 temperature = item.get('temperature'),
-                warm_diluent = item.get('warm_diluent'),
-                storage_volume = item.get('storage_volume_vaccine') ;
+                storage_volume = item.get('storage_volume') ;
 
-            if (!warm_diluent) {
-                storage_volume += item.get('storage_volume_diluent');
+            if (storage_volume == 0) {
+                return accum;
             }
 
             var group = accum.find(function(it) {
@@ -42,37 +35,25 @@ App.Level = DS.Model.extend({
                     { service: service,
                       temperature: temperature,
                       storage_volume: 0,
-                      items: 0 });
+                      items: [] });
                 accum.pushObject(group);
             }
 
             group.incrementProperty('storage_volume', storage_volume);
-            group.incrementProperty('items');
+            group.get('items').pushObject(item);
 
             return accum;
         },
         removedItem: function(accum, item, changeMeta, instanceMeta) {
-            if ((changeMeta.previousValues.packing || item.get('packing')) ==
-                App.Enums.packing.PASSIVECOOLED)
-            {
-                return accum;
-            }
-
             var service = changeMeta.previousValues.service
                     || item.get('service'),
                 temperature = changeMeta.previousValues.temperature
                     || item.get('temperature'),
-                warm_diluent = changeMeta.previousValues.warm_diluent
-                    || item.get('warm_diluent'),
                 storage_volume =
-                    changeMeta.previousValues.storage_volume_vaccine
-                    || item.get('storage_volume_vaccine') ;
+                    changeMeta.previousValues.storage_volume
+                    || item.get('storage_volume') ;
 
-            if (!warm_diluent) {
-                storage_volume +=
-                    changeMeta.previousValues.storage_volume_diluent
-                    || item.get('storage_volume_diluent');
-            }
+            if (storage_volume == 0) return accum;
 
             var group = accum.find(function(it) {
                 return (it.get('service') == service &&
@@ -82,9 +63,10 @@ App.Level = DS.Model.extend({
             if (Em.isNone(group)) return accum;
 
             group.decrementProperty('storage_volume', storage_volume);
-            group.decrementProperty('items');
 
-            if (group.get('items') == 0) {
+            var items = group.get('items');
+            items.removeObject(item);
+            if (items.isEmpty()) {
                 // remove group
                 accum.removeObject(group);
             }
@@ -94,7 +76,7 @@ App.Level = DS.Model.extend({
     })
 });
 
-App.Level.Fixtures = [
+App.Level.FIXTURES = [
     { id: 1,
       name: 'Level 1',
       paramSets: [ 1, 6 ] },

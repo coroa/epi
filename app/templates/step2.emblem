@@ -22,5 +22,6 @@ each service in controllers.requirements.services
           th % reserve safety/leadtime stock
           th supply interval
           th No. times vaccines received in 1 year
+          th Storage volume per 1000 people
         each service.vaccines
-          vaccine-level-param-set vaccine=this
+          vaccine-level-param-set requirement=this

@@ -15,32 +15,39 @@ App.LevelParamSet = DS.Model.extend({
 
     supply_interval: function(key, value, prevValue) {
         if (arguments.length > 1) {
-            if (value <= 0) return;
+            if (value <= 0) return prevValue;
             this.set('reorder_freq', 52.0/value);
+            return value;
         }
 
         return (52.0 / this.get('reorder_freq'));
     }.property('reorder_freq'),
 
     storage_volume_vaccine: function() {
-        return this.get('requirement.country.vaccine_volume_per_course') *
+        return this.get('requirement.vaccine_volume_per_course') *
             App.Enums.packing.options[this.get('packing')].factor *
             (1 + this.get('safety_stock') / 100) *
             (1 / this.get('reorder_freq'));
-    }.property('requirement.country.vaccine_volume_per_course',
+    }.property('requirement.vaccine_volume_per_course',
                'packing', 'safety_stock', 'reorder_freq'),
 
     storage_volume_diluent: function() {
-        return this.get('requirement.country.diluent_volume_per_course') *
+        return this.get('requirement.diluent_volume_per_course') *
             App.Enums.packing.options[this.get('packing')].factor *
             (1 + this.get('safety_stock') / 100) *
             (1 / this.get('reorder_freq'));
-    }.property('requirement.country.diluent_volume_per_course',
-               'packing', 'safety_stock', 'reorder_freq')
+    }.property('requirement.diluent_volume_per_course',
+               'packing', 'safety_stock', 'reorder_freq'),
 
+    storage_volume: function() {
+        return this.get('storage_volume_vaccine') +
+            this.get('warm_diluent') *
+            this.get('storage_volume_diluent');
+    }.property('storage_volume_vaccine', 'storage_volume_diluent',
+               'warm_diluent')
 });
 
-App.LevelParamSet.Fixtures = [
+App.LevelParamSet.FIXTURES = [
     { id: 1,
       requirement: 1,
       level: 1,
