@@ -1,0 +1,26 @@
+h2 = label
+.table-responsive
+  form.has-feedback role="form"
+    table.table.table-condensed.vaccine-table
+      colgroup
+        col width="100"
+        col width="100"
+        col width="100"
+        col width="100"
+        col width="100"
+        col width="100"
+        col width="100"
+        col width="100"
+        col width="100"
+      tr
+        th Vaccine
+        th
+        th Temperature of storage
+        th Category of packing
+        th Warm diluent
+        th % reserve safety/leadtime stock
+        th supply interval
+        th No. times vaccines received in 1 year
+        th Storage volume per 1000 people
+      each requirements
+        vaccine-level-param-set requirement=this

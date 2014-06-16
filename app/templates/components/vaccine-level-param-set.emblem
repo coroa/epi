@@ -1,13 +1,15 @@
-each wrappedParamSet in wrappedLevelParamSets: tr
-  if wrappedParamSet.showVaccine
-    td rowspan=wrappedParamSet.numberOfLevels
-      button.btn.btn-default type="button": requirement.vaccine.initials
-      button.btn.btn-default type="button": requirement.vaccine.doses_per_vial
-  th: wrappedParamSet.paramset.level.name
-  td: Ember.Select content=temperatures optionLabelPath="content.label" optionValuePath="content.id" value=wrappedParamSet.paramset.temperature prompt="Temperatures ..." class="form-control"
-  td: Ember.Select content=packings optionLabelPath="content.label" optionValuePath="content.id" value=wrappedParamSet.paramset.packing class="form-control" prompt="Packings ..."
-  td: = input type="checkbox" class="form-control" checked=wrappedParamSet.paramset.warm_diluent
-  td: = input type="text" class="form-control" value=wrappedParamSet.paramset.safety_stock
-  td: = input type="text" class="form-control" value=wrappedParamSet.paramset.supply_interval
-  td: wrappedParamSet.paramset.reorder_freq
-  td: wrappedParamSet.paramset.storage_volume
+each wrappedLevelParamSets: tr
+  if showVaccine
+    td rowspan=numberOfLevels
+      .btn-group
+        button.btn.btn-default type="button": view.requirement.vaccine.initials
+        button.btn.btn-default type="button": view.requirement.vaccine.doses_per_vial
+  with paramset
+    th: level.name
+    td: Ember.Select content=view.temperatures optionLabelPath="content.label" optionValuePath="content.id" value=temperature prompt="Temperatures ..." class="form-control"
+    td: Ember.Select content=view.packings optionLabelPath="content.label" optionValuePath="content.id" value=packing class="form-control" prompt="Packings ..."
+    td: = input type="checkbox" class="form-control" checked=warm_diluent
+    td: = input type="text" class="form-control" value=safety_stock
+    td: = input type="text" class="form-control" value=supply_interval
+    td: reorder_freq
+    td: storage_volume

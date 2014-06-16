@@ -1,1 +1,1 @@
-App.LevelParamSetControlller = Em.ObjectController;
+App.LevelParamSetController = Em.ObjectController;
