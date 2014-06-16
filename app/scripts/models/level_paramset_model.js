@@ -1,6 +1,6 @@
 var attr = DS.attr;
 
-App.LevelParamSet = DS.Model.extend({
+App.LevelParamset = DS.Model.extend({
     requirement: DS.belongsTo('requirement'),
     level: DS.belongsTo('level'),
     temperature: attr('number'),
@@ -47,7 +47,7 @@ App.LevelParamSet = DS.Model.extend({
                'warm_diluent')
 });
 
-App.LevelParamSet.FIXTURES = [
+App.LevelParamset.FIXTURES = [
     { id: 1,
       requirement: 1,
       level: 1,

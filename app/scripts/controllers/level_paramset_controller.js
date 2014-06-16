@@ -1,0 +1,1 @@
+App.LevelParamsetController = Em.ObjectController;

@@ -1,4 +1,4 @@
-App.VaccineLevelParamSetComponent = Ember.Component.extend({
+App.RequirementLevelParamsetComponent = Ember.Component.extend({
     // wants to have a requirement parameter
     tagName: 'tr',
     temperatures: App.Enums.temperature.options.map(function(item, index) {
@@ -7,13 +7,11 @@ App.VaccineLevelParamSetComponent = Ember.Component.extend({
     packings: App.Enums.packing.options.map(function(item, index) {
         return { id: index, label: item.label };
     }),
-    wrappedLevelParamSets: function() {
-        return this.get('requirement.levelParamSets')
+    wrappedLevelParamsets: function() {
+        return this.get('requirement.levelParamsets')
             .map(function(item, index, enumerable) {
                 return { numberOfLevels: enumerable.get('length'),
                          paramset: item,
                          showVaccine: index == 0 }; }, this);
-    }.property('requirement.levelParamSets')
+    }.property('requirement.levelParamsets')
 });
-
-// Ember.Handlebars.helper('labelled-input', App.LabelledInputComponent);

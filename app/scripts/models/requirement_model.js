@@ -26,7 +26,7 @@ App.Requirement = DS.Model.extend({
     doses_course: attr('number'),
     elligible_percent: attr('number'),
     wastage_rate: attr('number'),
-    levelParamSets: DS.hasMany('levelParamSet'),
+    levelParamsets: DS.hasMany('levelParamset'),
 
     vaccine_volume2: Em.computed.fallback('vaccine_volume',
                                           'vaccine.vaccine_volume'),
@@ -67,7 +67,7 @@ App.Requirement.FIXTURES = [
       wastage_rate: null,
       safety_stock: 25,
       inuse: true,
-      levelParamSets: [ 1, 2, 3, 4, 5 ]
+      levelParamsets: [ 1, 2, 3, 4, 5 ]
     },
     { id: 2,
       service: 0,
@@ -79,6 +79,6 @@ App.Requirement.FIXTURES = [
       wastage_rate: 25,
       safety_stock: 25,
       inuse: true,
-      levelParamSets: [ 6, 7, 8, 9, 10 ]
+      levelParamsets: [ 6, 7, 8, 9, 10 ]
     }
 ];

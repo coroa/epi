@@ -23,4 +23,4 @@ h2 = label
         th No. times vaccines received in 1 year
         th Storage volume per 1000 people
       each requirements
-        vaccine-level-param-set requirement=this
+        requirement-level-paramset requirement=this
