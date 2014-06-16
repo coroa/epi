@@ -1,2 +1,2 @@
-each service in controllers.requirements.services
-  vaccine-table service=service vaccines=controllers.vaccines action="createRequirement"
+each controllers.requirements.services
+  render "requirementsTable" this

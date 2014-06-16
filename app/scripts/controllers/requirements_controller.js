@@ -16,7 +16,7 @@ App.RequirementsController = Ember.ArrayController.extend({
             var id = App.Enums.service[service.toUpperCase()];
             return { id: id,
                      label: App.Enums.service.options[id].label,
-                     vaccines: this.get(service + 'Service') };
+                     requirements: this.get(service + 'Service') };
         }, this);
     }.property('routineService', 'schoolService',
                'siaService', 'otherService')
