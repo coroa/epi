@@ -49,6 +49,7 @@ label small {
     width: 100%;
     text-align: center;
 }
+
 .form-group > .header-label {
     margin-top: 20px;
 }
@@ -59,4 +60,28 @@ h1 {
 
 .vaccine-table td {
    padding: 0px;
+}
+
+// Footer
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom:200px;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 200px;
+  background-color: #f5f5f5;
+}
+
+.footer.footer-collapsed {
+  height: 40px;
 }

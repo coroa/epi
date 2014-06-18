@@ -17,3 +17,5 @@ nav.navbar.navbar-default.navbar-fixed-top role="navigation"
       
 #main.container
   outlet
+
+render "chartPicker"

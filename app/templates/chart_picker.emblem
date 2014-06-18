@@ -1,0 +1,10 @@
+/ a href="#" click="toggleFooter" style="position: absolute; top: 5px; left: 5px;"
+  span.glyphicon class=footerCollapsed:glyphicon-arrow-up:glyphicon-arrow-down
+.navbar-brand Charts
+
+.container
+  ul.nav.nav-pills
+    each chart in charts
+      chart-select-item value=chart.id label=chart.label selected_chart=selected_chart
+
+  chart-panes selected=selected_chart content=charts

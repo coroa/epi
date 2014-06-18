@@ -40,6 +40,15 @@ App.Enums.temperature = {
     ]
 };
 
+App.Enums.charts = {
+    VOLPERCOURSE: 0,
+    VOLPERLEVEL: 1,
+    options: [
+        { label: 'Volume per course', template: 'chart1' },
+        { label: 'Aggregated volume per level', template: 'chart2' }
+    ]
+};
+
 /* Order and include as you please. */
 require('scripts/components/*');
 require('scripts/controllers/*');
