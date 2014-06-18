@@ -1,2 +1,2 @@
-each service in controllers.requirements.services
-  render "requirementsLevelParamsTable" service
+each controllers.requirements.services
+  render "requirementsLevelTable" this
