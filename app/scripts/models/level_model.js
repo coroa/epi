@@ -4,17 +4,8 @@ App.Level = DS.Model.extend({
     paramsets: DS.hasMany('levelParamset', { async: true }),
     name: attr('string'),
 
-    // routineParamSets: Em.computed.filterBy('paramSets', 'service',
-    //                                        'routine'),
-    // schoolParamSets: Em.computed.filterBy('paramSets', 'service',
-    //                                       'school'),
-    // siaParamSets: Em.computed.filterBy('paramSets', 'service',
-    //                                    'sia'),
-    // otherParamSets: Em.computed.filterBy('paramSets', 'service',
-    //                                      'other'),
-
     storage_volume:
-    Em.reduceComputed('paramSets.@each.{service,storage_volume_vaccine,storage_volume_diluent,temperature,packing,warm_diluent}',{
+    Em.reduceComputed('paramsets.@each.{service,storage_volume_vaccine,storage_volume_diluent,temperature,packing,warm_diluent}',{
         initialValue: [],
         addedItem: function(accum, item, changeMeta, instanceMeta) {
             var service = item.get('service'),
