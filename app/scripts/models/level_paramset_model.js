@@ -3,9 +3,11 @@ var attr = DS.attr;
 App.LevelParamset = DS.Model.extend({
     requirement: DS.belongsTo('requirement'),
     level: DS.belongsTo('level'),
-    temperature: attr('number'),
+    temperature: attr('number',
+                      { defaultValue: App.Enums.temperature.MINUS25 }),
     warm_diluent: attr('boolean'),
-    packing: attr('number'),
+    packing: attr('number',
+                  { defaultValue: App.Enums.packing.SECONDARY }),
     safety_stock: attr('number'),
     reorder_freq: attr('number'),
 

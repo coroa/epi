@@ -1,7 +1,7 @@
 var attr = DS.attr;
 
 App.Level = DS.Model.extend({
-    paramSets: DS.hasMany('levelParamSet'),
+    paramsets: DS.hasMany('levelParamset', { async: true }),
     name: attr('string'),
 
     // routineParamSets: Em.computed.filterBy('paramSets', 'service',
@@ -79,17 +79,17 @@ App.Level = DS.Model.extend({
 App.Level.FIXTURES = [
     { id: 1,
       name: 'Level 1',
-      paramSets: [ 1, 6 ] },
+      paramsets: [ 1, 6 ] },
     { id: 2,
       name: 'Level 2',
-      paramSets: [ 2, 7 ] },
+      paramsets: [ 2, 7 ] },
     { id: 3,
       name: 'Level 3',
-      paramSets: [ 3, 8 ] },
+      paramsets: [ 3, 8 ] },
     { id: 4,
       name: 'Level 4',
-      paramSets: [ 4, 9 ] },
+      paramsets: [ 4, 9 ] },
     { id: 5,
       name: 'Level 5',
-      paramSets: [ 5, 10 ] }
+      paramsets: [ 5, 10 ] }
 ];
