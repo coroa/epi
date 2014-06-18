@@ -1,2 +1,12 @@
 | Hello, this is chart1.
   Am i not charming.
+table
+  thead: tr
+    th Category
+    th Label
+    th Values
+  tbody: each data: tr
+    td = category
+    td = label
+    td: each values: span = this
+  

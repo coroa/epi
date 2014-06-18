@@ -3,7 +3,8 @@ App.ChartPickerController = Em.Controller.extend({
 
     charts: App.Enums.charts.options.map(function(x, id) {
         return { id: id, label: x.label,
-                 template: x.template };
+                 template: x.template,
+                 controller: x.controller };
     }),
     footerCollapsed: Em.computed.none('selected_chart'),
 

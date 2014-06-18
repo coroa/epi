@@ -44,7 +44,8 @@ App.Enums.charts = {
     VOLPERCOURSE: 0,
     VOLPERLEVEL: 1,
     options: [
-        { label: 'Volume per course', template: 'chart1' },
+        { label: 'Volume per course',
+          template: 'chart1', controller: 'chart1' },
         { label: 'Aggregated volume per level', template: 'chart2' }
     ]
 };
