@@ -43,7 +43,7 @@ App.LevelParamset = DS.Model.extend({
 
     storage_volume: function() {
         return this.get('storage_volume_vaccine') +
-            this.get('warm_diluent') *
+            (!this.get('warm_diluent')) *
             this.get('storage_volume_diluent');
     }.property('storage_volume_vaccine', 'storage_volume_diluent',
                'warm_diluent'),
