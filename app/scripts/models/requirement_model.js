@@ -53,7 +53,27 @@ App.Requirement = DS.Model.extend({
                  (this.get('elligible_percent') / 100) *
                 this.get('wastage_factor')).toFixed(3);
     }.property('diluent_volume2', 'doses_course', 'elligible_percent',
-               'wastage_factor')
+               'wastage_factor'),
+
+    didCreate: function() {
+        var _this = this;
+        if (Em.isEmpty(this.get('levelParamsets'))) {
+            this.store.find('level')
+                .then(function(levels) {
+                    return Em.RSVP.all(levels.map(
+                        function(level) {
+                            return _this.store
+                                .createRecord('levelParamset',
+                                              { level: level,
+                                                requirement: _this })
+                                .save();
+                        }));
+                })
+                .then(function(paramsets) {
+
+                });
+        }
+    }
 });
 
 App.Requirement.FIXTURES = [
