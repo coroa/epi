@@ -18,9 +18,9 @@ h2 = label
         th Temperature of storage
         th Category of packing
         th Warm diluent
-        th % reserve safety/leadtime stock
-        th supply interval
+        th % reserve (safety/leadtime) stock
+        th Supply interval in weeks
         th No. times vaccines received in 1 year
-        th Storage volume per 1000 people
+        th Net storage volume per 1000 people
       each requirements
         requirement-level-paramset requirement=this
