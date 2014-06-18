@@ -43,8 +43,8 @@ h2 = label
           if diluent_volume_isCustom
             span.glyphicon.glyphicon-remove.form-control-feedback click="reset 'diluent_volume'"
         td: = input value=doses_course class="form-control"
-        td: vaccine_volume_per_course
-        td: diluent_volume_per_course
+        td: rounded-number number=vaccine_volume_per_course
+        td: rounded-number number=diluent_volume_per_course
       tr
         td: Ember.Select content=controllers.vaccines.vaccineInitials class="form-control" value=vaccineInitials prompt="Antigen ..."
         td: Ember.Select content=vaccines optionValuePath="content.id" optionLabelPath="content.doses_per_vial" value=vaccineId prompt="Presentation ..." class="form-control"
