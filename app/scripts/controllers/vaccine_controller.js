@@ -1,1 +1,0 @@
-App.VaccineController = Ember.ObjectController;

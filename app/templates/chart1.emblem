@@ -9,4 +9,4 @@ table
     td = category
     td = label
     td: each values: span = this
-  
+

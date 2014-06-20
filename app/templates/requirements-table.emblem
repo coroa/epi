@@ -1,0 +1,49 @@
+h2 = label
+.table-responsive
+  form.has-feedback role="form"
+    table.table.table-condensed.vaccine-table
+      thead
+        tr
+          th rowspan="2" Vaccine antigen
+          th rowspan="2" Vaccine presentation
+          th rowspan="2" % of total population elligible
+          th rowspan="2" % vaccine wastage
+          th colspan="2" Volume per vial
+          th rowspan="2" Number of vaccine doses per course
+          th colspan="2" Volume per course of doses
+        tr
+          td Vaccine
+          td Diluent
+          td Vaccine
+          td Diluent
+      tbody
+        each requirements: tr
+          td: Ember.Select content=controllers.vaccines.vaccineInitials class="form-control" value=vaccineInitials prompt="Antigen ..."
+          td: Ember.Select content=vaccines optionValuePath="content.id" optionLabelPath="content.doses_per_vial" value=vaccineId prompt="Presentation ..." class="form-control"
+          / td: vaccine-picker initials=controllers.vaccines.vaccineInitials vaccine=vaccine vaccines=controllers.vaccines
+          td: = input value=elligible_percent class="form-control" disabled=forms_disabled
+          td
+            = input value=wastage_rate2 class="form-control" classBinding="wastage_rate_isCustom:btn-warning"
+            if wastage_rate_isCustom
+              span.glyphicon.glyphicon-remove.form-control-feedback click="reset 'wastage_rate'"
+          td
+            = input value=vaccine_volume2 class="form-control" classBinding="vaccine_volume_isCustom:btn-warning"
+            if vaccine_volume_isCustom
+              span.glyphicon.glyphicon-remove.form-control-feedback click="reset 'vaccine_volume'"
+          td
+            = input value=diluent_volume2 class="form-control" classBinding="diluent_volume_isCustom:btn-warning"
+            if diluent_volume_isCustom
+              span.glyphicon.glyphicon-remove.form-control-feedback click="reset 'diluent_volume'"
+          td: = input value=doses_course class="form-control"
+          td: rounded-number number=vaccine_volume_per_course
+          td: rounded-number number=diluent_volume_per_course
+        tr
+          td: Ember.Select content=controllers.vaccines.vaccineInitials class="form-control" value=vaccineInitials prompt="Antigen ..."
+          td: Ember.Select content=vaccines optionValuePath="content.id" optionLabelPath="content.doses_per_vial" value=vaccineId prompt="Presentation ..." class="form-control"
+          td: input class="form-control" disabled="1"
+          td: input class="form-control" disabled="1"
+          td: input class="form-control" disabled="1"
+          td: input class="form-control" disabled="1"
+          td: input class="form-control" disabled="1"
+          td
+          td 
