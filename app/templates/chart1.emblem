@@ -1,6 +1,5 @@
-| Hello, this is chart1.
-  Am i not charming.
-table
+bar-chart data=data
+/ table
   thead: tr
     th Category
     th Label
