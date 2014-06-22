@@ -12,7 +12,7 @@ var LevelParamset = DS.Model.extend({
     packing: attr('number',
                   { defaultValue: Enums.packing.SECONDARY }),
     safety_stock: attr('number'),
-    reorder_freq: attr('number'),
+    reorder_freq: attr('number', { defaultValue: 1 }),
 
     service: function() {
         return this.get('requirement.service');

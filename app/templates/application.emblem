@@ -14,7 +14,7 @@ nav.navbar.navbar-default.navbar-fixed-top role="navigation"
         each steps
           link-to route tagName="li" href=false
             a href="#" = name
-      
+
 #main.container
   outlet
 
