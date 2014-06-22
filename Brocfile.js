@@ -22,6 +22,7 @@ var app = new EmberApp();
 app.import("vendor/ember-localstorage-adapter/localstorage_adapter.js");
 
 app.import("vendor/d3/d3.js");
+app.import("vendor/bootstrap-sass/dist/js/bootstrap.min.js");
 
 var bootstrapFonts = pickFiles('vendor/bootstrap-sass/dist/fonts', {
     srcDir: '/',
