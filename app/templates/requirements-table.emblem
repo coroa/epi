@@ -18,8 +18,8 @@ h2 = label
           td Diluent
       tbody
         each requirements: tr
-          td: Ember.Select content=controllers.vaccines.vaccineInitials class="form-control" value=vaccineInitials prompt="Antigen ..."
-          td: Ember.Select content=vaccines optionValuePath="content.id" optionLabelPath="content.doses_per_vial" value=vaccineId prompt="Presentation ..." class="form-control"
+          td: unbound-select content=controllers.vaccines.vaccineInitials class="form-control" value=vaccineInitials prompt="Antigen ..."
+          td: unbound-select content=vaccines optionValuePath="content.id" optionLabelPath="content.doses_per_vial" value=vaccineId prompt="Presentation ..." class="form-control"
           / td: vaccine-picker initials=controllers.vaccines.vaccineInitials vaccine=vaccine vaccines=controllers.vaccines
           td: = input value=elligible_percent class="form-control" disabled=forms_disabled
           td
@@ -38,8 +38,8 @@ h2 = label
           td: rounded-number number=vaccine_volume_per_course
           td: rounded-number number=diluent_volume_per_course
         tr
-          td: Ember.Select content=controllers.vaccines.vaccineInitials class="form-control" value=vaccineInitials prompt="Antigen ..."
-          td: Ember.Select content=vaccines optionValuePath="content.id" optionLabelPath="content.doses_per_vial" value=vaccineId prompt="Presentation ..." class="form-control"
+          td: unbound-select content=controllers.vaccines.vaccineInitials class="form-control" value=vaccineInitials prompt="Antigen ..."
+          td: unbound-select content=vaccines optionValuePath="content.id" optionLabelPath="content.doses_per_vial" value=vaccineId prompt="Presentation ..." class="form-control"
           td: input class="form-control" disabled="1"
           td: input class="form-control" disabled="1"
           td: input class="form-control" disabled="1"
