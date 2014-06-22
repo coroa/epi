@@ -29,22 +29,30 @@ export default function BarChart() {
                 xAxis.tickFormat("");
             }
 
+            // Calculate the stacks and a total
             data.forEach(function(d) {
-                d.count = +d.count;
+                var y0 = +0;
+                if (d.sublabels === undefined) { d.sublabels = []; }
+                d.stacks = d.values.map(function(x, i) {
+                    var value = isNaN(+x) ? 0 : +x;
+                    return { label: d.sublabels[i],
+                             value: x,
+                             id: d.id,
+                             y0: y0,
+                             y1: y0 += +value };
+                });
+                d.total = d.stacks[d.stacks.length - 1].y1;
             });
 
             var empty = !data.some(function(d) {
-                console.log(d.count);
-                return (d.count !== 0 && !isNaN(d.count));
+                return (d.total !== 0);
             });
 
             if (empty) {
-                var _this = this;
-
                 // Select the message svg element, if it exists.
 
                 var setMsg = function() {
-                    var msg = d3.select(_this).selectAll(".message").data([data]);
+                    var msg = selection.selectAll(".message").data([data]);
                     msg.enter()
                         .append("div")
                         .style('padding-top', (height/2)+'px')
@@ -58,8 +66,8 @@ export default function BarChart() {
                         .text(function() {return emptyText || 'No data to show.'; });
                 };
 
-                if (d3.select(_this).select("path")[0][0]) {
-                    d3.select(_this)
+                if (selection.select("path")[0][0]) {
+                    selection
                         .selectAll("svg")
                         .transition()
                         .duration(200)
@@ -74,7 +82,7 @@ export default function BarChart() {
                 return;
 
             } else {
-                d3.select(this)
+                selection
                     .select('.message')
                     .remove();
             }
@@ -82,15 +90,12 @@ export default function BarChart() {
             // Update the x-scale.
             xScale
                 .rangeRoundBands([0, width], 0.1)
-                .domain(data.map(function(d) { return d.category; }));
+                .domain(data.map(function(d) { return d.id; }));
 
             // Update the y-scale.
             yScale
                 .range([height, 0])
-                .domain([
-                    d3.min(data, function(d) { return d3.min([d.count, 0]); }),
-                    d3.max(data, function(d) { return d.count; })
-                ]);
+                .domain([0, d3.max(data, function(d) { return d.total; })]);
 
             // Select the svg element, if it exists.
             var svg = selection.selectAll("svg").data([data]);
@@ -103,8 +108,8 @@ export default function BarChart() {
             gEnter.append("g").attr("class", "y axis").call(yAxis);
 
             // Update the outer dimensions.
-            svg.attr("width", width + margin.left + margin.right)
-                 .attr("height", height + margin.top + margin.bottom);
+            svg .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom);
 
             // Update the inner dimensions.
             var g = svg.select("g")
@@ -134,31 +139,51 @@ export default function BarChart() {
                 .duration(duration)
                 .call(yAxis);
 
-            // Update the bars.
-            var bars = g.selectAll(".bar").data(function(d) {return d;});
+            // Update the stacks
+            var stacks = g.selectAll(".stack").data(function(d) { return d; });
+            stacks.enter()
+                .append("g").attr("class", "stack")
+                .attr("transform", function(d) {
+                    return "translate(" +
+                        xScale(d.id) + ",0)";
+                });
+            stacks
+                .transition()
+                .duration(duration)
+                .attr("transform", function(d) {
+                    return "translate(" +
+                        xScale(d.id) + ",0)";
+                });
+
+            var bars = stacks.selectAll(".bar")
+                    .data(function(d) {return d.stacks;});
             bars.enter()
-                .append("rect").attr("class", "bar").attr("height", 0).attr("y", yScale(0));
+                .append("rect")
+                .attr("class", "bar")
+                .attr("height", 0)
+                .attr("width", xScale.rangeBand())
+                .attr("y", yScale(0));
             bars // update
-                .attr("fill", function(d) {
-                    if (oneColor) {
-                        return oneColor;
-                    } else if (manyColors) {
-                        return color(d.category);
-                    } else {
-                        return (d.count >= 0) ? '#1f77b4' : '#BB1A03';
+                .attr("fill", function(d, i) {
+                    var col = oneColor;
+                    if (manyColors) {
+                        col = color(d.id);
                     }
+                    return d3.rgb(col).brighter(i);
                 })
                 .transition()
                 .duration(duration)
-                .attr("x", function(d) { return xScale(d.category); })
                 .attr("width", xScale.rangeBand())
-                .attr("y", function(d) { return yScale(d3.max([0, d.count])); })
-                .attr("height", function(d) { return Math.abs(yScale(d.count) - yScale(0)); });
+                .attr("y", function(d) { return yScale(d.y1); })
+                .attr("height", function(d) {return yScale(d.y0) - yScale(d.y1);});
             bars.exit()
                 .transition()
                 .duration(duration)
                 .attr("y", height)
                 .attr("height", 0)
+                .remove();
+
+            stacks.exit()
                 .remove();
 
             // Static data labels
@@ -171,55 +196,32 @@ export default function BarChart() {
                 var dataLabelsEnter = dataLabels.enter()
                     .append("g")
                     .attr("class", "dataLabel")
-                    .attr("transform", function(d, i) { return "translate("+ (xScale(d.category) + (xScale.rangeBand() / 2)) +","+(yScale(0) - 30)+")"; });
+                    .attr("transform", function(d, i) { return "translate("+ (xScale(d.id) + (xScale.rangeBand() / 2)) +","+(yScale(0) - 30)+")"; });
 
                 dataLabelsEnter.append("text")
-                        .attr("class", "category")
-                        .attr("text-anchor", "middle")
-                        .style("font-weight", function(d, i) {
-                            return (d.category === 'Total') ? 'bold' : 'normal';
-                        })
-                        .text(function(d) {return d.category;});
+                        .attr("class", "static_label")
+                        .attr("text-anchor", "middle");
 
                 dataLabelsEnter.append("text")
                     .attr("class", "value")
                     .attr("text-anchor", "middle")
                     .attr("transform", "translate(0,20)")
                     .style("font-weight", "bold")
-                    .style("fill", function(d, i) {
-                        return (oneColor) ?
-                            oneColor : (d.count >= 0) ? '#1f77b4' : '#BB1A03';
-                    })
-                    .text(function(d) {
-                        var rounding = d3.format(",2");
-                        return rounding(d.count);
-                    });
+                    .style("fill", '#1f77b4');
 
                 dataLabels
                     .transition()
                     .duration(duration)
-                    .attr("transform", function(d, i) {return "translate("+ (xScale(d.category) + (xScale.rangeBand() / 2)) +","+( yScale(d3.max([d.count,0])) - 30)+")"; });
+                    .attr("transform", function(d, i) {return "translate("+ (xScale(d.id) + (xScale.rangeBand() / 2)) +","+(yScale(d.total) - 30)+")"; });
                 dataLabels
-                    .select(".category")
-                    .text(function(d) {return d.category;});
+                    .select(".static_label")
+                    .text(function(d) {return d.label;});
                 dataLabels
                     .select(".value")
-                    .text(function(d) {return d3.format(",2")(d.count);});
-                    // .transition()
-                    // .duration(duration)
-                    // .tween("text", function(d) {
-                    //     var i = d3.interpolate(this.textContent, d.count);
-                    //     var rounding = d3.format(",2");
-                    //     return function(t) {
-                    //         this.textContent = rounding(i(t));
-                    //     };
-                    // });
+                    .text(function(d) {return d3.format(".2s")(d.total);});
                 dataLabels.exit()
                     .transition()
                     .duration(duration)
-                    .attr("transform", function(d, i) {
-                        var xTrans = /\(-?(\d)+.?(\d)+\,/.exec(d3.select(this).attr("transform"))[0].replace("(","").replace(",","");
-                        return "translate("+ xTrans +","+yScale(0)+")"; })
                     .style("opacity", 0)
                     .remove();
             }
@@ -236,13 +238,12 @@ export default function BarChart() {
                 hoverLabelEnter.append("div").attr("class", "hover-label-content");
 
                 hoverLabel.style('display', 'none');
-                selection
-                    .selectAll(".bar")
+                bars
                     .on("mouseover.labels", function() { hoverLabel.style("display", "initial"); })
                     .on("mouseout.labels", function() { hoverLabel.style("display", "none"); })
                     .on("mousemove.labels", function(d, i) {
                         hoverLabel.select(".hover-label-content")
-                            .html("<p>" + data[i].category + " : <strong>" + data[i].count + "</strong></p>");
+                            .html("<p>" + d.label + " : <strong>" + d.value + "</strong></p>");
 
                         var $hoverLabel = hoverLabel[0][0],
                             $object = d3.select(this)[0][0],

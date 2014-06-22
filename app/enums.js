@@ -41,8 +41,8 @@ Enums.charts = {
     VOLPERLEVEL: 1,
     options: [
         { label: 'Volume per course',
-          template: 'chart1', controller: 'chart1' },
-        { label: 'Aggregated volume per level', template: 'chart2' }
+          template: 'bar-chart',
+          controller: 'chart1' },
     ]
 };
 
