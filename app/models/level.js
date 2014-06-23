@@ -42,9 +42,6 @@ var Level = DS.Model.extend({
             return accum;
         },
         removedItem: function(accum, item, changeMeta, instanceMeta) {
-            console.log('calling removedItem with item', item,
-                        changeMeta, accum);
-
             if (Ember.isNone(accum)) { accum = []; }
 
             if (Ember.isNone(changeMeta.previousValues)) {
