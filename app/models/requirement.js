@@ -59,28 +59,33 @@ var Requirement = DS.Model.extend({
 
     didCreate: function() {
         if (Em.isEmpty(this.get('levelParamsets'))) {
-            var _this = this;
+            var _this = this,
+                all = Em.RSVP.all;
             console.log('Will create a levelParamset per level for ' +
                        _this + ': ');
 
             _this.store.find('level')
                 .then(function(levels) {
-                    return Em.RSVP.map(
-                        levels.map(function(level) {
+                    return Em.RSVP.all(levels.map(function(level) {
                             return _this.store
-                                .createRecord('levelParamset',
-                                              { level: level })
+                                .createRecord('level-paramset')
                                 .save();
-                        }),
-                        function(level) {
-                            _this.get('levelParamsets').pushObject(level);
-                            return level.save();
-                        }
-                    );
-                })
-                .then(function() {
-                    console.log(_this.get('levelParamsets'));
-                    return _this.save();
+                    })).then(function(paramsets) {
+                        return all(paramsets.map(function(ps, i) {
+                            var level = levels.objectAt(i);
+                            level.get('paramsets')
+                                .pushObject(ps);
+                            return all([ps.save(),
+                                        level.save()]);
+                        })).then(function() {
+                            _this.get('levelParamsets')
+                                .pushObjects(paramsets);
+                            return all(paramsets.invoke('save')
+                                       .concat([_this.save()]));
+                        }).then(function() {
+                            console.log('all saved');
+                        });
+                    });
                 });
         }
     }
