@@ -91,33 +91,4 @@ var Requirement = DS.Model.extend({
     }
 });
 
-Requirement.reopenClass({
-    FIXTURES: [
-        { id: 1,
-          service: 0,
-          vaccine: 1,
-          vaccine_volume: null,
-          diluent_volume: null,
-          doses_course: 1,
-          elligible_percent: 3.1,
-          wastage_rate: null,
-          safety_stock: 25,
-          inuse: true,
-          levelParamsets: [ 1, 2, 3, 4, 5 ]
-        },
-        { id: 2,
-          service: 0,
-          vaccine: 3,
-          vaccine_volume: 2.0,
-          diluent_volume: 0,
-          doses_course: 3,
-          elligible_percent: 3.1,
-          wastage_rate: 25,
-          safety_stock: 25,
-          inuse: true,
-          levelParamsets: [ 6, 7, 8, 9, 10 ]
-        }
-    ]
-});
-
 export default Requirement;

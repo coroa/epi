@@ -84,24 +84,4 @@ var Level = DS.Model.extend({
     })
 });
 
-Level.reopenClass({
-    FIXTURES: [
-        { id: 1,
-          name: 'Level 1',
-          paramsets: [ 1, 6 ] },
-        { id: 2,
-          name: 'Level 2',
-          paramsets: [ 2, 7 ] },
-        { id: 3,
-          name: 'Level 3',
-          paramsets: [ 3, 8 ] },
-        { id: 4,
-          name: 'Level 4',
-          paramsets: [ 4, 9 ] },
-        { id: 5,
-          name: 'Level 5',
-          paramsets: [ 5, 10 ] }
-    ]
-});
-
 export default Level;
