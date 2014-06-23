@@ -11,6 +11,7 @@ h2 = label
       th Supply interval in weeks
       th No. times vaccines received in 1 year
       th Net storage volume per 1000 people
+      / th Dirty?
     tbody
       each tableLines: tr
         if showVaccine
@@ -27,3 +28,4 @@ h2 = label
           td: = input type="text" class="form-control" value=supply_interval
           td: rounded-number number=reorder_freq
           td: rounded-number number=storage_volume_per_1000
+          / td: isDirty

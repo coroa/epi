@@ -5,19 +5,65 @@ export default Ember.Route.extend({
         // this.controllerFor('requirements').set('model',
         //                                        this.store.find('requirement'));
         console.log('setup application controller');
-        this.controllerFor('requirements').set('model', this.store.find('requirement'));
-        this.controllerFor('vaccines').set('model',
-                                           this.store.find('vaccine'));
-        this.controllerFor('levelParamsets').set('model', this.store.find('levelParamset'));
-        this.controllerFor('levels').set('model',
-                                         this.store.find('level'));
-
         this._super.apply(this, arguments);
+
+        this.controllerFor('levels')
+            .set('model', this.store.find('level'));
+        this.controllerFor('requirements')
+            .set('model', this.store.find('requirement'));
+        this.controllerFor('vaccines')
+            .set('model', this.store.find('vaccine'));
+        this.controllerFor('level-paramsets')
+            .set('model', this.store.find('level-paramset'));
+
         // this.store.createRecord('vaccine', {'product': 'help',
         //                                     'presentation':
         //                                     'bar'}).save()
         //     .then(function(record) {
         //         debugger;
         //     });
+    },
+    _collectDirtyModels: function() {
+        return [].concat.apply([], ['requirements',
+                                    'level-paramsets']
+                               .map(function(cntrl) {
+                                   return this.controllerFor(cntrl).get('dirty');
+                               }, this)).mapBy('model');
+    },
+    actions: {
+        doSave: function() {
+            Ember.RSVP.all(this._collectDirtyModels().invoke('save'))
+            .then(function() {
+                console.log('saved successfully');
+            },
+                  function() {
+                      console.log('saving errored out');
+                  });
+        },
+        doClear: function() {
+            Ember.RSVP.all(this._collectDirtyModels().invoke('rollback'))
+                .then(function() {
+                    console.log('rollback successfully');
+                },
+                      function() {
+                          console.log('rollback errored out');
+                      });
+        },
+        doTrash: function() {
+            var _this = this;
+            Ember.RSVP.all([].concat.apply([], ['requirements',
+                                                'level-paramsets']
+                                           .map(function(cntrl) {
+                                               return this.controllerFor(cntrl)
+                                                   .mapBy('model');
+                                           }, this))
+                           .invoke('destroyRecord'))
+                .then(function() {
+                    return Ember.RSVP.all(_this.controllerFor('levels')
+                                          .mapBy('model').invoke('save'));
+                }).then(function() {
+                    console.log('all cleared');
+                });
+        }
     }
 });
