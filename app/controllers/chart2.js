@@ -3,6 +3,7 @@ import Enums from '../enums';
 
 export default Em.Controller.extend({
     needs: ['levels'],
+    staticDataLabels: true,
     data: function() {
         var levels = this.get('controllers.levels');
         return [].concat.apply([], levels.map(function(level) {
