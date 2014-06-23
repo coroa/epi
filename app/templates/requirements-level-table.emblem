@@ -21,8 +21,8 @@ h2 = label
               button.btn.btn-default type="button": vaccine.doses_per_vial
         with paramset
           th: level.name
-          td: unbound-select content=controller.temperatures optionLabelPath="content.label" optionValuePath="content.id" value=temperature prompt="Temperatures ..." class="form-control"
-          td: unbound-select content=controller.packings optionLabelPath="content.label" optionValuePath="content.id" value=packing class="form-control" prompt="Packings ..."
+          td: unbound-select content=controller.temperatures optionLabelPath="content.label" optionValuePath="content.id" value=temperature class="form-control"
+          td: unbound-select content=controller.packings optionLabelPath="content.label" optionValuePath="content.id" value=packing class="form-control"
           td: = input type="checkbox" class="form-control" checked=warm_diluent
           td: = input type="text" class="form-control" value=safety_stock
           td: = input type="text" class="form-control" value=supply_interval

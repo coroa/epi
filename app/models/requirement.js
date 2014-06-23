@@ -28,7 +28,7 @@ var Requirement = DS.Model.extend({
     doses_course: attr('number'),
     elligible_percent: attr('number'),
     wastage_rate: attr('number'),
-    levelParamsets: DS.hasMany('levelParamset'),
+    levelParamsets: DS.hasMany('levelParamset', {inverse: 'requirement'}),
 
     vaccine_volume2: Em.computed.fallback('vaccine_volume',
                                           'vaccine.vaccine_volume'),
