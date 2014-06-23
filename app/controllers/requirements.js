@@ -22,9 +22,9 @@ export default Em.ArrayController.extend({
     }.property('routineService', 'schoolService',
                'siaService', 'otherService'),
 
-    // dirty: Ember.computed.filterBy('@this', 'isDirty', true),
+    // dirty: Em.computed.filterBy('@this', 'isDirty', true),
     dirty: function() {
         return this.filterBy('isDirty');
     }.property('@each.isDirty'),
-    isDirty: Ember.computed.notEmpty('dirty')
+    isDirty: Em.computed.notEmpty('dirty')
 });

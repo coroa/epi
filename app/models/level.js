@@ -11,7 +11,7 @@ var Level = DS.Model.extend({
     Em.reduceComputed('paramsets.@each.{service,storage_volume,temperature,warm_diluent}',{
         initialValue: null,
         addedItem: function(accum, item, changeMeta, instanceMeta) {
-            if (Ember.isNone(accum)) { accum = []; }
+            if (Em.isNone(accum)) { accum = []; }
 
             var service = item.get('service'),
                 temperature = item.get('temperature'),
@@ -42,9 +42,9 @@ var Level = DS.Model.extend({
             return accum;
         },
         removedItem: function(accum, item, changeMeta, instanceMeta) {
-            if (Ember.isNone(accum)) { accum = []; }
+            if (Em.isNone(accum)) { accum = []; }
 
-            if (Ember.isNone(changeMeta.previousValues)) {
+            if (Em.isNone(changeMeta.previousValues)) {
                 return accum;
             }
 
@@ -70,7 +70,7 @@ var Level = DS.Model.extend({
             var items = group.get('items');
             items.removeObject(item);
 
-            if (Ember.isEmpty(items)) {
+            if (Em.isEmpty(items)) {
                 // remove group
                 accum.removeObject(group);
             }
