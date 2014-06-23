@@ -6,7 +6,7 @@ import Em from 'ember';
 // });
 export default DS.LSAdapter.extend({
     namespace: 'epi',
-    bootstrap: 'assets/storage.pp.json',
+    bootstrap: 'assets/storage.json',
 
     loadData: function() {
         var ret = this._super();

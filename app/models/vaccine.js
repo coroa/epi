@@ -12,7 +12,7 @@ var Vaccine = DS.Model.extend({
     diluents: attr('string'),
     integrated_delivery_device: attr('string'),
 
-    doses_per_vial: attr('number'),
+    doses_per_vial: attr('string'),
     vaccine_volume: attr('number'),
     diluent_volume: attr('number'),
     wastage_rate: attr('number'),
