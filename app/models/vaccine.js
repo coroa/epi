@@ -20,7 +20,12 @@ var Vaccine = DS.Model.extend({
     vvm_type: attr('string'),
     manufacturer: attr('string'),
     qualification_date: attr('string'),
-    data_source_notes: attr('string')
+    data_source_notes: attr('string'),
+
+    label: function() {
+        return this.get('initials') + ' (' +
+            this.get('doses_per_vial') + ')';
+    }.property('initials', 'doses_per_vial')
 });
 
 Vaccine.reopenClass({

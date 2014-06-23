@@ -8,14 +8,16 @@ var Level = DS.Model.extend({
     name: attr('string'),
 
     storage_volume:
-    Em.reduceComputed('paramsets.@each.{service,storage_volume_vaccine,storage_volume_diluent,temperature,packing,warm_diluent}',{
-        initialValue: [],
+    Em.reduceComputed('paramsets.@each.{service,storage_volume,temperature,warm_diluent}',{
+        initialValue: null,
         addedItem: function(accum, item, changeMeta, instanceMeta) {
+            if (Ember.isNone(accum)) { accum = []; }
+
             var service = item.get('service'),
                 temperature = item.get('temperature'),
                 storage_volume = item.get('storage_volume') ;
 
-            if (storage_volume === 0) {
+            if (storage_volume === 0 || isNaN(storage_volume)) {
                 return accum;
             }
 
@@ -36,9 +38,19 @@ var Level = DS.Model.extend({
             group.incrementProperty('storage_volume', storage_volume);
             group.get('items').pushObject(item);
 
+            this.notifyPropertyChange('storage_volume');
             return accum;
         },
         removedItem: function(accum, item, changeMeta, instanceMeta) {
+            console.log('calling removedItem with item', item,
+                        changeMeta, accum);
+
+            if (Ember.isNone(accum)) { accum = []; }
+
+            if (Ember.isNone(changeMeta.previousValues)) {
+                return accum;
+            }
+
             var service = changeMeta.previousValues.service ||
                     item.get('service'),
                 temperature = changeMeta.previousValues.temperature ||
@@ -47,7 +59,7 @@ var Level = DS.Model.extend({
                     changeMeta.previousValues.storage_volume ||
                     item.get('storage_volume') ;
 
-            if (storage_volume === 0) { return accum; }
+            if (storage_volume === 0 || isNaN(storage_volume)) { return accum; }
 
             var group = accum.find(function(it) {
                 return (it.get('service') === service &&
@@ -60,11 +72,13 @@ var Level = DS.Model.extend({
 
             var items = group.get('items');
             items.removeObject(item);
-            if (items.isEmpty()) {
+
+            if (Ember.isEmpty(items)) {
                 // remove group
                 accum.removeObject(group);
             }
 
+            this.notifyPropertyChange('storage_volume');
             return accum;
         }
     })

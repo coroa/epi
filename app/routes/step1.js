@@ -4,6 +4,7 @@ import Enums from '../enums';
 export default Ember.Route.extend({
     setupController: function() {
         this._super();
-        this.controllerFor('chart-picker').send('switchToChart', Enums.charts.VOLPERCOURSE);
+        this.controllerFor('chart-picker')
+            .send('switchToChart', Enums.charts.VOLPERCOURSE);
     }
 });

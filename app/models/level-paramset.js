@@ -31,16 +31,16 @@ var LevelParamset = DS.Model.extend({
     storage_volume_vaccine: function() {
         return this.get('requirement.vaccine_volume_per_course') *
             Enums.packing.options[this.get('packing')].factor *
-            (1 + this.get('safety_stock') / 100) *
-            (1 / this.get('reorder_freq'));
+            (1 + (+this.get('safety_stock')) / 100) *
+            (1 / (+this.get('reorder_freq')));
     }.property('requirement.vaccine_volume_per_course',
                'packing', 'safety_stock', 'reorder_freq'),
 
     storage_volume_diluent: function() {
         return this.get('requirement.diluent_volume_per_course') *
             Enums.packing.options[this.get('packing')].factor *
-            (1 + this.get('safety_stock') / 100) *
-            (1 / this.get('reorder_freq'));
+            (1 + (+this.get('safety_stock')) / 100) *
+            (1 / (+this.get('reorder_freq')));
     }.property('requirement.diluent_volume_per_course',
                'packing', 'safety_stock', 'reorder_freq'),
 
