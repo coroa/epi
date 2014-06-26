@@ -8,9 +8,9 @@ h2 = label
           th rowspan="2" Vaccine presentation
           th rowspan="2" % of total population elligible
           th rowspan="2" % vaccine wastage
-          th colspan="2" Volume per vial
+          th colspan="2" Volume per dose in secondary packaging (cm<sup>3</sup>)
           th rowspan="2" Number of vaccine doses per course
-          th colspan="2" Volume per course of doses
+          th colspan="2" Volume per course of doses (cm<sup>3</sup>)
         tr
           td Vaccine
           td Diluent

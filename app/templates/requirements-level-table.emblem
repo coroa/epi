@@ -6,11 +6,11 @@ h2 = label
       th
       th Temperature of storage
       th Category of packing
-      th Warm diluent
+      th Diluent at room temperature
       th % reserve (safety/leadtime) stock
       th Supply interval in weeks
       th No. times vaccines received in 1 year
-      th Net storage volume per 1000 people
+      th Net Storage volume (cm<sup>3</sup>)
       / th Dirty?
     tbody
       each tableLines: tr
@@ -27,5 +27,5 @@ h2 = label
           td: = input type="text" class="form-control" value=safety_stock
           td: = input type="text" class="form-control" value=supply_interval
           td: rounded-number number=reorder_freq
-          td: rounded-number number=storage_volume_per_1000
+          td: rounded-number number=storage_volume
           / td: isDirty
