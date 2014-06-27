@@ -218,7 +218,7 @@ export default function BarChart() {
                     .text(function(d) {return d.label;});
                 dataLabels
                     .select(".value")
-                    .text(function(d) {return d3.format(".2s")(d.total);});
+                    .text(function(d) {return d3.format(".2f")(d.total);});
                 dataLabels.exit()
                     .transition()
                     .duration(duration)
@@ -243,7 +243,7 @@ export default function BarChart() {
                     .on("mouseout.labels", function() { hoverLabel.style("display", "none"); })
                     .on("mousemove.labels", function(d, i) {
                         hoverLabel.select(".hover-label-content")
-                            .html("<p>" + d.label + " : <strong>" + d.value + "</strong></p>");
+                            .html("<p>" + d.label + " : <strong>" + d3.format(".2f")(d.value) + "</strong></p>");
 
                         var $hoverLabel = hoverLabel[0][0],
                             $object = d3.select(this)[0][0],
