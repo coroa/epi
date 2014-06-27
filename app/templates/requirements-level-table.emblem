@@ -29,3 +29,9 @@ h2 = label
           td: rounded-number number=reorder_freq
           td: rounded-number number=storage_volume
           / td: isDirty
+.table-responsive: table.table.table-condensed.vaccine-table
+  thead: tr: each resultTableHead
+    th = label
+  tbody: each resultTableLines: tr
+    th = label
+    each content: td = this
