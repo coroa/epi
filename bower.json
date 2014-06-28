@@ -15,5 +15,8 @@
     "bootstrap-sass": "~3.0.2",
     "ember-localstorage-adapter": "~0.3.1",
     "d3": "~3.4.8"
+  },
+  "devDependencies": {
+    "ember-debug": "~0.3.1"
   }
 }
