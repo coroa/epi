@@ -1,3 +1,4 @@
+import Em from 'ember';
 import DS from 'ember-data';
 import Enums from '../enums';
 
@@ -14,9 +15,8 @@ var LevelParamset = DS.Model.extend({
     safety_stock: attr('number'),
     reorder_freq: attr('number', { defaultValue: 1 }),
 
-    service: function() {
-        return this.get('requirement.service');
-    }.property('requirement.service'),
+    service: Em.computed.alias('requirement.service'),
+    vaccine: Em.computed.alias('requirement.vaccine'),
 
     supply_interval: function(key, value, prevValue) {
         if (arguments.length > 1) {
@@ -49,11 +49,7 @@ var LevelParamset = DS.Model.extend({
             (!this.get('warm_diluent')) *
             this.get('storage_volume_diluent');
     }.property('storage_volume_vaccine', 'storage_volume_diluent',
-               'warm_diluent'),
-
-    storage_volume_per_1000: function() {
-        return this.get('storage_volume') * 1000;
-    }.property('storage_volume')
+               'warm_diluent')
 });
 
 export default LevelParamset;
