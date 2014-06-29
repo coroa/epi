@@ -7,9 +7,7 @@ export default Ember.Component.extend({
 
     chart: function() {
         return BarChart()
-            .margin({left: 40, top: 40, bottom: 5, right: 40})
             .manyColors(true)
-            .rotateAxisLabels(true)
             .staticDataLabels(this.get('staticDataLabels'));
     }.property('staticDataLabels'),
 

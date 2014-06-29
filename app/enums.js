@@ -30,9 +30,9 @@ Enums.temperature = {
     PLUS5: 1,
     PLUS25: 2,
     options: [
-        { label: '- 25° C' },
-        { label: '+ 5° C' },
-        { label: '+ 25° C' }
+        { label: '- 25° C', colour: '#1f77b4' },
+        { label: '+ 5° C', colour: '#bcbd22' },
+        { label: '+ 25° C', colour: '#d62728' }
     ]
 };
 
