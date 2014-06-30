@@ -76,7 +76,7 @@ function d3_scale_weighted_ordinal(domain, ranger) {
 export default function BarChart() {
 
     var margin           = {top: 40, right: 40, bottom: 30, left: 40},
-        xScale           = scale_weighted_ordinal(),
+        xScale           = d3.scale.ordinal(),
         yScale           = d3.scale.linear(),
         xAxis            = d3.svg.axis().scale(xScale).innerTickSize(0).tickPadding(15).orient("bottom"),
         yAxis            = d3.svg.axis().scale(yScale).ticks(5).orient("left"),
@@ -91,7 +91,8 @@ export default function BarChart() {
         hoverDataLabels  = 'top',
         fadeOnHover      = true,
         noTicks          = false,
-        emptyText        = 'No data.';
+        emptyText        = 'No data.',
+        categories       = false;
 
 
     function chart(selection) {
@@ -147,19 +148,25 @@ export default function BarChart() {
             }
 
             // Update the x-scale.
-            xScale
-                .domain(data.values.map(function(d) { return d.key; }))
-                .rangeRoundBands(
+            xScale.domain(data.values.map(function(d) { return d.key; }));
+
+            var xSubScales;
+            if (categories) {
+                xScale.rangeRoundBands(
                     [0, width],
                     data.values.map(function(d) { return d.values.length; }));
 
-            // Calculate subscales
-            var xSubScales = data.values.map(function(d) {
-                return d3.scale.ordinal()
-                    .domain(d.values.map(function(d) { return d.key; }))
-                    .rangeRoundBands(
-                        [0, xScale.weightedRangeBand(d.key)], 0.1);
-            });
+                // Calculate subscales
+                xSubScales = data.values.map(function(d) {
+                    return d3.scale.ordinal()
+                        .domain(d.values.map(function(d) { return d.key; }))
+                        .rangeRoundBands(
+                            [0, xScale.weightedRangeBand(d.key)], 0.1);
+                });
+            } else {
+                xScale.rangeRoundBands([0, width], 0.1);
+                xSubScales = [ xScale ];
+            }
 
             // Update the y-scale.
             yScale
@@ -167,7 +174,7 @@ export default function BarChart() {
                 .domain([0, data.maxValue]);
 
             // Select the svg element, if it exists.
-            var svg = selection.selectAll("svg").data([data.values]);
+            var svg = selection.selectAll("svg").data([data]);
 
             // Otherwise, create the skeletal chart.
             var gEnter = svg.enter().append("svg").append("g");
@@ -203,18 +210,23 @@ export default function BarChart() {
             // Update the y-axis.
             g.select(".y.axis").transition().duration(duration).call(yAxis);
 
-            // Update the categories
-            var cats = g.selectAll(".category")
-                    .data(function(d) { return d; });
-            cats.enter()
-                .append("g").attr("class", "category")
-                .attr("transform", function(d) {
-                    return "translate(" + (xScale(d.key) - xScale.weightedRangeBand(d.key)/2) + ",0)";
+            var cats;
+            if (categories) {
+                // Update the categories
+                cats = g.selectAll(".category")
+                        .data(function(d) { return d.values; });
+                cats.enter()
+                    .append("g").attr("class", "category")
+                    .attr("transform", function(d) {
+                        return "translate(" + (xScale(d.key) - xScale.weightedRangeBand(d.key)/2) + ",0)";
                 });
-            cats.transition().duration(duration)
-                .attr("transform", function(d) {
-                    return "translate(" + (xScale(d.key) - xScale.weightedRangeBand(d.key)/2) + ",0)";
-                });
+                cats.transition().duration(duration)
+                    .attr("transform", function(d) {
+                        return "translate(" + (xScale(d.key) - xScale.weightedRangeBand(d.key)/2) + ",0)";
+                    });
+            } else {
+                cats = g;
+            }
 
             // Update the stacks
             var stacks = cats.selectAll(".stack")
@@ -242,7 +254,7 @@ export default function BarChart() {
                             width = xSubScales[d.parent].rangeBand();
 
                         return d.values.map(function(e) {
-                            e.colour = d.colour;
+                            e.colour = d.colour || color(d.key);
                             e.width = width;
                             e.y0 = y0;
                             e.y1 = (y0 += e.value);
@@ -368,17 +380,17 @@ export default function BarChart() {
                     .on("mouseout.fade", function() {
                         selection.selectAll(".bar")
                             .transition()
-                            .duration(duration)
+                            .duration(200)
                             .style("opacity", "1");
                     })
                     .on("mouseover.fade", function(d, i) {
                         selection.selectAll(".bar").filter(function(d, j){return i!==j;})
                             .transition()
-                            .duration(duration)
+                            .duration(200)
                             .style("opacity", ".7");
                         selection.selectAll(".bar").filter(function(d, j){return i===j;})
                             .transition()
-                            .duration(duration)
+                            .duration(200)
                             .style("opacity", "1");
                     });
             }
@@ -461,13 +473,13 @@ export default function BarChart() {
         if (!arguments.length) { return manyColors; }
         manyColors = _;
         return chart;
-    };    
+    };
 
     chart.colors = function(_) {
         if (!arguments.length) { return color.range(); }
         color.range(_);
         return chart;
-    }; 
+    };
 
     chart.noTicks = function(_) {
         if (!arguments.length) {
@@ -483,6 +495,18 @@ export default function BarChart() {
         } else {
             xAxis.tickSize(1);
         }
+        return chart;
+    };
+
+    chart.categories = function(_) {
+        if (!arguments.length) { return categories; }
+        categories = _;
+        if (categories === true) {
+            xScale = scale_weighted_ordinal();
+        } else {
+            xScale = d3.scale.ordinal();
+        }
+        xAxis.scale(xScale);
         return chart;
     };
 

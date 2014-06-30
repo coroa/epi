@@ -1,1 +1,1 @@
-bar-chart data=data staticDataLabels=staticDataLabels
+bar-chart data=data staticDataLabels=staticDataLabels categories=categories
