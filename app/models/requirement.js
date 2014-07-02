@@ -25,8 +25,8 @@ var Requirement = DS.Model.extend({
     vaccine: DS.belongsTo('vaccine'),
     vaccine_volume: attr('number'),
     diluent_volume: attr('number'),
-    doses_course: attr('number'),
-    elligible_percent: attr('number'),
+    doses_course: attr('number', { defaultValue: null }),
+    elligible_percent: attr('number', { defaultValue: null }),
     wastage_rate: attr('number'),
     levelParamsets: DS.hasMany('levelParamset', {inverse: 'requirement'}),
 

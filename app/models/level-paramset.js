@@ -12,7 +12,7 @@ var LevelParamset = DS.Model.extend({
     warm_diluent: attr('boolean'),
     packing: attr('number',
                   { defaultValue: Enums.packing.SECONDARY }),
-    safety_stock: attr('number'),
+    safety_stock: attr('number', { defaultValue: null }),
     reorder_freq: attr('number', { defaultValue: 1 }),
 
     service: Em.computed.alias('requirement.service'),

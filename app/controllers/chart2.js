@@ -29,7 +29,7 @@ export default Em.Controller.extend({
         });
     }.property('controllers.levels.@each.{id,name}'),
     services: Enums.service.options.map(function(d, i) {
-        return { value: i, label: d['short'] };
+        return { value: i, label: d.word };
     }),
     temperatures: Enums.temperature.options.map(function(d, i) {
         return { value: i, label: d.label };
@@ -74,7 +74,6 @@ export default Em.Controller.extend({
         var f  = ['level', 'service', 'temperature']
                 .map(function(p) { return {key:p,value:this.get(p)}; }, this)
                 .filter(function(p){return ! Em.isNone(p.value);});
-        console.log('updated filter: ', f.toArray());
         return f;
     }.property('level', 'service', 'temperature'),
     data: Em.reduceComputed(

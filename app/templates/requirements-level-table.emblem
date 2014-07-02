@@ -30,14 +30,12 @@ h2 = label
           td: rounded-number number=storage_volume
           / td: isDirty
 .table-responsive: table.table.table-condensed.vaccine-table
-  thead: with resultTableHead
-    log no_levels
+  thead
     tr
-      each label in first: th colspan="5"
+      each label in resultTableHead.first: th colspan=resultTableHead.no_levels
         = label
     tr
-      each label in second: th = label
+      each label in resultTableHead.second: th = label
   tbody: tr
-    log resultTableLine.content
     each cell in resultTableLine.content
       td: rounded-number number=cell

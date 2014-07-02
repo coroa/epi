@@ -77,8 +77,8 @@ export default Em.Controller.extend({
                     accum.set('maxValue', accum.values.reduce(function(prev, cur) {
                         return Math.max(prev, cur.values.reduce(function(p, c) {
                             return Math.max(p, c.total);
-                        }));
-                    }));
+                        }, 0));
+                    }, 0));
                 }
                 this.propertyDidChange('data');
 
