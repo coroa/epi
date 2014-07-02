@@ -85,7 +85,7 @@ export default Em.Controller.extend({
             },
             addedItem: function(accum, item, changeMeta) {
                 if (this.get('filter').any(function(f) {
-                    return item[f.key] != f.value;
+                    return item[f.key] !== f.value;
                 })) {
                     return accum;
                 }
@@ -137,22 +137,21 @@ export default Em.Controller.extend({
             },
             removedItem: function(accum, item, changeMeta) {
                 if (!changeMeta.previousValues) { return accum; }
+                var f = function(key) {
+                    return changeMeta.previousValues[key] !== undefined
+                        ? changeMeta.previousValues[key] : item.get(key);
+                };
 
-                if (this.get('filter').any(function(f) {
-                    return ((changeMeta.previousValues[f.key] || item[f.key])
-                            != f.value);
+                if (this.get('filter').any(function(filter) {
+                    return (f(filter.key) != filter.value);
                 })) {
                     return accum;
                 }
 
-                var primary = changeMeta.previousValues[this.get('primary')]
-                        || item.get(this.get('primary')),
-                    secondary = changeMeta.previousValues[this.get('secondary')]
-                        || item.get(this.get('secondary')),
-                    stack = changeMeta.previousValues[this.get('stack')]
-                        || item.get(this.get('stack')),
-                    storage_volume = changeMeta.previousValues.storage_volume
-                        || item.get('storage_volume'),
+                var primary = f('primary'),
+                    secondary = f('secondary'),
+                    stack = f('stack'),
+                    storage_volume = f('storage_volume'),
                     primaryObj = accum.values.findBy('id', primary),
                     secondaryObj = primaryObj.values.findBy('id', secondary),
                     stackObj = secondaryObj.values

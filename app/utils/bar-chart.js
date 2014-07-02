@@ -26,16 +26,20 @@ function d3_scale_weighted_ordinal(domain, ranger) {
   }
 
   scale.domain = function(x) {
-    if (!arguments.length) return domain;
+    if (!arguments.length) { return domain; }
     domain = [];
     index = d3.map();
     var i = -1, n = x.length, xi;
-    while (++i < n) if (!index.has(xi = x[i])) index.set(xi, domain.push(xi));
+    while (++i < n) {
+        if (!index.has(xi = x[i])) {
+           index.set(xi, domain.push(xi));
+        }
+    }
     return scale[ranger.t].apply(scale, ranger.a);
   };
 
   scale.range = function(x) {
-    if (!arguments.length) return range;
+    if (!arguments.length) { return range; }
     range = x;
     rangeBand = 0;
     ranger = {t: "range", a: arguments};
@@ -43,9 +47,9 @@ function d3_scale_weighted_ordinal(domain, ranger) {
   };
 
   scale.rangeRoundBands = function(x, weights, padding, outerPadding) {
-    if (arguments.length < 2) weights = [];
-    if (arguments.length < 3) padding = 0;
-    if (arguments.length < 4) outerPadding = padding;
+    if (arguments.length < 2) { weights = []; }
+    if (arguments.length < 3) { padding = 0; }
+    if (arguments.length < 4) { outerPadding = padding; }
     var length = d3.sum(weights) || domain.length,
         reverse = x[1] < x[0],
         start = x[reverse - 0],
@@ -53,7 +57,7 @@ function d3_scale_weighted_ordinal(domain, ranger) {
         step = Math.floor((stop - start) / (length - padding + 2 * outerPadding)),
         error = stop - start - (length - padding) * step;
     range = steps(start + Math.round(error / 2), step, weights);
-    if (reverse) range.reverse();
+    if (reverse) { range.reverse(); }
     rangeBand = weights.map(function(w) {
         return Math.round(w * step * (1 - padding));
     });

@@ -66,10 +66,10 @@ var Requirement = DS.Model.extend({
 
             _this.store.find('level')
                 .then(function(levels) {
-                    return Em.RSVP.all(levels.map(function(level) {
-                            return _this.store
-                                .createRecord('level-paramset')
-                                .save();
+                    return Em.RSVP.all(levels.map(function() {
+                        return _this.store
+                            .createRecord('level-paramset')
+                            .save();
                     })).then(function(paramsets) {
                         return all(paramsets.map(function(ps, i) {
                             var level = levels.objectAt(i);

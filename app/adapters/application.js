@@ -8,6 +8,10 @@ export default DS.LSAdapter.extend({
     namespace: 'epi',
     bootstrap: 'assets/storage.json',
 
+    resetData: function() {
+        localStorage.removeItem(this.adapterNamespace());
+    },
+
     loadData: function() {
         var ret = this._super();
         if (Em.$.isEmptyObject(ret)) {

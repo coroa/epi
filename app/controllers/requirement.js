@@ -10,7 +10,7 @@ export default Em.ObjectController.extend({
     }.property('vaccineInitials',
                'controllers.vaccines.@each.initials'),
 
-    vaccineId: function(key, value, oldValue) {
+    vaccineId: function(key, value) {
         if (arguments.length > 1) {
             // setter
             this.set('vaccine', this.get('vaccines')

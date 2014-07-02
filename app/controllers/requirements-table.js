@@ -22,18 +22,7 @@ export default Em.ObjectController.extend({
                                   { service: service,
                                     vaccine: vaccine })
                     .save();
-                // Em.run.scheduleOnce('afterRender', _this,
-                //                     function(req) {
-                //                         // debugger;
-                //                     }, req);
-            })
-            .then(function(requirement) {
             });
-
-        // this.get('controllers.requirements').store
-        //     .createRecord('requirement', { 'service': service,
-        //                                    'vaccine': vaccineId });
-        // perhaps we want to focus it as well?
 
         this.set('vaccineInitials', null);
         this.set('vaccineId', null);

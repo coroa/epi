@@ -8,7 +8,7 @@ var Level = DS.Model.extend({
     name: attr('string'),
 
     storage_volume: Em.computed.map('paramsets.@each.{temperature,service,vaccine,storage_volume}', function(ps) {
-        return Ember.Object.create(
+        return Em.Object.create(
             { level: this.get('name'),
               temperature: ps.get('temperature'),
               service: ps.get('service'),
