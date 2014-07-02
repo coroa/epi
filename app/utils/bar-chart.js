@@ -8,7 +8,12 @@ function d3_scale_weighted_ordinal(domain, ranger) {
       rangeBand;
 
   function scale(x) {
-    return range[((index.get(x) || (ranger.t === "range" ? index.set(x, domain.push(x)) : NaN)) - 1) % range.length];
+    var ret = range[((index.get(x) || (ranger.t === "range" ?
+                                       index.set(x, domain.push(x)) :
+                                       NaN)) - 1) % range.length];
+    // never return undefined, as xAxis doesn't work otherwise
+    if (ret === undefined) { return 0; }
+    return ret;
   }
 
   function steps(start, step, weights) {
