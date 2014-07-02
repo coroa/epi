@@ -114,6 +114,9 @@ export default Em.Controller.extend({
                 secondaryObj.set('key',
                                  formatter[this.get('secondary')](secondary));
                 secondaryObj.incrementProperty('total', item.storage_volume);
+                if (this.get('secondary') === 'temperature') {
+                    secondaryObj.set('colour', Enums.temperature.options[secondary].colour);
+                }
 
                 var stackObj = secondaryObj.values.findBy('key', formatter[this.get('stack')](stack));
                 if (stackObj === undefined) {
