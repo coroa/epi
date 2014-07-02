@@ -1,0 +1,13 @@
+.table-responsive: table.table.table-condensed.vaccine-table
+  thead: with resultTableHead
+    tr
+      th
+      each label in first: th colspan="5"
+        = label
+    tr
+      th SERVICE
+      each label in second: th = label      
+  tbody: each resultTableLines: tr
+    th: = label
+    each cell in content
+      td: rounded-number number=cell

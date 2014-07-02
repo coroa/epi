@@ -10,7 +10,7 @@ h2 = label
       th % reserve (safety/leadtime) stock
       th Supply interval in weeks
       th No. times vaccines received in 1 year
-      th Net Storage volume (cm<sup>3</sup>)
+      th Net Storage volume per 1000 people (Lts.)
       / th Dirty?
     tbody
       each tableLines: tr
@@ -30,8 +30,14 @@ h2 = label
           td: rounded-number number=storage_volume
           / td: isDirty
 .table-responsive: table.table.table-condensed.vaccine-table
-  thead: tr: each resultTableHead
-    th = label
-  tbody: each resultTableLines: tr
-    th = label
-    each content: td = this
+  thead: with resultTableHead
+    log no_levels
+    tr
+      each label in first: th colspan="5"
+        = label
+    tr
+      each label in second: th = label
+  tbody: tr
+    log resultTableLine.content
+    each cell in resultTableLine.content
+      td: rounded-number number=cell

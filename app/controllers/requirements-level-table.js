@@ -3,7 +3,7 @@ import Em from 'ember';
 import Enums from '../enums';
 
 export default Em.ObjectController.extend({
-    needs: ['levels'],
+    needs: ['levels', 'step2'],
     temperatures: Enums.temperature.options.map(function(item, index) {
         return { id: index, label: item.label };
     }),
@@ -23,19 +23,9 @@ export default Em.ObjectController.extend({
                 });
             }));
     }.property('requirements.@each'),
-    resultTableHead: [{label: 'Net storage volume'}]
-            .concat(Enums.temperature.options.map(function(el) {
-                return {label: '@ ' + el.label};
-            })),
-    resultTableLines: function() {
-        var _this = this;
-        return this.get('controllers.levels').map(function(lvl) {
-            return {label: lvl.get('name'),
-                    content: lvl.get('storage_volume')
-                    .filterBy('service', _this.get('id'))
-                    .mapBy('storage_volume')};
-        });
-    }.property('controllers.levels.@each.{name,storage_volume}')
+    resultTableHead: Ember.computed.alias('controllers.step2.resultTableHead'),
+    resultTableLine: function() {
+        return this.get('controllers.step2.resultTableLines')
+            .objectAt(this.get('id'));
+    }.property('controllers.step2.resultTableLines.[]', 'id')
 });
-
-

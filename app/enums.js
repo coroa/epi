@@ -6,10 +6,10 @@ Enums.service = {
     SIA: 2,
     OTHER: 3,
     options: [
-        { 'label': 'Routine Immunization', 'short': 'RI' },
-        { 'label': 'School Immunization', 'short': 'SI' },
-        { 'label': 'Supplementary Immunization Activities', 'short': 'SIA' },
-        { 'label': 'Other Immunization', 'short': 'OI' }
+        { 'label': 'Routine Immunization', word: 'Routine', 'short': 'RI' },
+        { 'label': 'School Immunization', word: 'School', 'short': 'SI' },
+        { 'label': 'Supplementary Immunization Activities', word: 'SIA', 'short': 'SIA' },
+        { 'label': 'Other Immunization', word: 'Other', 'short': 'OI' }
     ]};
 
 Enums.packing = {
@@ -39,13 +39,17 @@ Enums.temperature = {
 Enums.charts = {
     VOLPERCOURSE: 0,
     VOLPERLEVEL: 1,
+    VOLTABLE: 2,
     options: [
         { label: 'Volume per course',
           template: 'bar-chart',
           controller: 'chart1' },
         { label: 'Aggregated volume per level',
           template: 'chart2',
-          controller: 'chart2' }
+          controller: 'chart2' },
+        { label: 'Volume per level as table',
+          template: 'volume-table',
+          controller: 'volume-table' }
     ]
 };
 
