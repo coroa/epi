@@ -8,7 +8,7 @@ var insertSortedBy = function(array, item, key) {
 },
     formatter = {
     level: function(id) { return id; },
-    service: function(id) { return Enums.service.options[id].label; },
+    service: function(id) { return Enums.service.options[id]['short']; },
     temperature: function(id) {
         return Enums.temperature.options[id].label;
     },
@@ -20,32 +20,66 @@ var insertSortedBy = function(array, item, key) {
 
 export default Em.Controller.extend({
     needs: ['levels'],
-    categories: true,
     staticDataLabels: true,
+
+    levels: function() {
+        return this.get('controllers.levels').map(function(i) {
+            return { value: i.get('id'),
+                     label: i.get('name') };
+        });
+    }.property('controllers.levels.@each.{id,name}'),
+    services: Enums.service.options.map(function(d, i) {
+        return { value: i, label: d['short'] };
+    }),
+    temperatures: Enums.temperature.options.map(function(d, i) {
+        return { value: i, label: d.label };
+    }),
 
     // level, service, temperature can take as selection:
     // one of 'primary', 'secondary', 'stack' or a concrete value,
     // the filter property collects all concrete values
     // input
-    level: 'primary',
-    service: 0,
-    temperature: 'secondary',
+    level: null,
+    service: null,
+    temperature: null,
+
+    changeParameters: function() {
+        var level = this.get('level'),
+            service = this.get('service'),
+            temp = this.get('temperature');
+        if (service !== null) {
+            this.setProperties({ primary: 'level',
+                                 secondary: 'temperature',
+                                 stack: 'vaccine' });
+        } else if (level !== null) {
+            this.setProperties({ primary: 'service',
+                                 secondary: 'temperature',
+                                 stack: 'vaccine' });
+        } else if (temp !== null) {
+            this.setProperties({ primary: 'level',
+                                 secondary: 'service',
+                                 stack: 'vaccine' });
+        } else {
+            this.setProperties({ primary: 'level',
+                                 secondary: 'service',
+                                 stack: 'temperature' });
+        }
+    }.observes('level', 'service', 'temperature').on('init'),
 
     // output
     primary: 'level',
     secondary: 'temperature',
     stack: 'vaccine',
     filter: function() {
-        var states = [ 'primary', 'secondary', 'stack' ], f = [];
-        ['level', 'service', 'temperature'].map(function(p) {
-            if (! states.contains(this.get(p))) {
-                f.push({ key: p, value: this.get(p) });
-            }
-        }, this);
+        var f  = ['level', 'service', 'temperature']
+                .map(function(p) { return {key:p,value:this.get(p)}; }, this)
+                .filter(function(p){return ! Em.isNone(p.value);});
+        console.log('updated filter: ', f.toArray());
         return f;
     }.property('level', 'service', 'temperature'),
     data: Em.reduceComputed(
         'controllers.levels.storage_volume',
+        'primary', 'secondary', 'stack', 'filter.[]',
         {
             initialValue: function() {
                 return Em.Object.create({ maxValue: 0, values: []});
@@ -81,12 +115,16 @@ export default Em.Controller.extend({
                                  formatter[this.get('secondary')](secondary));
                 secondaryObj.incrementProperty('total', item.storage_volume);
 
-                insertSortedBy(secondaryObj.values,
-                               Em.Object.create(
-                                   { key: formatter[this.get('stack')](stack),
-                                     value: item.storage_volume}),
-                               'key');
-
+                var stackObj = secondaryObj.values.findBy('key', formatter[this.get('stack')](stack));
+                if (stackObj === undefined) {
+                    insertSortedBy(secondaryObj.values,
+                                   Em.Object.create(
+                                       { key: formatter[this.get('stack')](stack),
+                                         value: item.storage_volume}),
+                                   'key');
+                } else {
+                    stackObj.incrementProperty('value', item.storage_volume);
+                }
 
                 if (secondaryObj.total > accum.maxValue) {
                     accum.set('maxValue', secondaryObj.total);
@@ -122,17 +160,19 @@ export default Em.Controller.extend({
                 this.propertyWillChange('data');
 
                 // remove them
-                secondaryObj.values.removeObject(stackObj);
-                if (secondaryObj.values.length === 0) {
-                    primaryObj.values.removeObject(secondaryObj);
-                    if (primaryObj.values.length === 0) {
-                        accum.values.removeObject(primaryObj);
+                stackObj.decrementProperty('value', storage_volume);
+                if (Math.abs(stackObj.get('value')) < 1e-5) {
+                    secondaryObj.values.removeObject(stackObj);
+                    if (secondaryObj.values.length === 0) {
+                        primaryObj.values.removeObject(secondaryObj);
+                        if (primaryObj.values.length === 0) {
+                            accum.values.removeObject(primaryObj);
+                        }
                     }
-                } else {
-                    secondaryObj.decrementProperty('total', storage_volume);
                 }
+                secondaryObj.decrementProperty('total', storage_volume);
 
-                if (total === accum.maxValue) {
+                if (Math.abs(total - accum.maxValue) < 1e-5) {
                     accum.set('maxValue', accum.values.reduce(function(prev, cur) {
                         return Math.max(prev, cur.values.reduce(function(p, c) {
                             return Math.max(p, c.total);

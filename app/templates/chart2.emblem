@@ -1,0 +1,6 @@
+table width="100%": tbody: tr
+  td: bar-chart data=data
+  td width="100": form.form-horizontal role="form"
+    unbound-select content=services value=service optionValuePath="content.value" optionLabelPath="content.label" prompt="Service..." class="form-control"
+    unbound-select content=levels value=level optionValuePath="content.label" optionLabelPath="content.label" prompt="Level..." class="form-control"
+    unbound-select content=temperatures value=temperature optionValuePath="content.value" optionLabelPath="content.label" prompt="Temp..." class="form-control"

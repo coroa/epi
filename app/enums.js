@@ -44,7 +44,7 @@ Enums.charts = {
           template: 'bar-chart',
           controller: 'chart1' },
         { label: 'Aggregated volume per level',
-          template: 'bar-chart',
+          template: 'chart2',
           controller: 'chart2' }
     ]
 };
