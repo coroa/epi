@@ -38,8 +38,14 @@ export default Ember.Controller.extend({
                 );
             },
             addedItem: function(accum, item) {
-                var f = function(key) { return item.get(key); },
-                    levels = this.get('controllers.levels').mapBy('name'),
+                var f = function(key) { return item.get(key); };
+
+                if ([ f('service'), f('temperature'), f('level') ]
+                    .any(Ember.isNone)) {
+                    return accum;
+                }
+
+                var levels = this.get('controllers.levels').mapBy('name'),
                     row = accum.objectAt(f('service')).get('content'),
                     index = f('temperature') * levels.length +
                         levels.indexOf(f('level'));
@@ -48,8 +54,14 @@ export default Ember.Controller.extend({
                 return accum;
             },
             removedItem: function(accum, item) {
-                var f = function(key) {return item.get(key);},
-                    levels = this.get('controllers.levels').mapBy('name'),
+                var f = function(key) {return item.get(key);};
+
+                if ([ f('service'), f('temperature'), f('level') ]
+                    .any(Ember.isNone)) {
+                    return accum;
+                }
+
+                var levels = this.get('controllers.levels').mapBy('name'),
                     row = accum.objectAt(f('service')).get('content'),
                     index = f('temperature') * levels.length +
                         levels.indexOf(f('level'));

@@ -21,6 +21,7 @@ var insertSortedBy = function(array, item, key) {
 export default Em.Controller.extend({
     needs: ['levels'],
     staticDataLabels: true,
+    updateTrigger: true,
 
     levels: function() {
         return this.get('controllers.levels').map(function(i) {
@@ -94,7 +95,11 @@ export default Em.Controller.extend({
                     secondary = item.get(this.get('secondary')),
                     stack = item.get(this.get('stack'));
 
-                this.propertyWillChange('data');
+                if([primary, secondary, stack].any(Em.isNone)) {
+                    return accum;
+                }
+
+                // this.propertyWillChange('data');
 
                 var primaryObj = accum.values.findBy('id', primary);
                 if (primaryObj === undefined) {
@@ -132,13 +137,14 @@ export default Em.Controller.extend({
                     accum.set('maxValue', secondaryObj.total);
                 }
 
-                this.propertyDidChange('data');
+                // this.propertyDidChange('data');
+                this.toggleProperty('updateTrigger');
                 return accum;
             },
             removedItem: function(accum, item, changeMeta) {
-                if (!changeMeta.previousValues) { return accum; }
                 var f = function(key) {
-                    return changeMeta.previousValues[key] !== undefined
+                    return (changeMeta.previousValues !== undefined &&
+                        changeMeta.previousValues[key] !== undefined)
                         ? changeMeta.previousValues[key] : item.get(key);
                 };
 
@@ -148,17 +154,28 @@ export default Em.Controller.extend({
                     return accum;
                 }
 
-                var primary = f('primary'),
-                    secondary = f('secondary'),
-                    stack = f('stack'),
-                    storage_volume = f('storage_volume'),
+                var primary = f(this.get('primary')),
+                    secondary = f(this.get('secondary')),
+                    stack = f(this.get('stack'));
+
+                if ([primary, secondary, stack].any(Em.isNone)) {
+                    return accum;
+                }
+
+                var storage_volume = f('storage_volume'),
                     primaryObj = accum.values.findBy('id', primary),
                     secondaryObj = primaryObj.values.findBy('id', secondary),
-                    stackObj = secondaryObj.values
-                        .findBy('key', formatter[this.get('stack')](stack)),
-                    total = secondaryObj.total;
+                    stackObj, total;
+                Em.assert("Secondary Object not found in removedItem",
+                          !Em.isNone(secondaryObj));
 
-                this.propertyWillChange('data');
+                stackObj = secondaryObj.values
+                    .findBy('key', formatter[this.get('stack')](stack));
+                Em.assert("Stack Object not found in removedItem",
+                          !Em.isNone(stackObj));
+                total = secondaryObj.total;
+
+                // this.propertyWillChange('data');
 
                 // remove them
                 stackObj.decrementProperty('value', storage_volume);
@@ -173,15 +190,16 @@ export default Em.Controller.extend({
                 }
                 secondaryObj.decrementProperty('total', storage_volume);
 
-                if (Math.abs(total - accum.maxValue) < 1e-5) {
+                if (Math.abs(total - accum.get('maxValue')) < 1e-5) {
                     accum.set('maxValue', accum.values.reduce(function(prev, cur) {
                         return Math.max(prev, cur.values.reduce(function(p, c) {
                             return Math.max(p, c.total);
-                        }));
-                    }));
+                        }, 0));
+                    }, 0));
                 }
 
-                this.propertyDidChange('data');
+                // this.propertyDidChange('data');
+                // this.set('updateTrigger', true);
 
                 return accum;
             }

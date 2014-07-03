@@ -5,6 +5,7 @@ export default Ember.Component.extend({
     classNames: ['chart'],
     staticDataLabels: true,
     categories: true,
+    updateTrigger: true,
 
     chart: function() {
         return BarChart()
@@ -13,13 +14,9 @@ export default Ember.Component.extend({
             .categories(this.get('categories'));
     }.property('staticDataLabels', 'categories'),
 
-    didInsertElement: function() {
-        this.scheduleUpdate();
-    },
-
     scheduleUpdate: function() {
         Ember.run.scheduleOnce('render', this, 'update');
-    }.observes('data.@each'),
+    }.observes('data.@each','updateTrigger').on('didInsertElement'),
 
     update: function() {
         d3.select(this.$()[0])

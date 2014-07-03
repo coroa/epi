@@ -45,9 +45,11 @@ var LevelParamset = DS.Model.extend({
                'packing', 'safety_stock', 'reorder_freq'),
 
     storage_volume: function() {
-        return this.get('storage_volume_vaccine') +
+        var ret = this.get('storage_volume_vaccine') +
             (!this.get('warm_diluent')) *
             this.get('storage_volume_diluent');
+        console.log('updating storage_volume on level-paramset to', ret);
+        return ret;
     }.property('storage_volume_vaccine', 'storage_volume_diluent',
                'warm_diluent')
 });

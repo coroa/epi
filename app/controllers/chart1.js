@@ -5,7 +5,7 @@ export default Em.Controller.extend({
     needs: ['requirements'],
     staticDataLabels: true,
     categories: true,
-
+    updateTrigger: true,
     data: Em.reduceComputed(
         'controllers.requirements.@each.'
             + '{vaccine,service,vaccine_volume_per_course,'
@@ -15,6 +15,7 @@ export default Em.Controller.extend({
                 return Em.Object.create({ maxValue: 0, values: []});
             },
             addedItem: function(accum, req, changeMeta) {
+
                 var label = req.get('vaccine.initials') +
                         ' (' + req.get('vaccine.doses_per_vial') + ')',
                     service = req.get('service'),
@@ -22,7 +23,10 @@ export default Em.Controller.extend({
                     vaccine_volume = req.get('vaccine_volume_per_course'),
                     diluent_volume = req.get('diluent_volume_per_course');
 
-                this.propertyWillChange('data');
+                if([ service, vaccine ].any(Ember.isNone)) {
+                    return accum;
+                }
+                // this.propertyWillChange('data');
 
                 var serviceObj = accum.values.findBy('id', service);
                 if (serviceObj === undefined) {
@@ -51,21 +55,36 @@ export default Em.Controller.extend({
                     accum.set('maxValue', total);
                 }
 
-                this.propertyDidChange('data');
+                this.toggleProperty('updateTrigger');
                 return accum;
             },
             removedItem: function(accum, req, changeMeta) {
-                if (!changeMeta.previousValues) { return accum; }
+                var f = function(key) {
+                    return (changeMeta.previousValues !== undefined &&
+                        changeMeta.previousValues[key] !== undefined)
+                        ? changeMeta.previousValues[key] : req.get(key);
+                };
 
-                var vaccine = changeMeta.previousValues.id
-                        || req.get('id'),
-                    service = changeMeta.previousValues.service
-                        || req.get('service'),
-                    serviceObj = accum.values.findBy('id', service),
-                    vaccineObj = serviceObj.values.findBy('id', vaccine),
-                    total = vaccineObj.total;
+                var vaccine = f('id'),
+                    service = f('service');
 
-                this.propertyWillChange('data');
+                if([ vaccine, service ].any(Ember.isNone)) {
+                    return accum;
+                }
+
+                var serviceObj = accum.values.findBy('id', service),
+                    vaccineObj = serviceObj.values.findBy('id', vaccine);
+
+                if (Ember.isNone(vaccineObj)) {
+                    // ok, couldn't find it. let's hope it was ignored
+                    // during one these phases were it still had some
+                    // null values
+                    return accum;
+                }
+
+                var total = vaccineObj.total;
+
+                // this.propertyWillChange('data');
 
                 // remove them
                 serviceObj.values.removeObject(vaccineObj);
@@ -80,8 +99,9 @@ export default Em.Controller.extend({
                         }, 0));
                     }, 0));
                 }
-                this.propertyDidChange('data');
 
+                // this.toggleProperty('updateTrigger');
+                // console.log('set updateTrigger to', this.get('updateTrigger'));
                 return accum;
             }
         })
