@@ -18,9 +18,9 @@ Enums.packing = {
     TERTIARY: 2,
     PASSIVECOOLED: 3,
     options: [
-        { label: 'Primary', factor: 1.0 },
+        { label: 'Primary', factor: 2.0 },
         { label: 'Secondary', factor: 1.0 },
-        { label: 'Tertiary', factor: 1.0 },
+        { label: 'Tertiary', factor: 3.0 },
         { label: 'Passive cooled', factor: 5.0 }
     ]
 };
