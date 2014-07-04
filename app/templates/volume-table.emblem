@@ -1,4 +1,4 @@
-.table-responsive: table.table.table-condensed.vaccine-table
+.table-responsive: table.table.table-condensed.table-bordered.vaccine-table
   thead: with resultTableHead
     tr
       th
@@ -10,5 +10,5 @@
   tbody: each resultTableLines: tr
     th: = label
     each content
-      td class={isAffected:btn-info}
+      td class={isAffected:danger}
         rounded-number number=value

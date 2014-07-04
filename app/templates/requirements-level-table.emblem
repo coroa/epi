@@ -1,42 +1,45 @@
 h2 = label
-.table-responsive: form.has-feedback role="form"
-  table.table.table-condensed.vaccine-table
-    thead: tr
-      th Vaccine
-      th
-      th Temperature of storage
-      th Category of packing
-      th Diluent at room temperature
-      th % reserve (safety/leadtime) stock
-      th Supply interval in weeks
-      th No. times vaccines received in 1 year
-      th Net Storage volume per 1000 people (Lts.)
-      / th Dirty?
-    tbody
-      each tableLines: tr
-        if showVaccine
-          td rowspan=numberOfLevels
-            .btn-group
-              button.btn.btn-default type="button": vaccine.initials
-              button.btn.btn-default type="button": vaccine.doses_per_vial
-        with paramset
-          th: level.name
-          td: unbound-select content=controller.temperatures optionLabelPath="content.label" optionValuePath="content.id" value=temperature class="form-control"
-          td: unbound-select content=controller.packings optionLabelPath="content.label" optionValuePath="content.id" value=packing class="form-control"
-          td: = input type="checkbox" class="form-control" checked=warm_diluent
-          td: affecting-text value=safety_stock paramset=this action="setAffectedParamset"
-          td: = input type="text" class="form-control" value=supply_interval
-          td: rounded-number number=reorder_freq
-          td: rounded-number number=storage_volume
-          / td: isDirty
-.table-responsive: table.table.table-condensed.vaccine-table
-  thead
-    tr
-      each label in resultTableHead.first: th colspan=resultTableHead.no_levels
-        = label
-    tr
-      each label in resultTableHead.second: th = label
-  tbody: tr
-    each resultTableLine.content
-      td class={isAffected:btn-info}
-        rounded-number number=value
+if tableLines
+  .table-responsive: form.has-feedback role="form"
+    table.table.table-condensed.vaccine-table
+      thead: tr
+        th Vaccine
+        th
+        th Temperature of storage
+        th Category of packing
+        th Diluent at room temperature
+        th % reserve (safety/leadtime) stock
+        th Supply interval in weeks
+        th No. times vaccines received in 1 year
+        th Net Storage volume per 1000 people (Lts.)
+        / th Dirty?
+      tbody
+        each tableLines: tr
+          if showVaccine
+            td rowspan=numberOfLevels
+              .btn-group
+                button.btn.btn-default type="button": vaccine.initials
+                button.btn.btn-default type="button": vaccine.doses_per_vial
+          with paramset
+            th: level.name
+            td: unbound-select content=controller.temperatures optionLabelPath="content.label" optionValuePath="content.id" value=temperature class="form-control"
+            td: unbound-select content=controller.packings optionLabelPath="content.label" optionValuePath="content.id" value=packing class="form-control"
+            td: = input type="checkbox" class="form-control" checked=warm_diluent
+            td: affecting-text value=safety_stock paramset=this action="setAffectedParamset"
+            td: = input type="text" class="form-control" value=supply_interval
+            td: rounded-number number=reorder_freq
+            td: rounded-number number=storage_volume
+            / td: isDirty
+  .table-responsive: table.table.table-condensed.table-bordered.vaccine-table
+    thead
+      tr
+        each label in resultTableHead.first: th colspan=resultTableHead.no_levels
+          = label
+      tr
+        each label in resultTableHead.second: th = label
+    tbody: tr
+      each resultTableLine.content
+        td class={isAffected:danger}
+          rounded-number number=value
+else
+  p No vaccines chosen for this service.
