@@ -15,6 +15,8 @@ export default Ember.Component.extend({
         return valuePath ? this.get('selection.' + valuePath) : this.get('selection');
     }).property('selection'),
     update: function() {
+        var $el = this.$();
+        this.set('hasFocus', !Ember.isNone($el) && $el.is(':focus'));
         this.rerender();
     }.observes('content', 'selection'),
     render: function(buffer) {
@@ -40,6 +42,11 @@ export default Ember.Component.extend({
         }, this).join("");
 
         buffer.push(output);
+    },
+    didInsertElement: function() {
+        if (this.get('hasFocus')) {
+            this.$().focus();
+        }
     },
     updateSelectionFromValue: function(value) {
         var content = this.get('content'),
