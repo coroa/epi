@@ -23,7 +23,7 @@ export default Em.ObjectController.extend({
                 });
             }));
     }.property('requirements.@each'),
-    resultTableHead: Ember.computed.alias('controllers.step2.resultTableHead'),
+    resultTableHead: Em.computed.alias('controllers.step2.resultTableHead'),
     resultTableLine: function() {
         return this.get('controllers.step2.resultTableLines')
             .objectAt(this.get('id'));

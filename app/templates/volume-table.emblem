@@ -9,5 +9,6 @@
       each label in second: th = label      
   tbody: each resultTableLines: tr
     th: = label
-    each cell in content
-      td: rounded-number number=cell
+    each content
+      td class={isAffected:btn-info}
+        rounded-number number=value

@@ -24,7 +24,7 @@ h2 = label
           td: unbound-select content=controller.temperatures optionLabelPath="content.label" optionValuePath="content.id" value=temperature class="form-control"
           td: unbound-select content=controller.packings optionLabelPath="content.label" optionValuePath="content.id" value=packing class="form-control"
           td: = input type="checkbox" class="form-control" checked=warm_diluent
-          td: = input type="text" class="form-control" value=safety_stock
+          td: affecting-text value=safety_stock paramset=this action="setAffectedParamset"
           td: = input type="text" class="form-control" value=supply_interval
           td: rounded-number number=reorder_freq
           td: rounded-number number=storage_volume
@@ -37,5 +37,6 @@ h2 = label
     tr
       each label in resultTableHead.second: th = label
   tbody: tr
-    each cell in resultTableLine.content
-      td: rounded-number number=cell
+    each resultTableLine.content
+      td class={isAffected:btn-info}
+        rounded-number number=value

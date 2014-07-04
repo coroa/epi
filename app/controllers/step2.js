@@ -3,7 +3,10 @@ import Enums from '../enums';
 
 var make_array = function(n) {
     var a = [];
-    while(n --) { a.push(0); }
+    while(n --) {
+        a.push(Ember.Object
+               .create({ isAffected: false, value: 0 }));
+    }
     return a;
 };
 
@@ -48,9 +51,12 @@ export default Ember.Controller.extend({
                 var levels = this.get('controllers.levels').mapBy('name'),
                     row = accum.objectAt(f('service')).get('content'),
                     index = f('temperature') * levels.length +
-                        levels.indexOf(f('level'));
+                        levels.indexOf(f('level')),
+                    obj = row.objectAt(index);
 
-                row.replace(index, 1, [row.objectAt(index) + f('storage_volume')]);
+                obj.incrementProperty('value', f('storage_volume'));
+                obj.set('isAffected', f('isAffected'));
+
                 return accum;
             },
             removedItem: function(accum, item) {
@@ -64,8 +70,12 @@ export default Ember.Controller.extend({
                 var levels = this.get('controllers.levels').mapBy('name'),
                     row = accum.objectAt(f('service')).get('content'),
                     index = f('temperature') * levels.length +
-                        levels.indexOf(f('level'));
-                row.replace(index, 1, [row.objectAt(index) - f('storage_volume')]);
+                        levels.indexOf(f('level')),
+                    obj = row.objectAt(index);
+
+                obj.decrementProperty('value', f('storage_volume'));
+                obj.set('isAffected', false);
+
                 return accum;
             }
         })

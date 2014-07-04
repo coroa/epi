@@ -26,7 +26,9 @@ var Level = DS.Model.extend({
               temperature: ps.get('temperature'),
               service: service,
               vaccine: vaccine,
-              storage_volume: ps.get('storage_volume') });
+              storage_volume: ps.get('storage_volume'),
+              requirementId: ps.get('requirement.id'),
+              paramsetId: ps.get('id') });
     })
 });
 

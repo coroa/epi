@@ -8,6 +8,7 @@ export default Ember.ArrayController.extend({
             this.set('content', Ember.A([]));
             this.set('_positions', Ember.A([]));
             this.set('_changequeue', Ember.A([]));
+            this.set('_affected_ps', Ember.A([]));
             this._super();
         },
         arrayWillChange: function(observedObj, start, removeCount, addCount) {
@@ -81,7 +82,11 @@ export default Ember.ArrayController.extend({
                     }
                 }
 
-                // console.log('Accumulated changed array at', pos.index + ch.start);
+                this.updateItemsForAffected(ch.newValues);
+
+                console.log('Accumulated changed array at', pos.index
+                            + ch.start, 'we\'re removing',
+                            ch.removeCount, 'and adding', ch.newValues.length );
                 accum.replace(pos.index + ch.start, ch.removeCount,
                               ch.newValues);
                 if (ch.addCount !== ch.removeCount) {
@@ -92,7 +97,46 @@ export default Ember.ArrayController.extend({
                 }
             }
         },
-        addObserved: function(obj) {
+        updateItemsForAffected: function(newValues) {
+            var paramsetIds = this.get('_affected_ps');
+            newValues.forEach(function(v) {
+                if (paramsetIds.contains(v.get('paramsetId'))) {
+                    v.set('isAffected', true);
+                }
+            });
+        },
+        setAffected: function(ps, affected) {
+            var lvl = ps.get('level'),
+                pos = this.get('_positions')
+                    .find(function(p) {return p.level.get('model') === lvl;});
+            if (!Ember.isNone(pos)) {
+                var findIndexByBounded = function(arr, key, value, from, to) {
+                    var i=from;
+                    while(i < to) {
+                        if (arr.objectAt(i).get(key) === value) {
+                            return i;
+                        }
+                        i++;
+                    }},
+                    content = this.get('content'),
+                    index = findIndexByBounded(
+                        content, 'paramsetId', ps.get('id'),
+                        pos.index, pos.index+pos.length);
+                if (index !== undefined) {
+                    console.log('found index', index);
+                    var item = content.objectAt(index);
+                    item.set('isAffected', affected);
+                    // call replace for the array observer to pick up the changes
+                    content.replace(index, 1, [item]);
+                }
+            }
+            if (affected) {
+                this.get('_affected_ps').addObject(ps.get('id'));
+            } else {
+                this.get('_affected_ps').removeObject(ps.get('id'));
+            }
+        },
+        addObserved: function(lvl, obj) {
             var positions = this.get('_positions'),
                 pos = positions.findBy('obj', obj);
             if (pos === undefined) {
@@ -101,7 +145,8 @@ export default Ember.ArrayController.extend({
                 var accum = this.get('content'),
                     last = positions.objectAt(positions.length-1)
                         || { index: 0, length: 0 };
-                pos = { obj: obj,
+                pos = { level: lvl,
+                        obj: obj,
                         index: last.index + last.length,
                         length: obj.get('length') };
                 positions.pushObject(pos);
@@ -116,7 +161,12 @@ export default Ember.ArrayController.extend({
     _setup_observers: function() {
         var observer = this.get('storage_volume');
         this.forEach(function(lvl) {
-            observer.addObserved(lvl.get('storage_volume'));
+            observer.addObserved(lvl, lvl.get('storage_volume'));
         });
-    }.observes('[]').on('init')
+    }.observes('[]').on('init'),
+
+    setAffectedParamset: function(ps, affected) {
+        console.log('called setAffectedParamset');
+        this.get('storage_volume').setAffected(ps, affected);
+    }
 });
