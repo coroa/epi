@@ -8,10 +8,7 @@ export default Ember.Route.extend({
             .send('switchToChart', Enums.charts.VOLPERLEVEL);
     },
     actions: {
-        setAffectedParamset: function(ps, req, affected) {
-            if (!Ember.isNone(req)) {
-                ps = [ ps ].concat(req.get('levelParamsets'));
-            }
+        setAffected: function(ps, _, affected) {
             this.controllerFor('levels').setAffectedParamset(ps, affected);
         }
     }

@@ -19,22 +19,22 @@ h2 = label
       tbody
         each requirements: tr
           td: unbound-select content=controllers.vaccines.vaccineInitials class="form-control" value=vaccineInitials prompt="Antigen ..."
-          td: unbound-select content=vaccines optionValuePath="content.id" optionLabelPath="content.doses_per_vial" value=vaccineId prompt="Presentation ..." class="form-control"
+          td: affecting-select content=vaccines optionValuePath="content.id" optionLabelPath="content.doses_per_vial" value=vaccineId prompt="Presentation ..." action="setAffected" requirement=this
           / td: vaccine-picker initials=controllers.vaccines.vaccineInitials vaccine=vaccine vaccines=controllers.vaccines
-          td: = input value=elligible_percent class="form-control" disabled=forms_disabled
+          td: affecting-text value=elligible_percent action="setAffected" requirement=this
           td
-            = input value=wastage_rate2 class="form-control" classBinding="wastage_rate_isCustom:btn-warning"
+            affecting-text value=wastage_rate2 classBinding="wastage_rate_isCustom:btn-warning" action="setAffected" requirement=this
             if wastage_rate_isCustom
               span.glyphicon.glyphicon-remove.form-control-feedback click="reset 'wastage_rate'"
           td
-            = input value=vaccine_volume2 class="form-control" classBinding="vaccine_volume_isCustom:btn-warning"
+            affecting-text value=vaccine_volume2 classBinding="vaccine_volume_isCustom:btn-warning" action="setAffected" requirement=this
             if vaccine_volume_isCustom
               span.glyphicon.glyphicon-remove.form-control-feedback click="reset 'vaccine_volume'"
           td
-            = input value=diluent_volume2 class="form-control" classBinding="diluent_volume_isCustom:btn-warning"
+            affecting-text value=diluent_volume2 classBinding="diluent_volume_isCustom:btn-warning" action="setAffected" requirement=this
             if diluent_volume_isCustom
               span.glyphicon.glyphicon-remove.form-control-feedback click="reset 'diluent_volume'"
-          td: = input value=doses_course class="form-control"
+          td: affecting-text value=doses_course action="setAffected" requirement=this
           td: rounded-number number=vaccine_volume_per_course
           td: rounded-number number=diluent_volume_per_course
         tr

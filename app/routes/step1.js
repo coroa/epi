@@ -6,5 +6,11 @@ export default Ember.Route.extend({
         this._super();
         this.controllerFor('chart-picker')
             .send('switchToChart', Enums.charts.VOLPERCOURSE);
+    },
+    actions: {
+        setAffected: function(_, req, affected) {
+            this.controllerFor('levels')
+                .setAffectedParamset(req.get('levelParamsets'), affected);
+        }
     }
 });

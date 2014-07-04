@@ -23,10 +23,10 @@ if tableLines
           with paramset
             th: level.name
             td: = input type="checkbox" class="form-control" checked=warm_diluent
-            td: affecting-select content=controller.temperatures optionLabelPath="content.label" optionValuePath="content.id" value=temperature action="setAffectedParamset" paramset=this
-            td: affecting-select content=controller.packings optionLabelPath="content.label" optionValuePath="content.id" value=packing action="setAffectedParamset" paramset=this
-            td: affecting-text value=safety_stock action="setAffectedParamset" paramset=this
-            td: affecting-text value=supply_interval action="setAffectedParamset" paramset=this
+            td: affecting-select content=controller.temperatures optionLabelPath="content.label" optionValuePath="content.id" value=temperature action="setAffected" paramset=this
+            td: affecting-select content=controller.packings optionLabelPath="content.label" optionValuePath="content.id" value=packing action="setAffected" paramset=this
+            td: affecting-text value=safety_stock action="setAffected" paramset=this
+            td: affecting-text value=supply_interval action="setAffected" paramset=this
             td: rounded-number number=reorder_freq
             td: rounded-number number=storage_volume
             / td: isDirty
