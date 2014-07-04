@@ -32,11 +32,8 @@ if tableLines
             / td: isDirty
   .table-responsive: table.table.table-condensed.table-bordered.vaccine-table
     thead
-      tr
-        each label in resultTableHead.first: th colspan=resultTableHead.no_levels
-          = label
-      tr
-        each label in resultTableHead.second: th = label
+      tr: each label in resultTableHead.first: th colspan=resultTableHead.no_levels = label
+      tr: each label in resultTableHead.second: th = label
     tbody: tr
       each resultTableLine.content
         td class={isAffected:danger}

@@ -135,7 +135,6 @@ export default Ember.ArrayController.extend({
                         content, 'paramsetId', ps.get('id'),
                         pos.index, pos.index+pos.length);
                 if (index !== undefined) {
-                    console.log('found index', index);
                     var item = content.objectAt(index);
                     item.set('isAffected', affected);
                     // call replace for the array observer to pick up the changes
@@ -178,7 +177,6 @@ export default Ember.ArrayController.extend({
     }.observes('[]').on('init'),
 
     setAffectedParamset: function(ps, affected) {
-        console.log('called setAffectedParamset');
         this.get('storage_volume').setAffected(ps, affected);
     }
 });
