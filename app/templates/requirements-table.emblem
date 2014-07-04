@@ -4,6 +4,7 @@ h2 = label
     table.table.table-condensed.vaccine-table
       thead
         tr
+          th.delete rowspan="2"
           th rowspan="2" Vaccine antigen
           th rowspan="2" Vaccine presentation
           th rowspan="2" % of total population elligible
@@ -18,6 +19,8 @@ h2 = label
           td Diluent
       tbody
         each requirements: tr
+          td.delete: button.btn.btn-default click="delete"
+            span.glyphicon.glyphicon-remove
           td: unbound-select content=controllers.vaccines.vaccineInitials class="form-control" value=vaccineInitials prompt="Antigen ..."
           td: affecting-select content=vaccines optionValuePath="content.id" optionLabelPath="content.doses_per_vial" value=vaccineId prompt="Presentation ..." action="setAffected" requirement=this
           / td: vaccine-picker initials=controllers.vaccines.vaccineInitials vaccine=vaccine vaccines=controllers.vaccines
@@ -38,6 +41,7 @@ h2 = label
           td: rounded-number number=vaccine_volume_per_course
           td: rounded-number number=diluent_volume_per_course
         tr
+          td.delete
           td: unbound-select content=controllers.vaccines.vaccineInitials class="form-control" value=vaccineInitials prompt="Antigen ..."
           td: unbound-select content=vaccines optionValuePath="content.id" optionLabelPath="content.doses_per_vial" value=vaccineId prompt="Presentation ..." class="form-control"
           td: input class="form-control" disabled="1"

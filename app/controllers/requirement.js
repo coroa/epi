@@ -34,6 +34,9 @@ export default Em.ObjectController.extend({
     }.property('controllers.requirements.@each.' +
                '{vaccine.name,vaccine_schedule_factor,serviceLabel}'),
     actions: {
+        'delete': function() {
+            this.get('model').destroyRecord();
+        },
         'reset': function(field) {
             this.set(field, null);
         }

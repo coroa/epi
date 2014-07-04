@@ -51,17 +51,10 @@ export default Ember.Route.extend({
         },
         doTrash: function() {
             var _this = this;
-            Ember.RSVP.all([].concat.apply([], ['requirements',
-                                                'level-paramsets']
-                                           .map(function(cntrl) {
-                                               return this.controllerFor(cntrl)
-                                                   .mapBy('model');
-                                           }, this))
+            Ember.RSVP.all(this.controllerFor('requirements')
+                           .mapBy('model')
                            .invoke('destroyRecord'))
                 .then(function() {
-                    return Ember.RSVP.all(_this.controllerFor('levels')
-                                          .mapBy('model').invoke('save'));
-                }).then(function() {
                     console.log('all cleared');
                 });
         }

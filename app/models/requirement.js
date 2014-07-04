@@ -88,6 +88,17 @@ var Requirement = DS.Model.extend({
                     });
                 });
         }
+    },
+    didDelete: function() {
+        Em.assert("levelParamsets must not be deleted yet",
+                  this.get('levelParamsets.length') > 0);
+        this.get('levelParamsets').map(function(ps) {
+            var level = ps.get('level');
+            level.get('paramsets').removeObject(ps);
+            return level.save().then(function() {
+                return ps.destroyRecord();
+            });
+        });
     }
 });
 
