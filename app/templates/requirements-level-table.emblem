@@ -22,11 +22,11 @@ if tableLines
                 button.btn.btn-default type="button": vaccine.doses_per_vial
           with paramset
             th: level.name
-            td: unbound-select content=controller.temperatures optionLabelPath="content.label" optionValuePath="content.id" value=temperature class="form-control"
-            td: unbound-select content=controller.packings optionLabelPath="content.label" optionValuePath="content.id" value=packing class="form-control"
             td: = input type="checkbox" class="form-control" checked=warm_diluent
-            td: affecting-text value=safety_stock paramset=this action="setAffectedParamset"
-            td: = input type="text" class="form-control" value=supply_interval
+            td: affecting-select content=controller.temperatures optionLabelPath="content.label" optionValuePath="content.id" value=temperature action="setAffectedParamset" paramset=this
+            td: affecting-select content=controller.packings optionLabelPath="content.label" optionValuePath="content.id" value=packing action="setAffectedParamset" paramset=this
+            td: affecting-text value=safety_stock action="setAffectedParamset" paramset=this
+            td: affecting-text value=supply_interval action="setAffectedParamset" paramset=this
             td: rounded-number number=reorder_freq
             td: rounded-number number=storage_volume
             / td: isDirty

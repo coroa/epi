@@ -1,14 +1,6 @@
 import Ember from 'ember';
+import AffectingMixin from '../mixins/affecting';
 
-export default Ember.TextField.extend({
-    classNames: ['form-control'],
-    paramset: null,
-
-    focusIn: function() {
-        this.sendAction('action', this.get('paramset'), true);
-    },
-
-    focusOut: function() {
-        this.sendAction('action', this.get('paramset'), false);
-    }
+export default Ember.TextField.extend(AffectingMixin, {
+    classNames: ['form-control']
 });
