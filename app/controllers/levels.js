@@ -83,6 +83,7 @@ export default Ember.ArrayController.extend({
                 }
 
                 this.updateItemsForAffected(ch.newValues);
+                this.replaceNaNswithZero(ch.newValues);
 
                 console.log('Accumulated changed array at', pos.index
                             + ch.start, 'we\'re removing',
@@ -97,6 +98,14 @@ export default Ember.ArrayController.extend({
                 }
             }
         },
+        replaceNaNswithZero: function(newValues) {
+            newValues.forEach(function(v) {
+                if (isNaN(v.get('storage_volume'))) {
+                    console.log('Replacing NaN by 0 in storage_volume');
+                    v.set('storage_volume', 0);
+                }
+            });
+        },
         updateItemsForAffected: function(newValues) {
             var paramsetIds = this.get('_affected_ps');
             newValues.forEach(function(v) {
@@ -106,6 +115,9 @@ export default Ember.ArrayController.extend({
             });
         },
         setAffected: function(ps, affected) {
+            if (Ember.isArray(ps)) {
+                ps.forEach(function(p) {this.setAffected(p,affected);}, this);
+            }
             var lvl = ps.get('level'),
                 pos = this.get('_positions')
                     .find(function(p) {return p.level.get('model') === lvl;});

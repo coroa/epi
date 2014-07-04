@@ -20,7 +20,6 @@ var Level = DS.Model.extend({
             // see above
             vaccine = ps.get('requirement.vaccine');
         }
-        Em.assert('Storage volume must not be NaN', !isNaN(ps.get('storage_volume')));
         console.log('updating on level, storage_volume:', ps.get('storage_volume'));
         return Em.Object.create(
             { level: this.get('name'),
