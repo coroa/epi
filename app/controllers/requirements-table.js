@@ -3,7 +3,7 @@ import Em from 'ember';
 export default Em.ObjectController.extend({
     needs: ['vaccines', 'requirements'],
     vaccineInitials: null,
-    vaccineId: null,
+    vaccine: null,
     vaccines: function() {
         return this.get('controllers.vaccines')
             .filterBy('initials', this.get('vaccineInitials'));
@@ -11,20 +11,16 @@ export default Em.ObjectController.extend({
                'controllers.vaccines.@each.initials'),
     createRequirement: function() {
         var service = this.get('id'),
-            vaccineId = this.get('vaccineId'),
-            store = this.get('controllers.vaccines').store;
-        if(Em.isEmpty(vaccineId)) { return; }
+            vaccine = this.get('vaccine'),
+            store = this.get('controllers.requirements').store;
+        if(Em.isEmpty(vaccine)) { return; }
 
-        store.find('vaccine', vaccineId)
-            .then(function(vaccine) {
-                return store
-                    .createRecord('requirement',
-                                  { service: service,
-                                    vaccine: vaccine })
-                    .save();
-            });
+        store.createRecord('requirement',
+                           { service: service,
+                             vaccine: vaccine })
+            .save();
 
         this.set('vaccineInitials', null);
-        this.set('vaccineId', null);
-    }.observes('vaccineId')
+        this.set('vaccine', null);
+    }.observes('vaccine')
 });

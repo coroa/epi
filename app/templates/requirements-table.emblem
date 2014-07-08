@@ -42,7 +42,7 @@ h2 = label
         tr
           td.delete
           td: unbound-select content=controllers.vaccines.vaccineInitials class="form-control" value=vaccineInitials prompt="Antigen ..."
-          td: unbound-select content=vaccines optionValuePath="content.id" optionLabelPath="content.doses_per_vial" value=vaccineId prompt="Presentation ..." class="form-control"
+          td: vaccine-picker vaccines=vaccines vaccine=vaccine
           td: input class="form-control" disabled="1"
           td: input class="form-control" disabled="1"
           td: input class="form-control" disabled="1"
