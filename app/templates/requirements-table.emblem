@@ -22,8 +22,7 @@ h2 = label
           td.delete: button.btn.btn-default click="delete"
             span.glyphicon.glyphicon-remove
           td: unbound-select content=controllers.vaccines.vaccineInitials class="form-control" value=vaccineInitials prompt="Antigen ..."
-          td: affecting-select content=vaccines optionValuePath="content.id" optionLabelPath="content.doses_per_vial" value=vaccineId prompt="Presentation ..." action="setAffected" requirement=this
-          / td: vaccine-picker initials=controllers.vaccines.vaccineInitials vaccine=vaccine vaccines=controllers.vaccines
+          td: vaccine-picker vaccines=vaccines vaccine=vaccine action="setAffected" requirement=this
           td: affecting-text value=elligible_percent action="setAffected" requirement=this
           td
             affecting-text value=wastage_rate2 classBinding="wastage_rate_isCustom:btn-warning" action="setAffected" requirement=this

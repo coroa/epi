@@ -213,3 +213,20 @@ body {
         bottom: -10px; }
     .chart .hover-label .hover-label-content {
       padding: 10px; }
+
+
+// vaccine-picker
+
+.vaccine-picker button {
+    text-align: left;
+}
+
+.vaccine-picker button span.caret {
+    float: right;
+    position: relative;
+    top: 7px;
+}
+
+.vaccine-picker .dropdown-menu {
+    width: 800px;
+}

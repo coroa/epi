@@ -3,6 +3,7 @@ import DS from 'ember-data';
 var attr = DS.attr;
 
 var Vaccine = DS.Model.extend({
+    type: attr('string'),
     product: attr('string'),
     initials: attr('string'),
     formulation: attr('string'),

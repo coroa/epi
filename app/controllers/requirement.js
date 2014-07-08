@@ -10,17 +10,6 @@ export default Em.ObjectController.extend({
     }.property('vaccineInitials',
                'controllers.vaccines.@each.initials'),
 
-    vaccineId: function(key, value) {
-        if (arguments.length > 1) {
-            // setter
-            this.set('vaccine', this.get('vaccines')
-                     .findBy('id', value).get('content'));
-            return value;
-        }
-
-        return this.get('vaccine.id');
-    }.property('vaccine'),
-
     data: function() {
         var reqs = this.get("controllers.requirements");
         var ret = reqs.map(function(req) {
