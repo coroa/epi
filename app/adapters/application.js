@@ -6,7 +6,7 @@ import Em from 'ember';
 // });
 export default DS.LSAdapter.extend({
     namespace: 'epi',
-    bootstrap: 'assets/storage.sample3.json',
+    bootstrap: 'assets/storage.sample.json',
 
     resetData: function() {
         localStorage.removeItem(this.adapterNamespace());
