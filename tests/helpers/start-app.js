@@ -2,6 +2,7 @@
 
 var Application = require('epi/app')['default'];
 var Router = require('epi/router')['default'];
+import Ember from 'ember';
 
 export default function startApp(attrs) {
   var App;
