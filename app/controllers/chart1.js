@@ -1,10 +1,9 @@
 import Em from 'ember';
 import Enums from '../enums';
+import insertSortedBy from '../utils/insert-sorted-by';
 
 export default Em.Controller.extend({
     needs: ['requirements'],
-    staticDataLabels: true,
-    categories: true,
     updateTrigger: true,
     data: Em.reduceComputed(
         'controllers.requirements.@each.'
@@ -28,26 +27,30 @@ export default Em.Controller.extend({
                 }
                 // this.propertyWillChange('data');
 
-                var serviceObj = accum.values.findBy('id', service);
+                var serviceObj = accum.values.findBy('key', service);
                 if (serviceObj === undefined) {
                     serviceObj = Em.Object.create({ values: [] });
                     accum.values.pushObject(serviceObj);
                 }
-                var vaccineObj = serviceObj.values.findBy('id', vaccine);
+                var vaccineObj = serviceObj.values.findBy('key', vaccine);
                 if (vaccineObj === undefined) {
-                    vaccineObj = Em.Object.create({ id: vaccine });
-                    serviceObj.values.pushObject(vaccineObj);
+                    vaccineObj = Em.Object.create({ key: vaccine,
+                                                    index: changeMeta.index });
+                    insertSortedBy(serviceObj.values, vaccineObj, 'index');
                 }
                 serviceObj.setProperties(
-                    {id: service,
-                     key: Enums.service
+                    {key: service,
+                     label: Enums.service
                      .options[service]['short']});
                 var total = vaccine_volume + diluent_volume;
                 vaccineObj.setProperties(
-                    {key: label,
-                     values: [{key: label + ' - vaccine',
+                    {key: vaccine,
+                     label: label,
+                     values: [{label: label + ' - vaccine',
+                               key: vaccine + '_vac',
                                value: vaccine_volume},
-                              {key: label + ' - diluent',
+                              {label: label + ' - diluent',
+                               key: vaccine + '_dil',
                                value: diluent_volume}],
                      total: total});
 
@@ -72,8 +75,8 @@ export default Em.Controller.extend({
                     return accum;
                 }
 
-                var serviceObj = accum.values.findBy('id', service),
-                    vaccineObj = serviceObj.values.findBy('id', vaccine);
+                var serviceObj = accum.values.findBy('key', service),
+                    vaccineObj = serviceObj.values.findBy('key', vaccine);
 
                 if (Ember.isNone(vaccineObj)) {
                     // ok, couldn't find it. let's hope it was ignored

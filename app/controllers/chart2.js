@@ -1,16 +1,12 @@
 import Em from 'ember';
 import Enums from '../enums';
+import insertSortedBy from '../utils/insert-sorted-by';
 
-var insertSortedBy = function(array, item, key) {
-    var value = item.get(key), i=0;
-    while (i < array.length && array.objectAt(i).get(key) < value) { i ++; }
-    return array.insertAt(i, item);
-},
-    formatter = {
-    level: function(id) { return id; },
-    service: function(id) { return Enums.service.options[id]['short']; },
-    temperature: function(id) {
-        return Enums.temperature.options[id].label;
+var formatter = {
+    level: function(key) { return key; },
+    service: function(key) { return Enums.service.options[key]['short']; },
+    temperature: function(key) {
+        return Enums.temperature.options[key].label;
     },
     vaccine: function(vac) {
         return vac.get('initials') +
@@ -20,7 +16,6 @@ var insertSortedBy = function(array, item, key) {
 
 export default Em.Controller.extend({
     needs: ['levels'],
-    staticDataLabels: true,
     updateTrigger: true,
 
     levels: function() {
@@ -101,36 +96,39 @@ export default Em.Controller.extend({
 
                 // this.propertyWillChange('data');
 
-                var primaryObj = accum.values.findBy('id', primary);
+                var primaryObj = accum.values.findBy('key', primary);
                 if (primaryObj === undefined) {
-                    primaryObj = Em.Object.create({ id: primary, values: [] });
-                    insertSortedBy(accum.values, primaryObj, 'id');
+                    primaryObj = Em.Object.create({ key: primary, values: [] });
+                    insertSortedBy(accum.values, primaryObj, 'key');
                 }
-                primaryObj.set('key',
+                primaryObj.set('label',
                                formatter[this.get('primary')](primary));
 
-                var secondaryObj = primaryObj.values.findBy('id', secondary);
+                var secondaryObj = primaryObj.values.findBy('key', secondary);
                 if (secondaryObj === undefined) {
-                    secondaryObj = Em.Object.create({ id: secondary,
+                    secondaryObj = Em.Object.create({ key: secondary,
                                                       values: [] });
-                    insertSortedBy(primaryObj.values, secondaryObj, 'id');
+                    insertSortedBy(primaryObj.values, secondaryObj, 'key');
                 }
-                secondaryObj.set('key',
+                secondaryObj.set('label',
                                  formatter[this.get('secondary')](secondary));
                 secondaryObj.incrementProperty('total', item.storage_volume);
                 if (this.get('secondary') === 'temperature') {
                     secondaryObj.set('colour', Enums.temperature.options[secondary].colour);
                 }
 
-                var stackObj = secondaryObj.values.findBy('key', formatter[this.get('stack')](stack));
+                var stackObj = secondaryObj.values.findBy('key', stack);
                 if (stackObj === undefined) {
                     insertSortedBy(secondaryObj.values,
                                    Em.Object.create(
-                                       { key: formatter[this.get('stack')](stack),
-                                         value: item.storage_volume}),
+                                       { key: stack,
+                                         label: formatter[this.get('stack')](stack),
+                                         value: item.storage_volume,
+                                         isAffected: item.isAffected }),
                                    'key');
                 } else {
                     stackObj.incrementProperty('value', item.storage_volume);
+                    stackObj.set('isAffected', item.isAffected);
                 }
 
                 if (secondaryObj.total > accum.maxValue) {
@@ -163,14 +161,14 @@ export default Em.Controller.extend({
                 }
 
                 var storage_volume = f('storage_volume'),
-                    primaryObj = accum.values.findBy('id', primary),
-                    secondaryObj = primaryObj.values.findBy('id', secondary),
+                    primaryObj = accum.values.findBy('key', primary),
+                    secondaryObj = primaryObj.values.findBy('key', secondary),
                     stackObj, total;
                 Em.assert("Secondary Object not found in removedItem",
                           !Em.isNone(secondaryObj));
 
                 stackObj = secondaryObj.values
-                    .findBy('key', formatter[this.get('stack')](stack));
+                    .findBy('key', stack);
                 Em.assert("Stack Object not found in removedItem",
                           !Em.isNone(stackObj));
                 total = secondaryObj.total;

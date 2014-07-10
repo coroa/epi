@@ -4,14 +4,12 @@ import BarChart from '../utils/bar-chart';
 export default Ember.Component.extend({
     classNames: ['chart'],
     staticDataLabels: true,
-    categories: true,
     updateTrigger: true,
 
     chart: function() {
         return BarChart()
             .manyColors(true)
-            .staticDataLabels(this.get('staticDataLabels'))
-            .categories(this.get('categories'));
+            .staticDataLabels(this.get('staticDataLabels'));
     }.property('staticDataLabels', 'categories'),
 
     scheduleUpdate: function() {
