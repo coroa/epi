@@ -1,0 +1,21 @@
+{
+    "version": "0.1",
+    "name": "EPI",
+    "description": "",
+    "launch_path": "/index.html",
+    "icons": {
+        "16": "/assets/fridge16.png",
+        "64": "/assets/fridge64.png",
+        "128": "/assets/fridge128.png"
+    },
+    "developer": {
+        "name": "Jonas Hörsch",
+        "url": ""
+    },
+    "default_locale": "en",
+    "activities": {
+        "dhis": {
+            "href": "*"
+        }
+    }
+}
