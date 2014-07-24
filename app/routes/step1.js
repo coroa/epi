@@ -9,7 +9,7 @@ export default Ember.Route.extend({
     },
     actions: {
         setAffected: function(_, req, affected) {
-            this.controllerFor('levels')
+            this.controllerFor('requirements')
                 .setAffectedParamset(req.get('levelParamsets'), affected);
         }
     }

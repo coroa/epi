@@ -26,7 +26,7 @@ export default Ember.Controller.extend({
         });
     }.property('controllers.levels.@each.name'),
     resultTableLines: Ember.reduceComputed(
-        'controllers.levels.storage_volume', {
+        'controllers.requirements.storage_volume', {
             initialValue: function() { return []; },
             initialize: function(initialValue) {
                 var no_levels = this.get('controllers.levels.length'),

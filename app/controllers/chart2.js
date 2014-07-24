@@ -15,7 +15,7 @@ var formatter = {
 };
 
 export default Em.Controller.extend({
-    needs: ['levels'],
+    needs: ['requirements', 'levels'],
     updateTrigger: true,
 
     levels: function() {
@@ -73,7 +73,7 @@ export default Em.Controller.extend({
         return f;
     }.property('level', 'service', 'temperature'),
     data: Em.reduceComputed(
-        'controllers.levels.storage_volume',
+        'controllers.requirements.storage_volume',
         'primary', 'secondary', 'stack', 'filter.[]',
         {
             initialValue: function() {

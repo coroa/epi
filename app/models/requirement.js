@@ -57,6 +57,21 @@ var Requirement = DS.Model.extend({
     }.property('diluent_volume2', 'doses_course', 'elligible_percent',
                'wastage_factor'),
 
+    storage_volume: Em.computed.map(null, function(ps) {
+        var service = this.get('service'),
+            vaccine = this.get('vaccine');
+        console.log('updating on level, storage_volume:', ps.get('storage_volume'));
+        return Em.Object.create(
+            { level: ps.get('level.name'),
+              temperature: ps.get('temperature'),
+              service: service,
+              vaccine: vaccine,
+              storage_volume: ps.get('storage_volume'),
+              requirementId: this.get('id'),
+              paramsetId: ps.get('id') });
+    }).property('levelParamsets.@each.{temperature,storage_volume}',
+                'service', 'vaccine'), // set the dependent key omitted earlier
+
     didCreate: function() {
         if (Em.isEmpty(this.get('levelParamsets'))) {
             var _this = this,
