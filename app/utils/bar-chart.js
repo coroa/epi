@@ -276,7 +276,7 @@ export default function BarChart() {
                 .attr("width", function(d) {return d.width;})
                 .attr("y", yScale(0));
             bars // update
-                .attr("stroke-width", function(d) {return d.isAffected ? 1:0;})
+                .attr("stroke-width", function(d) {return d.isAffected ? 2:0;})
                 .attr("fill", function(d, i) {
                     var col;
                     if (d.colour) {
@@ -287,6 +287,10 @@ export default function BarChart() {
                         col = oneColor;
                     }
                     return d3.rgb(col).brighter(0.5*i);
+                })
+                .sort(function(a, b) {
+                    return a.isAffected ? +1 :
+                        (b.isAffected ? -1 : 0);
                 })
                 .transition()
                 .duration(duration)
