@@ -161,8 +161,11 @@ export default Em.Controller.extend({
                 }
 
                 var storage_volume = f('storage_volume'),
-                    primaryObj = accum.values.findBy('key', primary),
-                    secondaryObj = primaryObj.values.findBy('key', secondary),
+                    primaryObj = accum.values.findBy('key', primary);
+                Em.assert("Primary Object not found in removedItem",
+                          !Em.isNone(primaryObj));
+
+                var secondaryObj = primaryObj.values.findBy('key', secondary),
                     stackObj, total;
                 Em.assert("Secondary Object not found in removedItem",
                           !Em.isNone(secondaryObj));
