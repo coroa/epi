@@ -25,8 +25,7 @@ export default Ember.Controller.extend({
             }))
         });
     }.property('controllers.levels.@each.name'),
-    resultTableLines: Ember.reduceComputed(
-        'controllers.requirements.storage_volume', {
+    resultTableLines: Ember.reduceComputed(null, {
             initialValue: function() { return []; },
             initialize: function(initialValue) {
                 var no_levels = this.get('controllers.levels.length'),
@@ -78,5 +77,6 @@ export default Ember.Controller.extend({
 
                 return accum;
             }
-        })
+    }).property('controllers.requirements.storage_volume',
+                'controllers.levels.[]')
 });

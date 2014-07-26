@@ -53,7 +53,7 @@ var Requirement = DS.Model.extend({
     diluent_volume_per_course: function() {
         return +(this.get('diluent_volume2') * this.get('doses_course') *
                  (this.get('elligible_percent') / 100) *
-                this.get('wastage_factor')).toFixed(3);
+                 this.get('wastage_factor')).toFixed(3);
     }.property('diluent_volume2', 'doses_course', 'elligible_percent',
                'wastage_factor'),
 
@@ -75,33 +75,29 @@ var Requirement = DS.Model.extend({
     didCreate: function() {
         if (Em.isEmpty(this.get('levelParamsets'))) {
             var _this = this,
-                all = Em.RSVP.all;
+                all = Em.RSVP.all,
+                levels = _this.store.all('level');
             console.log('Will create a levelParamset per level for ' +
-                       _this + ': ');
+                        _this + ': ');
 
-            _this.store.find('level')
-                .then(function(levels) {
-                    return Em.RSVP.all(levels.map(function() {
-                        return _this.store
-                            .createRecord('level-paramset')
-                            .save();
-                    })).then(function(paramsets) {
-                        return all(paramsets.map(function(ps, i) {
-                            var level = levels.objectAt(i);
-                            level.get('paramsets')
-                                .pushObject(ps);
-                            return all([ps.save(),
-                                        level.save()]);
-                        })).then(function() {
-                            _this.get('levelParamsets')
-                                .pushObjects(paramsets);
-                            return all(paramsets.invoke('save')
-                                       .concat([_this.save()]));
-                        }).then(function() {
-                            console.log('all saved');
-                        });
-                    });
+            all(levels.map(function() {
+                return _this.store
+                    .createRecord('level-paramset')
+                    .save();
+            })).then(function(paramsets) {
+                return all(paramsets.map(function(ps, i) {
+                    var level = levels.objectAt(i);
+                    ps.set('level', level);
+                    return ps.save();
+                })).then(function() {
+                    _this.get('levelParamsets')
+                        .pushObjects(paramsets);
+                    return all(paramsets.invoke('save')
+                               .concat([_this.save()]));
+                }).then(function() {
+                    console.log('all saved');
                 });
+            });
         }
     },
     didDelete: function() {
