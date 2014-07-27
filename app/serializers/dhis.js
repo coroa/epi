@@ -2,7 +2,7 @@ import DS from 'ember-data';
 import Em from 'ember';
 
 export default DS.JSONSerializer.extend({
-    periods: [ '2014' ],
+    periods: [ '2013' ],
     dataelements: {
         population: 'drdP9msdeIZ',
         capacity: 'qkFwjzfUrmP'
@@ -10,19 +10,26 @@ export default DS.JSONSerializer.extend({
     buildIdFromQuery: function(pe, ou, de) {
         return [pe, ou, de].join(':');
     },
+    extractMeta: function(store, type, payload) {
+        if (payload && payload.pager) {
+            store.metaForType(type, payload.pager);
+            delete payload.pager;
+        }
+    },
     extractArray: function(store, type, payload) {
-        var arrayPayload = payload[store.adapterFor(type).pathForType[type.typeKey]];
+        var serializer = this,
+            arrayPayload = payload[store.adapterFor(type).pathForType[type.typeKey]];
         if (type.typeKey === 'level') {
             // we need a deep copy
             arrayPayload = arrayPayload.map(function(p) {
                 return Em.$.extend({}, p);
             });
         }
-        arrayPayload.meta = payload.pager;
-        return this._super(store, type, arrayPayload);
+        return arrayPayload.map(function(singlePayload) {
+            return serializer.extractSingle(store, type, singlePayload);
+        });
     },
     extractSingle: function(store, type, payload) {
-        payload = this._super(store, type, payload);
         Em.get(type,'relationships')
             .get(store.modelFor('data-value'))
             .forEach(function(r) {
@@ -40,6 +47,6 @@ export default DS.JSONSerializer.extend({
                            return this.buildIdFromQuery(p, payload.id, dataelement);
                        }, this));
             }, this);
-        return payload;
+        return this._super(store, type, payload);
     }
 });
