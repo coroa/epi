@@ -1,1 +1,1 @@
-bar-chart data=data updateTrigger=updateTrigger
+bar-chart data=data needsUpdate=needsUpdate

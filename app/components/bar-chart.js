@@ -4,7 +4,7 @@ import BarChart from '../utils/bar-chart';
 export default Ember.Component.extend({
     classNames: ['chart'],
     staticDataLabels: true,
-    updateTrigger: true,
+    needsUpdate: true,
 
     chart: function() {
         return BarChart()
@@ -14,7 +14,8 @@ export default Ember.Component.extend({
 
     scheduleUpdate: function() {
         Ember.run.scheduleOnce('render', this, 'update');
-    }.observes('data.@each','updateTrigger').on('didInsertElement'),
+        this.set('needsUpdate', false);
+    }.observes('needsUpdate').on('didInsertElement'),
 
     update: function() {
         d3.select(this.$()[0])

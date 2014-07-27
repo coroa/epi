@@ -4,7 +4,7 @@ import insertSortedBy from '../utils/insert-sorted-by';
 
 export default Em.Controller.extend({
     needs: ['requirements'],
-    updateTrigger: true,
+    needsUpdate: true,
     data: Em.reduceComputed(
         'controllers.requirements.@each.'
             + '{vaccine,service,vaccine_volume_per_course,'
@@ -58,7 +58,7 @@ export default Em.Controller.extend({
                     accum.set('maxValue', total);
                 }
 
-                this.toggleProperty('updateTrigger');
+                this.set('needsUpdate', true);
                 return accum;
             },
             removedItem: function(accum, req, changeMeta) {
@@ -103,7 +103,7 @@ export default Em.Controller.extend({
                     }, 0));
                 }
 
-                // this.toggleProperty('updateTrigger');
+                this.set('needsUpdate', true);
                 // console.log('set updateTrigger to', this.get('updateTrigger'));
                 return accum;
             }

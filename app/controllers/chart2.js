@@ -16,7 +16,7 @@ var formatter = {
 
 export default Em.Controller.extend({
     needs: ['requirements', 'levels'],
-    updateTrigger: true,
+    needsUpdate: true,
 
     levels: function() {
         return this.get('controllers.levels').map(function(i) {
@@ -136,7 +136,7 @@ export default Em.Controller.extend({
                 }
 
                 // this.propertyDidChange('data');
-                this.toggleProperty('updateTrigger');
+                this.set('needsUpdate', true);
                 return accum;
             },
             removedItem: function(accum, item, changeMeta) {
@@ -200,7 +200,7 @@ export default Em.Controller.extend({
                 }
 
                 // this.propertyDidChange('data');
-                // this.set('updateTrigger', true);
+                this.set('needsUpdate', true);
 
                 return accum;
             }
