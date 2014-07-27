@@ -4,8 +4,8 @@ import DHISBaseAdapter from './dhis-base';
 export default DHISBaseAdapter.extend({
     pathForType: {
         level: "organisationUnitLevels",
-        facility: "organisationUnit",
-        'data-element': "dataElements"
+        facility: "organisationUnits",
+        dataElement: "dataElements"
     },
     findAllinProcess: {},
     buildURL: function(type, id) {
