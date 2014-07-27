@@ -50,7 +50,6 @@ export default Ember.Route.extend({
                       });
         },
         doTrash: function() {
-            var _this = this;
             Ember.RSVP.all(this.controllerFor('requirements')
                            .mapBy('model')
                            .invoke('destroyRecord'))

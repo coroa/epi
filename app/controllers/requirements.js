@@ -193,7 +193,7 @@ export default Em.ArrayController.extend({
         this.forEach(function(req) {
             observer.addObserved(req, req.get('storage_volume'));
         });
-    }.observes('[]').on('init'),
+    }.observes('[]').on('didInsertElement'),
 
     setAffectedParamset: function(ps, affected) {
         this.get('storage_volume').setAffected(ps, affected);
