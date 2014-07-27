@@ -70,7 +70,7 @@ var Requirement = DS.Model.extend({
               requirementId: this.get('id'),
               paramsetId: ps.get('id') });
     }).property('levelParamsets.@each.{temperature,storage_volume}',
-                'service', 'vaccine'), // set the dependent key omitted earlier
+                'service', 'vaccine', 'levelParamsets.[]'), // set the dependent key omitted earlier
 
     didCreate: function() {
         if (Em.isEmpty(this.get('levelParamsets'))) {
