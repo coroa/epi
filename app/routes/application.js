@@ -15,7 +15,8 @@ export default Ember.Route.extend({
             .set('model', this.store.find('vaccine'));
         this.controllerFor('level-paramsets')
             .set('model', this.store.find('level-paramset'));
-
+        this.controllerFor('sia-storage-volumes')
+            .set('model', this.store.find('sia-storage-volume'));
         // this.store.createRecord('vaccine', {'product': 'help',
         //                                     'presentation':
         //                                     'bar'}).save()

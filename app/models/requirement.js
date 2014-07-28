@@ -1,24 +1,9 @@
 import DS from 'ember-data';
 import Em from 'ember';
+import Enums from '../enums';
+import fallback from '../utils/fallback';
 
 var attr = DS.attr;
-
-Em.computed.fallback = function(path, fallbackPath) {
-    return Em.computed(function(key, newValue, cachedValue) {
-        if (arguments.length === 1) {
-            // getter
-            var val = this.get(path);
-            return !Em.isNone(val) ? val
-                : this.get(fallbackPath);
-        } else if(newValue != cachedValue) {
-            // setter
-            this.set(path, newValue);
-            return newValue;
-        } else {
-            return cachedValue;
-        }
-    }).property(path, fallbackPath);
-};
 
 var Requirement = DS.Model.extend({
     service: attr('number'),
@@ -30,14 +15,14 @@ var Requirement = DS.Model.extend({
     wastage_rate: attr('number'),
     levelParamsets: DS.hasMany('levelParamset', {inverse: 'requirement'}),
 
-    vaccine_volume2: Em.computed.fallback('vaccine_volume',
-                                          'vaccine.vaccine_volume'),
+    vaccine_volume2: fallback('vaccine_volume',
+                              'vaccine.vaccine_volume'),
     vaccine_volume_isCustom: Em.computed.notEmpty('vaccine_volume'),
-    diluent_volume2: Em.computed.fallback('diluent_volume',
-                                          'vaccine.diluent_volume'),
+    diluent_volume2: fallback('diluent_volume',
+                              'vaccine.diluent_volume'),
     diluent_volume_isCustom: Em.computed.notEmpty('diluent_volume'),
-    wastage_rate2: Em.computed.fallback('wastage_rate',
-                                        'vaccine.wastage_rate'),
+    wastage_rate2: fallback('wastage_rate',
+                            'vaccine.wastage_rate'),
     wastage_rate_isCustom: Em.computed.notEmpty('wastage_rate'),
 
     wastage_factor: function() {
@@ -56,21 +41,6 @@ var Requirement = DS.Model.extend({
                  this.get('wastage_factor')).toFixed(3);
     }.property('diluent_volume2', 'doses_course', 'elligible_percent',
                'wastage_factor'),
-
-    storage_volume: Em.computed.map(null, function(ps) {
-        var service = this.get('service'),
-            vaccine = this.get('vaccine');
-        console.log('updating on level, storage_volume:', ps.get('storage_volume'));
-        return Em.Object.create(
-            { level: ps.get('level.name'),
-              temperature: ps.get('temperature'),
-              service: service,
-              vaccine: vaccine,
-              storage_volume: ps.get('storage_volume'),
-              requirementId: this.get('id'),
-              paramsetId: ps.get('id') });
-    }).property('levelParamsets.@each.{temperature,storage_volume}',
-                'service', 'vaccine', 'levelParamsets.[]'), // set the dependent key omitted earlier
 
     didCreate: function() {
         if (Em.isEmpty(this.get('levelParamsets'))) {

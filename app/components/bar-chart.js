@@ -15,7 +15,7 @@ export default Ember.Component.extend({
     scheduleUpdate: function() {
         Ember.run.scheduleOnce('render', this, 'update');
         this.set('needsUpdate', false);
-    }.observes('needsUpdate').on('didInsertElement'),
+    }.observes('data.[]','needsUpdate').on('didInsertElement'),
 
     update: function() {
         d3.select(this.$()[0])

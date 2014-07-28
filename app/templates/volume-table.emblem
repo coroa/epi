@@ -2,7 +2,7 @@
   thead: with resultTableHead
     tr
       th
-      each label in first: th colspan="5"
+      each label in first: th colspan=resultTableHead.no_levels
         = label
     tr
       th SERVICE
@@ -11,4 +11,4 @@
     th: = label
     each content
       td class={isAffected:danger}
-        rounded-number number=value
+        rounded-number number=value2

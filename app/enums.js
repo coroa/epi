@@ -6,10 +6,10 @@ Enums.service = {
     SIA: 2,
     OTHER: 3,
     options: [
-        { 'label': 'Routine Immunization', word: 'Routine', 'short': 'RI' },
-        { 'label': 'School Immunization', word: 'School', 'short': 'SI' },
-        { 'label': 'Supplementary Immunization Activities', word: 'SIA', 'short': 'SIA' },
-        { 'label': 'Other Immunization', word: 'Other', 'short': 'OI' }
+        { id: 0, 'label': 'Routine Immunization', word: 'Routine', 'short': 'RI' },
+        { id: 1, 'label': 'School Immunization', word: 'School', 'short': 'SI' },
+        { id: 2, 'label': 'Supplementary Immunization Activities', word: 'SIA', 'short': 'SIA' },
+        { id: 3, 'label': 'Other Immunization', word: 'Other', 'short': 'OI' }
     ]};
 
 Enums.packing = {
@@ -30,9 +30,9 @@ Enums.temperature = {
     PLUS5: 1,
     PLUS25: 2,
     options: [
-        { label: '- 25° C', colour: '#1f77b4' },
-        { label: '+ 5° C', colour: '#bcbd22' },
-        { label: '+ 25° C', colour: '#d62728' }
+        { id: 0, label: '- 25° C', colour: '#1f77b4' },
+        { id: 1, label: '+ 5° C', colour: '#bcbd22' },
+        { id: 2, label: '+ 25° C', colour: '#d62728' }
     ]
 };
 

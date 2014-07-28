@@ -3,7 +3,7 @@ import Enums from '../enums';
 import insertSortedBy from '../utils/insert-sorted-by';
 
 var formatter = {
-    level: function(key) { return key; },
+    level: function(lvl) { return lvl.get('name'); },
     service: function(key) { return Enums.service.options[key]['short']; },
     temperature: function(key) {
         return Enums.temperature.options[key].label;
@@ -31,14 +31,16 @@ export default Em.Controller.extend({
         return { value: i, label: d.label };
     }),
 
-    // level, service, temperature can take as selection:
-    // one of 'primary', 'secondary', 'stack' or a concrete value,
-    // the filter property collects all concrete values
+    // level, service, temperature accept either concrete value or null
+    // changeParameters chooses the axis based on their nulls
+    // filter collects the concrete values
+
     // input
     level: null,
     service: null,
     temperature: null,
 
+    // intermediary
     changeParameters: function() {
         var level = this.get('level'),
             service = this.get('service'),
@@ -67,10 +69,12 @@ export default Em.Controller.extend({
     secondary: 'temperature',
     stack: 'vaccine',
     filter: function() {
-        var f  = ['level', 'service', 'temperature']
-                .map(function(p) { return {key:p,value:this.get(p)}; }, this)
-                .filter(function(p){return ! Em.isNone(p.value);});
-        return f;
+        return [{key: 'level.id', value: 'level'},
+                {key: 'service', value: 'service'},
+                {key: 'temperature', value: 'temperature'}]
+            .map(function(p) { p.value = this.get(p.value); return p; }, this)
+            .filter(function(p){return ! Em.isNone(p.value);});
+
     }.property('level', 'service', 'temperature'),
     data: Em.reduceComputed(
         'controllers.requirements.storage_volume',
@@ -81,7 +85,7 @@ export default Em.Controller.extend({
             },
             addedItem: function(accum, item, changeMeta) {
                 if (this.get('filter').any(function(f) {
-                    return item[f.key] !== f.value;
+                    return item.get(f.key) !== f.value;
                 })) {
                     return accum;
                 }
@@ -93,8 +97,6 @@ export default Em.Controller.extend({
                 if([primary, secondary, stack].any(Em.isNone)) {
                     return accum;
                 }
-
-                // this.propertyWillChange('data');
 
                 var primaryObj = accum.values.findBy('key', primary);
                 if (primaryObj === undefined) {
@@ -135,15 +137,14 @@ export default Em.Controller.extend({
                     accum.set('maxValue', secondaryObj.total);
                 }
 
-                // this.propertyDidChange('data');
                 this.set('needsUpdate', true);
                 return accum;
             },
             removedItem: function(accum, item, changeMeta) {
                 var f = function(key) {
                     return (changeMeta.previousValues !== undefined &&
-                        changeMeta.previousValues[key] !== undefined)
-                        ? changeMeta.previousValues[key] : item.get(key);
+                        changeMeta.previousValues.get(key) !== undefined)
+                        ? changeMeta.previousValues.get(key) : item.get(key);
                 };
 
                 if (this.get('filter').any(function(filter) {
@@ -176,8 +177,6 @@ export default Em.Controller.extend({
                           !Em.isNone(stackObj));
                 total = secondaryObj.total;
 
-                // this.propertyWillChange('data');
-
                 // remove them
                 stackObj.decrementProperty('value', storage_volume);
                 if (Math.abs(stackObj.get('value')) < 1e-5) {
@@ -192,6 +191,7 @@ export default Em.Controller.extend({
                 secondaryObj.decrementProperty('total', storage_volume);
 
                 if (Math.abs(total - accum.get('maxValue')) < 1e-5) {
+                    // Max value generation could become faster by using apply
                     accum.set('maxValue', accum.values.reduce(function(prev, cur) {
                         return Math.max(prev, cur.values.reduce(function(p, c) {
                             return Math.max(p, c.total);
@@ -199,7 +199,6 @@ export default Em.Controller.extend({
                     }, 0));
                 }
 
-                // this.propertyDidChange('data');
                 this.set('needsUpdate', true);
 
                 return accum;

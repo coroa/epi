@@ -3,7 +3,7 @@ import Em from 'ember';
 import Enums from '../enums';
 
 export default Em.ObjectController.extend({
-    needs: ['levels', 'step2'],
+    needs: ['levels', 'requirements'],
     temperatures: Enums.temperature.options.map(function(item, index) {
         return { id: index, label: item.label };
     }),
@@ -23,9 +23,22 @@ export default Em.ObjectController.extend({
                 });
             }));
     }.property('requirements.@each'),
-    resultTableHead: Em.computed.alias('controllers.step2.resultTableHead'),
+    resultTableHead: Em.computed.alias('controllers.requirements.resultTableHead'),
     resultTableLine: function() {
-        return this.get('controllers.step2.resultTableLines')
+        return this.get('controllers.requirements.resultTable')
             .objectAt(this.get('id'));
-    }.property('controllers.step2.resultTableLines.[]', 'id')
+    }.property('controllers.requirements.resultTable.[]', 'id'),
+    resultTableSIA: function() {
+        return this.get('controllers.requirements.siaServiceIds')
+            .map(function(_, i) {
+                return Em.Object.create({
+                    label: 'SIA' + (i+1).toString(),
+                    content: this.get('resultTableLine.content')
+                        .map(function(col) {
+                            return col.get('values').objectAt(i);
+                        })});
+            }, this);
+    }.property('resultTableLine.[]',
+               'controllers.requirements.siaServiceIds.[]'),
+    isSIA: Em.computed.equal('id', Enums.service.SIA)
 });

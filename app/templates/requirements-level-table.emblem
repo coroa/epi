@@ -30,13 +30,36 @@ if tableLines
             td: rounded-number number=reorder_freq
             td: rounded-number number=storage_volume
             / td: isDirty
-  .table-responsive: table.table.table-condensed.table-bordered.vaccine-table
-    thead
-      tr: each label in resultTableHead.first: th colspan=resultTableHead.no_levels = label
-      tr: each label in resultTableHead.second: th = label
-    tbody: tr
-      each resultTableLine.content
-        td class={isAffected:danger}
-          rounded-number number=value
+  if isSIA
+    .table-responsive: form.has-feedback role="form"
+      table.table.table-condensed.table-bordered.vaccine-table
+        thead
+          tr
+            td
+            each label in resultTableHead.first: th colspan=resultTableHead.no_levels = label
+          tr
+            td
+            each label in resultTableHead.second: th = label
+        tbody
+          each resultTableSIA: tr
+            th = label
+            each content: td class={isAffected:danger}
+              rounded-number number=value
+          tr
+            th Max
+            each resultTableLine.content: td class={isAffected:danger}
+              = input value=value2 class="form-control" classBinding="isCustom:btn-warning"
+              if isCustom
+                span.glyphicon.glyphicon-remove.form-control-feedback
+  else
+    .table-responsive: table.table.table-condensed.table-bordered.vaccine-table
+      thead
+        tr: each label in resultTableHead.first: th colspan=resultTableHead.no_levels = label
+        tr: each label in resultTableHead.second: th = label
+      tbody: tr
+        each resultTableLine.content
+          td class={isAffected:danger}
+            rounded-number number=value2
+
 else
   p No vaccines chosen for this service.
