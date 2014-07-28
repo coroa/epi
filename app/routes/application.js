@@ -23,6 +23,7 @@ export default Ember.Route.extend({
         //     .then(function(record) {
         //         debugger;
         //     });
+        this.store.find('facility');
     },
     _collectDirtyModels: function() {
         return [].concat.apply([], ['requirements',
@@ -34,21 +35,24 @@ export default Ember.Route.extend({
     actions: {
         doSave: function() {
             Ember.RSVP.all(this._collectDirtyModels().invoke('save'))
-            .then(function() {
-                console.log('saved successfully');
-            },
-                  function() {
-                      console.log('saving errored out');
-                  });
+            .then(
+                function() {
+                    console.log('saved successfully');
+                },
+                function() {
+                    console.log('saving errored out');
+                }
+            );
         },
         doClear: function() {
             Ember.RSVP.all(this._collectDirtyModels().invoke('rollback'))
-                .then(function() {
-                    console.log('rollback successfully');
-                },
-                      function() {
-                          console.log('rollback errored out');
-                      });
+                .then(
+                    function() {
+                        console.log('rollback successfully');
+                    },
+                    function() {
+                        console.log('rollback errored out');
+                    });
         },
         doTrash: function() {
             Ember.RSVP.all(this.controllerFor('requirements')

@@ -227,9 +227,6 @@ export default Em.ArrayController.extend({
                         index: last.index + last.length,
                         length: obj.get('length') };
                 positions.pushObject(pos);
-                console.log('Grabbing full copy of length',
-                            obj.get('length'), 'with the first value',
-                            obj.objectAt(0).get('storage_volume'));
                 accum.pushObjects(obj);
             }
         }

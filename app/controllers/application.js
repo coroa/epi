@@ -5,7 +5,9 @@ export default Ember.ObjectController.extend({
     steps: [ { name: 'Step 1',
                route: 'step1' },
              { name: 'Step 2',
-               route: 'step2' } ],
+               route: 'step2' },
+             { name: 'Step 3',
+               route: 'step3' } ],
     isDirty: Ember.computed.or('controllers.requirements.isDirty',
                                'controllers.level-paramsets.isDirty')
 });

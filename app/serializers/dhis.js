@@ -5,7 +5,8 @@ export default DS.JSONSerializer.extend({
     periods: [ '2013' ],
     dataelements: {
         population: 'drdP9msdeIZ',
-        capacity: 'qkFwjzfUrmP'
+        capacity: 'drdP9msdeIZ'
+        // capacity: 'qkFwjzfUrmP'
     },
     buildIdFromQuery: function(pe, ou, de) {
         return [pe, ou, de].join(':');
@@ -30,8 +31,11 @@ export default DS.JSONSerializer.extend({
         });
     },
     extractSingle: function(store, type, payload) {
-        Em.get(type,'relationships')
-            .get(store.modelFor('data-value'))
+        Array.prototype.concat.apply(
+            [],
+            ['data-value', 'equipment-data-value'].map(function(t) {
+                return this.get(store.modelFor(t));
+            }, Em.get(type,'relationships')))
             .forEach(function(r) {
                 Em.assert('data-value relationships may only be of'
                           + ' kind hasMany', r.kind === 'hasMany');
