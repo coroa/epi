@@ -5,7 +5,7 @@ import Enums from '../enums';
 var attr = DS.attr;
 
 var LevelParamset = DS.Model.extend({
-    requirement: DS.belongsTo('requirement'),
+    requirement: DS.belongsTo('requirement', {embedded:'drop'}),
     level: DS.belongsTo('level'),
     temperature: attr('number',
                       { defaultValue: Enums.temperature.MINUS25 }),
@@ -14,9 +14,6 @@ var LevelParamset = DS.Model.extend({
                   { defaultValue: Enums.packing.SECONDARY }),
     safety_stock: attr('number', { defaultValue: null }),
     reorder_freq: attr('number', { defaultValue: 1 }),
-
-    service: Em.computed.alias('requirement.service'),
-    vaccine: Em.computed.alias('requirement.vaccine'),
 
     supply_interval: function(key, value, prevValue) {
         if (arguments.length > 1) {

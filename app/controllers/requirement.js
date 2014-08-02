@@ -52,7 +52,7 @@ export default Em.ObjectController.extend({
                '{vaccine.name,vaccine_schedule_factor,serviceLabel}'),
     actions: {
         'delete': function() {
-            this.get('model').destroyRecord();
+            this.send('removeRequirement', this);
         },
         'reset': function(field) {
             this.set(field, null);

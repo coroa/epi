@@ -1,7 +1,7 @@
 import Em from 'ember';
 
 export default Em.ObjectController.extend({
-    needs: ['vaccines', 'requirements'],
+    needs: ['vaccines', 'requirements', 'requirement-sets'],
     vaccineInitials: null,
     vaccine: null,
     vaccines: function() {
@@ -15,10 +15,8 @@ export default Em.ObjectController.extend({
             store = this.get('controllers.requirements').store;
         if(Em.isEmpty(vaccine)) { return; }
 
-        store.createRecord('requirement',
-                           { service: service,
-                             vaccine: vaccine })
-            .save();
+        this.send('addRequirement', { service:service,
+                                      vaccine:vaccine });
 
         this.set('vaccineInitials', null);
         this.set('vaccine', null);

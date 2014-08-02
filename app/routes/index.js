@@ -1,7 +1,17 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
-    beforeModel: function() {
-        this.transitionTo('step1');
+    afterModel: function() {
+        var store = this.store,
+            sets = this.controllerFor('requirement-sets'),
+            set;
+
+        if (sets.get('length') > 0) {
+            set = sets.objectAt(0);
+        } else {
+            set = store.createRecord('requirement-set', {}).save();
+        }
+
+        this.transitionTo('requirement-set.index', set);
     }
 });

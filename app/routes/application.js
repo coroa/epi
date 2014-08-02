@@ -1,6 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
+    controllerName: 'requirement-sets',
     setupController: function() {
         // this.controllerFor('requirements').set('model',
         //                                        this.store.find('requirement'));
@@ -9,58 +10,20 @@ export default Ember.Route.extend({
 
         this.controllerFor('levels')
             .set('model', this.store.find('level'));
-        this.controllerFor('requirements')
-            .set('model', this.store.find('requirement'));
         this.controllerFor('vaccines')
             .set('model', this.store.find('vaccine'));
-        this.controllerFor('level-paramsets')
-            .set('model', this.store.find('level-paramset'));
-        this.controllerFor('sia-storage-volumes')
-            .set('model', this.store.find('sia-storage-volume'));
-        // this.store.createRecord('vaccine', {'product': 'help',
-        //                                     'presentation':
-        //                                     'bar'}).save()
-        //     .then(function(record) {
-        //         debugger;
-        //     });
-        this.store.find('facility');
+        // this.controllerFor('requirement-sets')
+        //     .set('model', this.store.find('requirement-set'));
+
+        // this.store.find('facility');
     },
-    _collectDirtyModels: function() {
-        return [].concat.apply([], ['requirements',
-                                    'level-paramsets']
-                               .map(function(cntrl) {
-                                   return this.controllerFor(cntrl).get('dirty');
-                               }, this)).mapBy('model');
+    model: function() {
+        return this.store.find('requirement-set');
     },
+
     actions: {
-        doSave: function() {
-            Ember.RSVP.all(this._collectDirtyModels().invoke('save'))
-            .then(
-                function() {
-                    console.log('saved successfully');
-                },
-                function() {
-                    console.log('saving errored out');
-                }
-            );
-        },
-        doClear: function() {
-            Ember.RSVP.all(this._collectDirtyModels().invoke('rollback'))
-                .then(
-                    function() {
-                        console.log('rollback successfully');
-                    },
-                    function() {
-                        console.log('rollback errored out');
-                    });
-        },
-        doTrash: function() {
-            Ember.RSVP.all(this.controllerFor('requirements')
-                           .mapBy('model')
-                           .invoke('destroyRecord'))
-                .then(function() {
-                    console.log('all cleared');
-                });
+        updateRequirementSet: function(id) {
+            this.transitionTo('requirement-set.index', id);
         }
     }
 });

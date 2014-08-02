@@ -13,7 +13,9 @@ var Requirement = DS.Model.extend({
     doses_course: attr('number', { defaultValue: null }),
     elligible_percent: attr('number', { defaultValue: null }),
     wastage_rate: attr('number'),
-    levelParamsets: DS.hasMany('levelParamset', {inverse: 'requirement'}),
+    levelParamsets: DS.hasMany('levelParamset',
+                               {inverse: 'requirement',
+                                embedded: 'onsave'}),
 
     vaccine_volume2: fallback('vaccine_volume',
                               'vaccine.vaccine_volume'),
@@ -71,9 +73,9 @@ var Requirement = DS.Model.extend({
         }
     },
     didDelete: function() {
-        Em.assert("levelParamsets must not be deleted yet",
-                  this.get('levelParamsets.length') > 0);
-        this.get('levelParamsets').invoke('destroyRecord');
+        // Em.assert("levelParamsets must not be deleted yet",
+        //           this.get('levelParamsets.length') > 0);
+        // this.get('levelParamsets').invoke('destroyRecord');
     }
 });
 

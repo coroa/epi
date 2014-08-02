@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import Enums from '../enums';
+import Enums from '../../enums';
 
 export default Ember.Route.extend({
     setupController: function() {

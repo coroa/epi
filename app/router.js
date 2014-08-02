@@ -5,9 +5,11 @@ var Router = Ember.Router.extend({
 });
 
 Router.map(function() {
-  this.route('step1');
-  this.route('step2');
-  this.route('step3');
+  this.resource('requirement-set', { path: '/:requirementSet_id' }, function() {
+      this.route('step1');
+      this.route('step2');
+      this.route('step3');
+  });
   this.route('reset');
 });
 

@@ -1,7 +1,12 @@
 import Ember from 'ember';
 
 export default Ember.ObjectController.extend({
-    needs: [ 'requirements', 'level-paramsets' ],
+    needs: [ 'requirements', 'level-paramsets', 'requirement-sets' ],
+    selectedRequirementSet: Ember.computed.oneWay('id'),
+    doUpdateRequirementSet: function() {
+        this.send('updateRequirementSet',
+                  this.get('selectedRequirementSet'));
+    }.observes('selectedRequirementSet'),
     steps: [ { name: 'Step 1',
                route: 'requirement-set.step1' },
              { name: 'Step 2',
