@@ -7,6 +7,12 @@ export default Ember.ObjectController.extend({
         this.send('updateRequirementSet',
                   this.get('selectedRequirementSet'));
     }.observes('selectedRequirementSet'),
+    interactions: [
+        { label: 'Delete', event: 'del' },
+        { label: 'Download', event: 'down' },
+        { label: 'New Table', event: 'new' },
+        { label: 'Upload', event: 'up' }
+    ],
     steps: [ { name: 'Step 1',
                route: 'requirement-set.step1' },
              { name: 'Step 2',

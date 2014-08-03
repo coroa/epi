@@ -82,6 +82,19 @@ export default Ember.Route.extend({
                 hasMany.invoke('destroyRecord');
                 hasMany.setObjects(items);
             });
+        },
+        addRequirementSet: function() {
+            alert('addRequirementSet');
+        },
+        deleteRequirementSet: function() {
+            alert('deleteRequirementSet');
+        },
+        uploadRequirementSet: function() {
+            alert('uploadRequirementSet');
+        },
+        downloadRequirementSet: function() {
+            alert('downloadRequirementSet');
         }
+
     }
 });

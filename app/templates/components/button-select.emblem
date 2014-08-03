@@ -1,0 +1,13 @@
+.input-group style="width: 200px;"
+  = input value=label class="form-control"
+  span.input-group-btn
+    button.btn.btn-default.dropdown-toggle data-toggle="dropdown"
+      span.caret
+      span.sr-only Toggle Dropdown
+    ul.dropdown-menu role="menu"
+      / li style="padding: 5px" Choose a set of requirements
+      each options
+        li class={selected:active} click="select value": a href="#" = label
+      li.divider
+      each interactions
+        li click="act event": a href="#" = label
