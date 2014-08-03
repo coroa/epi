@@ -18,7 +18,7 @@ export default Ember.Component.extend({
         var $el = this.$();
         this.set('hasFocus', !Ember.isNone($el) && $el.is(':focus'));
         this.rerender();
-    }.observes('content', 'selection'),
+    }.observes('selection', 'content.@each'),
     render: function(buffer) {
         var labelKey = this.get("optionLabelPath")
                 .replace("content.", ""),
@@ -73,9 +73,5 @@ export default Ember.Component.extend({
         if (prompt && selectedIndex === 0) { this.set('selection', null); return; }
         if (prompt) { selectedIndex -= 1; }
         this.set('selection', content.objectAt(selectedIndex));
-    },
-    init: function() {
-        this._super();
-        this.on("change", this, this._change);
-    }
+    }.on("change")
 });
