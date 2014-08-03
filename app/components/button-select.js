@@ -59,12 +59,13 @@ export default Ember.Component.extend({
 
     actions: {
         act: function(event) {
-            debugger;
             this.sendAction(event, this.get('selection'));
         },
         select: function(value) {
-            debugger;
             this.set('value', value);
+        },
+        save: function() {
+            this.sendAction('save');
         }
-    }
+   }
 });

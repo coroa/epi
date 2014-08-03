@@ -20,5 +20,10 @@ export default Ember.ObjectController.extend({
              { name: 'Step 3',
                route: 'requirement-set.step3' } ],
     isDirty: Ember.computed.or('controllers.requirements.isDirty',
-                               'controllers.level-paramsets.isDirty')
+                               'controllers.level-paramsets.isDirty'),
+    actions: {
+        save: function() {
+            this.get('model').save();
+        }
+    }
 });
