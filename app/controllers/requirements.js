@@ -2,36 +2,37 @@ import Em from 'ember';
 import Enums from '../enums';
 import fallback from '../utils/fallback';
 
-var make_array = function(n, amends, no_of_sia) {
-    var a = [], baseObj;
-    if (amends == null) {
-        baseObj = Em.Object.extend({
-            value2: Em.computed.alias('value')
-        });
-    } else {
-        baseObj = Em.Object.extend({
-            value2: fallback('_amendObj.storage_volume', 'value'),
-            isCustom: Em.computed.notEmpty('_amendObj.storage_volume')
-        });
-    }
+var requirementTableCell = Em.Object.extend({
+        value2: Em.computed.alias('value')
+    }),
+    amendableRequirementTableCell = Em.Object.extend({
+        value2: fallback('_amendObj.storage_volume', 'value'),
+        isCustom: Em.computed.notEmpty('_amendObj.storage_volume')
+    }),
 
-    for(var i=0; i<n; i++) {
-        var obj = baseObj.create({
-            isAffected: false,
-            value: 0
-        });
-        if (amends != null) {
-            obj.set('_amendObj', amends.objectAt(i));
-            var values = Em.A();
-            for(var j=0; j<no_of_sia; j++) {
-                values.push(Em.Object.create({value: 0}));
+    make_array = function(n, amends, no_of_sia) {
+        var a = [],
+            baseObj = (amends == null
+                       ? requirementTableCell
+                       : amendableRequirementTableCell);
+
+        for(var i=0; i<n; i++) {
+            var obj = baseObj.create({
+                isAffected: false,
+                value: 0
+            });
+            if (amends != null) {
+                obj.set('_amendObj', amends.objectAt(i));
+                var values = Em.A();
+                for(var j=0; j<no_of_sia; j++) {
+                    values.push(Em.Object.create({value: 0}));
+                }
+                obj.set('values', values);
             }
-            obj.set('values', values);
+            a.push(obj);
         }
-        a.push(obj);
-    }
-    return a;
-};
+        return a;
+    };
 
 
 
@@ -319,8 +320,8 @@ export default Em.ArrayController.extend({
                     var value = f('storage_volume'),
                         id = this.get('siaServiceIds').indexOf(item.get('requirementId')),
                         siaObj = obj.get('values').objectAt(id);
-                    siaObj.set('value', value);
-                    siaObj.set('isAffected', f('isAffected'));
+                    Em.set(siaObj, 'value', value);
+                    Em.set(siaObj, 'isAffected', f('isAffected'));
                     if (value > obj.get('value')) {
                         obj.set('value', value);
                     }
@@ -352,8 +353,8 @@ export default Em.ArrayController.extend({
                     var value = f('storage_volume'),
                         id = this.get('siaServiceIds').indexOf(item.get('requirementId')),
                         siaObj = obj.get('values').objectAt(id);
-                    siaObj.set('value', 0);
-                    siaObj.set('isAffected', false);
+                    Em.set(siaObj, 'value', 0);
+                    Em.set(siaObj, 'isAffected', false);
                     if (value >= obj.get('value')) {
                         // was the maximum, we need to find the new one
                         obj.set('value', Math.max.apply(0, obj.get('values').mapBy('value')));

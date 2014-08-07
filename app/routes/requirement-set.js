@@ -56,7 +56,7 @@ export default Ember.Route.extend({
         },
         addRequirement: function(req) {
             var set = this.get('controller.model');
-            store.createRecord('requirement', req)
+            set.store.createRecord('requirement', req)
                 .save()
                 .then(function(record) {
                     return set.get('requirements')
@@ -83,7 +83,7 @@ export default Ember.Route.extend({
                 hasMany.setObjects(items);
             });
         },
-        addRequirementSet: function() {
+        newRequirementSet: function() {
             alert('addRequirementSet');
         },
         deleteRequirementSet: function() {
