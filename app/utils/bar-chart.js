@@ -1,91 +1,11 @@
-var scale_weighted_ordinal = function() {
-  return d3_scale_weighted_ordinal([], {t: "range", a: [[]]});
-};
-
-function d3_scale_weighted_ordinal(domain, ranger) {
-  var index,
-      range,
-      rangeBand;
-
-  function scale(x) {
-    var ret = range[((index.get(x) || (ranger.t === "range" ?
-                                       index.set(x, domain.push(x)) :
-                                       NaN)) - 1) % range.length];
-    // never return undefined, as xAxis doesn't work otherwise
-    if (ret === undefined) { return 0; }
-    return ret;
-  }
-
-  function steps(start, step, weights) {
-      var accum = start;
-      return d3.range(weights.length || domain.length).map(function(i) {
-          var val = accum + step * (weights[i] || 1) / 2;
-          accum += step * (weights[i] || 1);
-          return val;
-      });
-  }
-
-  scale.domain = function(x) {
-    if (!arguments.length) { return domain; }
-    domain = [];
-    index = d3.map();
-    var i = -1, n = x.length, xi;
-    while (++i < n) {
-        if (!index.has(xi = x[i])) {
-           index.set(xi, domain.push(xi));
-        }
-    }
-    return scale[ranger.t].apply(scale, ranger.a);
-  };
-
-  scale.range = function(x) {
-    if (!arguments.length) { return range; }
-    range = x;
-    rangeBand = 0;
-    ranger = {t: "range", a: arguments};
-    return scale;
-  };
-
-  scale.rangeRoundBands = function(x, weights, padding, outerPadding) {
-    if (arguments.length < 2) { weights = []; }
-    if (arguments.length < 3) { padding = 0; }
-    if (arguments.length < 4) { outerPadding = padding; }
-    var length = d3.sum(weights) || domain.length,
-        reverse = x[1] < x[0],
-        start = x[reverse - 0],
-        stop = x[1 - reverse],
-        step = Math.floor((stop - start) / (length - padding + 2 * outerPadding)),
-        error = stop - start - (length - padding) * step;
-    range = steps(start + Math.round(error / 2), step, weights);
-    if (reverse) { range.reverse(); }
-    rangeBand = weights.map(function(w) {
-        return Math.round(w * step * (1 - padding));
-    });
-    ranger = {t: "rangeRoundBands", a: arguments};
-    return scale;
-  };
-
-  scale.weightedRangeBand = function(x) {
-    return rangeBand[(index.get(x) - 1) % rangeBand.length];
-  };
-
-  scale.rangeExtent = function() {
-      var domain = ranger.a[0],
-          start = domain[0], stop = domain[domain.length - 1];
-      return start < stop ? [start, stop] : [stop, start];
-  };
-
-  scale.copy = function() {
-    return d3_scale_weighted_ordinal(domain, ranger);
-  };
-
-  return scale.domain(domain);
-}
+import d3_empty from './d3-empty';
+import d3_scale_weighted_ordinal from './d3-scale-weighted-ordinal';
 
 export default function BarChart() {
 
-    var margin           = {top: 40, right: 40, bottom: 30, left: 40},
-        xScale           = scale_weighted_ordinal(),
+    var margin           = {top: 50, right: 40, bottom: 30, left: 40},
+        empty            = d3_empty('main'),
+        xScale           = d3_scale_weighted_ordinal(),
         yScale           = d3.scale.linear(),
         xAxis            = d3.svg.axis().scale(xScale).innerTickSize(0).tickPadding(15).orient("bottom"),
         yAxis            = d3.svg.axis().scale(yScale).ticks(5).orient("left"),
@@ -98,7 +18,7 @@ export default function BarChart() {
         hideDataLabels   = false,
         staticDataLabels = false,
         hoverDataLabels  = 'top',
-        fadeOnHover      = true,
+        fadeOnHover      = false,
         noTicks          = false,
         emptyText        = 'No data.',
         xSubScales       = {};
@@ -113,46 +33,9 @@ export default function BarChart() {
                 xAxis.tickFormat("");
             }
 
-            var empty = (data.maxValue === undefined ||
-                         data.maxValue === 0);
-
-            if (empty) {
-                // Select the message svg element, if it exists.
-
-                var setMsg = function() {
-                    var msg = selection.selectAll(".message").data([data]);
-                    msg.enter()
-                        .append("div")
-                        .style('padding-top', (height/2)+'px')
-                        .style('text-align', 'center')
-                        .attr('class', 'message')
-                        .append('text');
-                    msg.select('text')
-                        .attr("transform", function() {return 'translate('+width/2+', '+height/2+')';})
-                        .transition()
-                        .duration(100)
-                        .text(function() {return emptyText || 'No data to show.'; });
-                };
-
-                if (selection.select("path")[0][0]) {
-                    selection
-                        .selectAll("svg")
-                        .transition()
-                        .duration(200)
-                        .style('opacity', 0)
-                        .each('end', function() {
-                          setMsg();
-                        })
-                        .remove();
-                } else {
-                    setMsg();
-                }
+            empty.width(width).height(height);
+            if (empty(d3.select(this))) {
                 return;
-
-            } else {
-                selection
-                  .select('.message')
-                    .remove();
             }
 
             // Update the x-scale.
@@ -302,7 +185,7 @@ export default function BarChart() {
             bars.exit()
                 .transition()
                 .duration(duration)
-                .attr("y", height)
+                .attr("y", yScale(0))
                 .attr("height", 0)
                 .remove();
 
