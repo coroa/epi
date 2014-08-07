@@ -1,9 +1,9 @@
 import DS from 'ember-data';
 import Em from 'ember';
 
+import DHIS from '../utils/dhis';
 
 export default DS.Adapter.extend({
-    baseURL: "http://localhost/api",
     headers: {
         Accept: 'application/json'
     },
@@ -35,6 +35,7 @@ export default DS.Adapter.extend({
         hash.type = type;
         hash.dataType = 'json';
         hash.context = this;
+        hash.traditional = true;
 
         if (hash.data && type !== 'GET') {
             hash.contentType = 'application/json; charset=utf-8';

@@ -1,16 +1,13 @@
 import Em from 'ember';
 import DHISBaseAdapter from './dhis-base';
 
+import DHIS from '../utils/dhis';
+
 export default DHISBaseAdapter.extend({
-    pathForType: {
-        level: "organisationUnitLevels",
-        facility: "organisationUnits",
-        dataElement: "dataElements"
-    },
     findAllinProcess: {},
     buildURL: function(type, id) {
-        var url = [ this.baseURL,
-                    this.pathForType[type] ];
+        var url = [ DHIS.baseURL,
+                    DHIS.getPathFor(type) ];
         if (id) { url.push(id); }
         return url.join('/');
     },
@@ -32,15 +29,15 @@ export default DHISBaseAdapter.extend({
         return promise;
     },
     findQuery: function(store, type, query) {
-        return this.ajax(this.buildURL(type.typeKey), 'GET', { data: query });
+        return this.ajax(this.buildURL(type.typeKey), 'GET',
+                         { data: query });
     },
     find: function(store, type, id) {
         if (type.typeKey === 'level') {
-            var adapter = this;
             // We have to either fire a findAll or already know there
             // is one in process and return the right data as soon as
             // it returns
-            var findAllinProcess = Em.get(adapter, 'findAllinProcess');
+            var findAllinProcess = Em.get(this, 'findAllinProcess');
             if (Em.get(findAllinProcess, type.typeKey) === null) {
                 // it's not running, hmm have the store kick it off
                 store.find(type.typeKey);
@@ -51,7 +48,7 @@ export default DHISBaseAdapter.extend({
                 .then(function(json) {
                     // the level number returned by DHIS is an integer,
                     // while Ember uses string ids
-                    var result = json[Em.get(adapter, 'pathForType')[type.typeKey]]
+                    var result = json[DHIS.getPathFor(type.typeKey)]
                             .findBy(Em.get(store.serializerFor(type),'primaryKey'),
                                     parseInt(id));
                     return result;
