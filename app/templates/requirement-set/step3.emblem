@@ -1,2 +1,4 @@
 / render "requirements-level-table"
 ' Step 3
+
+surplus-chart data=controllers.facilities needsUpdate=needsUpdate

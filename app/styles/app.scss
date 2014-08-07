@@ -92,11 +92,12 @@ body {
 
 /* Charts
 ****************/
+
 .chart {
   font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
   font-size: 11px;
   color: #999999;
-  height: 170px;
+  height: 190px;
   clear: both; }
   .chart img.loading {
     display: block;
@@ -214,6 +215,9 @@ body {
     .chart .hover-label .hover-label-content {
       padding: 10px; }
 
+.surplus {
+  height: 300px;
+}
 
 // vaccine-picker
 
