@@ -1,3 +1,4 @@
+import Em from 'ember';
 import DHISBaseAdapter from './dhis-base';
 
 export default DHISBaseAdapter.extend({

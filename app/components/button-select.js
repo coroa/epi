@@ -46,8 +46,7 @@ export default Ember.Component.extend({
         return this.get('selectedObj.value');
     }).property('selectedObj'),
     updateSelectionFromValue: function(value) {
-        var content = this.get('content'),
-            selectedValue = this.get('selectedObj.value');
+        var selectedValue = this.get('selectedObj.value');
 
         if (value !== selectedValue) {
             this.set('selection',

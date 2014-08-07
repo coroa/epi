@@ -10,7 +10,8 @@ Enums.service = {
         { id: 1, 'label': 'School Immunization', word: 'School', 'short': 'SI' },
         { id: 2, 'label': 'Supplementary Immunization Activities', word: 'SIA', 'short': 'SIA' },
         { id: 3, 'label': 'Other Immunization', word: 'Other', 'short': 'OI' }
-    ]};
+    ]
+};
 
 Enums.packing = {
     PRIMARY: 0,

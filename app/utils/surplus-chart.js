@@ -30,7 +30,7 @@ export default function SurplusChart() {
             var myRotateAxisLabels = rotateAxisLabels
                     || data.data.get('length') > threshold,
                 myStaticDataLabels = staticDataLabels
-                    && ! data.data.get('length') > threshold,
+                    && data.data.get('length') <= threshold,
                 myMargin = margin;
 
             if (myRotateAxisLabels) {
@@ -253,4 +253,4 @@ export default function SurplusChart() {
     };
 
     return chart;
-};
+}

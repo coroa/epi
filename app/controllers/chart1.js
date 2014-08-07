@@ -22,7 +22,7 @@ export default Em.Controller.extend({
                     vaccine_volume = req.get('vaccine_volume_per_course'),
                     diluent_volume = req.get('diluent_volume_per_course');
 
-                if([ service, vaccine ].any(Ember.isNone)) {
+                if([ service, vaccine ].any(Em.isNone)) {
                     return accum;
                 }
                 // this.propertyWillChange('data');
@@ -71,14 +71,14 @@ export default Em.Controller.extend({
                 var vaccine = f('id'),
                     service = f('service');
 
-                if([ vaccine, service ].any(Ember.isNone)) {
+                if([ vaccine, service ].any(Em.isNone)) {
                     return accum;
                 }
 
                 var serviceObj = accum.values.findBy('key', service),
                     vaccineObj = serviceObj.values.findBy('key', vaccine);
 
-                if (Ember.isNone(vaccineObj)) {
+                if (Em.isNone(vaccineObj)) {
                     // ok, couldn't find it. let's hope it was ignored
                     // during one these phases were it still had some
                     // null values

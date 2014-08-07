@@ -120,7 +120,7 @@ export default function BarChart() {
 
             // Update the stacks
             var stacks = cats.selectAll(".stack")
-                    .data(function(d,i) {
+                    .data(function(d) {
                         return d.values.map(function(e) {
                             e.xScale = xSubScales[d.key];
                             return e;
@@ -198,7 +198,7 @@ export default function BarChart() {
             // Static data labels
             if (staticDataLabels) {
                 var dataLabels = stacks.selectAll(".dataLabel")
-                        .data(function(d, i) {
+                        .data(function(d) {
                             return [{key: d.key, label: d.label, total: d.total,
                                      width: d.xScale.rangeBand()}]; });
                 var dataLabelsEnter = dataLabels.enter()

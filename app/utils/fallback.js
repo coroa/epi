@@ -1,3 +1,5 @@
+import Em from 'ember';
+
 export default function(path, fallbackPath) {
     return Em.computed(function(key, newValue, cachedValue) {
         if (arguments.length === 1) {

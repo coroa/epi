@@ -5,7 +5,7 @@ var BarGroup = D3EmberComputed(
         'capacity',
         'requirement',
         function() {
-            var duration, yScale, xSubScale, color, hoverDataLabels = true;
+            var duration, yScale, xSubScale, color;
 
             function exports(selection) {
                 var bars = selection.selectAll(".bar")
@@ -109,7 +109,7 @@ var BarGroup = D3EmberComputed(
                 // Static data labels
                 if (staticDataLabels) {
                     var dataLabels = temperatures.selectAll(".dataLabel")
-                            .data(function(d, i) {
+                            .data(function(d) {
                                 return [{temperature: d.get('temperature'),
                                          label: Enums.temperature.options[d.get('temperature')].label,
                                          max: Math.max(d.get('requirement'),
@@ -200,7 +200,7 @@ export default D3EmberComputed(
             temperatures = TemperatureBarGroup('main');
 
         function exports(selection) {
-            selection.each(function(data) {
+            selection.each(function() {
                 var g = d3.select(this);
 
                 // Update the facilities
@@ -244,7 +244,7 @@ export default D3EmberComputed(
         };
 
         exports.xSubScale = function(_) {
-            if (!arguments.length) { return xSubScale; }
+            if (!arguments.length) { return temperatures.xSubScale(); }
             temperatures.xSubScale(_);
             return exports;
         };
@@ -257,13 +257,13 @@ export default D3EmberComputed(
         };
 
         exports.staticDataLabels = function(_) {
-            if (!arguments.length) { return staticDataLabels; }
+            if (!arguments.length) { return temperatures.staticDataLabels(); }
             temperatures.staticDataLabels(_);
             return exports;
         };
 
         exports.color = function(_) {
-            if (!arguments.length) { return color; }
+            if (!arguments.length) { return temperatures.color(); }
             temperatures.color(_);
             return exports;
         };

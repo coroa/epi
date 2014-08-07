@@ -39,11 +39,11 @@ export default function D3EmberComputed() {
         }
 
         for (var prop in d3object) {
-            if (d3object.hasOwnProperty(prop) && typeof(d3object[prop]) == 'function') {
+            if (d3object.hasOwnProperty(prop) && typeof(d3object[prop]) === 'function') {
                 exports[prop] = d3object[prop];
             }
         }
 
         return exports;
     };
-};
+}

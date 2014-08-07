@@ -13,7 +13,7 @@ export default Ember.ArrayController.extend({
 
         if (N === 0) {return;}
 
-        if (this.get('length') != N*M) {
+        if (this.get('length') !== N*M) {
             // purge all and refill
             Ember.RSVP.all(
                 [].concat.apply([], temperatures.map(function(t) {

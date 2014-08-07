@@ -1,8 +1,7 @@
 import Ember from 'ember';
 import DS from 'ember-data';
 
-var all = Ember.RSVP.all,
-    cast = Ember.RSVP.Promise.cast;
+var all = Ember.RSVP.all;
 
 export default {
     name: 'record-loader',
@@ -23,7 +22,7 @@ export default {
                     var related = recordJSON[key], // The record at this relationship
                         type = relationship.type;  // The model type
 
-                    if (!related) return;
+                    if (!related) { return; }
 
                     var retrieve_func = (relationship.options.embedded === 'onsave'
                                          ? store.loadRecordFromPayloadRecursively

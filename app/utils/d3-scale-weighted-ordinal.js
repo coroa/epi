@@ -80,4 +80,4 @@ function d3_scale_weighted_ordinal(domain, ranger) {
 
 export default function() {
     return d3_scale_weighted_ordinal([], {t: "range", a: [[]]});
-};
+}

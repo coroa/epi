@@ -1,8 +1,6 @@
 import DS from 'ember-data';
 import Em from 'ember';
 
-import DHIS from '../utils/dhis';
-
 export default DS.Adapter.extend({
     headers: {
         Accept: 'application/json'

@@ -8,7 +8,7 @@ export default DS.JSONSerializer.extend({
             hasManyRecords = Ember.get(record, key);
 
         if (hasManyRecords
-            && relationship.options.embedded == 'onsave')
+            && relationship.options.embedded === 'onsave')
         {
             json[key] = hasManyRecords.map(function(item){
                 return serializer.serialize(item);

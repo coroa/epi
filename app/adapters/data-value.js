@@ -1,16 +1,15 @@
-import Em from 'ember';
 import DHISBaseAdapter from './dhis-base';
 
 import DHIS from '../utils/dhis';
 
 export default DHISBaseAdapter.extend({
     buildURL: function() {return DHIS.baseURL + "/analytics";},
-    find: function(store, type, id) {
+    find: function(store, _, id) {
         return this.ajax(this.buildURL(), 'GET', {
             data: DHIS.buildQueryFromId(id)
         });
     },
-    findMany: function(store, type, ids) {
+    findMany: function(store, _, ids) {
         var query = {pe: [], ou: [], de: []},
             fields = ['pe', 'ou', 'de'];
         ids.forEach(function(id) {
@@ -28,7 +27,7 @@ export default DHISBaseAdapter.extend({
                 return { ids: ids, data: json };
             });
     },
-    findAll: function(store, type) {
+    findAll: function(store, _) {
         var no_level = store.all('level').get('length'),
             levels = [],
             periods = DHIS.getPeriods(),

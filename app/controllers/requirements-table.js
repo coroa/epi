@@ -11,8 +11,8 @@ export default Em.ObjectController.extend({
                'controllers.vaccines.@each.initials'),
     createRequirement: function() {
         var service = this.get('id'),
-            vaccine = this.get('vaccine'),
-            store = this.get('controllers.requirements').store;
+            vaccine = this.get('vaccine');
+
         if(Em.isEmpty(vaccine)) { return; }
 
         this.send('addRequirement', { service:service,

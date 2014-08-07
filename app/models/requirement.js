@@ -1,6 +1,5 @@
 import DS from 'ember-data';
 import Em from 'ember';
-import Enums from '../enums';
 import fallback from '../utils/fallback';
 
 var attr = DS.attr;

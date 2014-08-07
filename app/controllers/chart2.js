@@ -83,7 +83,7 @@ export default Em.Controller.extend({
             initialValue: function() {
                 return Em.Object.create({ maxValue: 0, values: []});
             },
-            addedItem: function(accum, item, changeMeta) {
+            addedItem: function(accum, item) {
                 if (this.get('filter').any(function(f) {
                     return item.get(f.key) !== f.value;
                 })) {
@@ -148,7 +148,7 @@ export default Em.Controller.extend({
                 };
 
                 if (this.get('filter').any(function(filter) {
-                    return (f(filter.key) != filter.value);
+                    return (f(filter.key) !== filter.value);
                 })) {
                     return accum;
                 }
