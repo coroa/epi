@@ -15,7 +15,8 @@
     "bootstrap-sass": "~3.0.2",
     "ember-localstorage-adapter": "~0.3.1",
     "d3": "~3.4.8",
-    "ember-group-helper-dist": "*"
+    "ember-group-helper-dist": "*",
+    "font-awesome": "~4.1.0"
   },
   "devDependencies": {
     "ember-debug": "~0.3.1"
