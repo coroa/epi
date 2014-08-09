@@ -20,7 +20,13 @@ var TemperatureCell = Ember.Object.extend({
     });
 
 export default Ember.ObjectController.extend({
-    needs: [ 'requirements', 'levels' ],
+    needs: [ 'requirements', 'levels', 'facilities' ],
+
+    title: Ember.computed.oneWay('name'),
+
+    wrappedChildren: Ember.computed.map('children', function(child) {
+        return this.get('controllers.facilities').findBy('id', child.get('id'));
+    }),
 
     data: function() {
         var controller = this;

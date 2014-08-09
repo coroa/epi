@@ -1,4 +1,10 @@
-/ render "requirements-level-table"
-' Step 3
+.row
+  .col-sm-3
+    em-tree model=country itemController="facility" selected=selected
+  .col-sm-9
+    with selected
+      h2 = name
 
-surplus-chart data=controllers.facilities needsUpdate=needsUpdate
+    .row
+      .col-sm-3: surplus-chart data=selectedAsArray
+      .col-sm-9: surplus-chart data=selectedChildren
