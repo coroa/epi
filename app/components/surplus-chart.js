@@ -11,7 +11,12 @@ export default Ember.Component.extend({
     }.property('staticDataLabels'),
 
     filteredData: function() {
-        return this.get('data').filterBy('hasValue');
+        var data = this.get('data');
+        if (data) {
+            return data.filterBy('hasValue');
+        } else {
+            return [];
+        }
     }.property('data.@each.hasValue'),
     // filteredData: Ember.computed.filterBy('data', 'hasValue'),
     maxValues: Ember.computed.mapBy('filteredData', 'maxValue'),
@@ -35,8 +40,8 @@ export default Ember.Component.extend({
                 .data([ { maxValue: this.get('maxValue'),
                           data: this.get('sortedData') } ])
                 .call(this.get('chart'));
-        } else {
-            Ember.run.scheduleOnce('afterRender', this, 'update');
-        }
+        }//  else {
+        //     Ember.run.scheduleOnce('afterRender', this, 'update');
+        // }
     }
 });
