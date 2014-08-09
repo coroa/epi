@@ -10,9 +10,14 @@ export default DS.JSONSerializer.extend({
             delete payload.pager;
         }
     },
-    extractArray: function(store, type, payload) {
-        var serializer = this,
-            arrayPayload = payload[DHIS.getPathFor(type.typeKey)];
+    extractFindAll: function(store, type, payload) {
+        return this.extractArray(store, type, payload[DHIS.getPathFor(type.typeKey)]);
+    },
+    extractFindQuery: function(store, type, payload) {
+        return this.extractArray(store, type, payload[DHIS.getPathFor(type.typeKey)]);
+    },
+    extractArray: function(store, type, arrayPayload) {
+        var serializer = this;
         if (type.typeKey === 'level') {
             // we need a deep copy
             arrayPayload = arrayPayload.map(function(p) {
@@ -24,11 +29,12 @@ export default DS.JSONSerializer.extend({
         });
     },
     extractSingle: function(store, type, payload) {
+        var relationships = Em.get(type, 'relationships');
         Array.prototype.concat.apply(
             [],
             ['data-value', 'equipment-data-value'].map(function(t) {
-                return this.get(store.modelFor(t));
-            }, Em.get(type,'relationships')))
+                return relationships.get(store.modelFor(t));
+            }))
             .forEach(function(r) {
                 Em.assert('data-value relationships may only be of'
                           + ' kind hasMany', r.kind === 'hasMany');
