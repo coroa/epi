@@ -1,0 +1,22 @@
+span
+  if hasIcon
+    i{action toggle} class=iconClass
+  else
+    a.text{action toggle} *
+
+if tree.in-multi-selection
+  span.em-tree-node-multiselection
+  if multi-selected
+    i{action toggleSelection} class=tree.selected-icon
+  else
+    i{action toggleSelection} class=tree.unselected-con
+
+span.title{action select} class=nodeSelectedClasses
+  model.title
+  if tree.hovered-actions
+    span.actions
+      each tree.hovered-actions
+        em-tree-node-icon-action meta=this model=controller.model
+
+if expanded
+  em-tree-branch model=model tree=tree itemController=itemController targetObject=targetObject

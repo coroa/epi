@@ -1,0 +1,2 @@
+each children itemController=view.itemController
+  em-tree-node model=this tree=view.tree itemController=view.itemController targetObject=view.targetObject
