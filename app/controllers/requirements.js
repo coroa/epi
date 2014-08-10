@@ -139,7 +139,7 @@ export default Em.ArrayController.extend({
             addedItem: function(accum, item) {
                 var f = function(key) { return item.get(key); };
 
-                if ([ f('service'), f('temperature'), f('level') ]
+                if ([ f('service'), f('temperature'), f('level'), accum ]
                     .any(Em.isNone)) {
                     return accum;
                 }
@@ -176,7 +176,7 @@ export default Em.ArrayController.extend({
             removedItem: function(accum, item) {
                 var f = function(key) {return item.get(key);};
 
-                if ([ f('service'), f('temperature'), f('level') ]
+                if ([ f('service'), f('temperature'), f('level'), accum ]
                     .any(Em.isNone)) {
                     return accum;
                 }
