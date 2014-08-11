@@ -9,7 +9,7 @@ export default Ember.Component.extend({
     interactions: [],
 
     selectedObj: null,
-    options: Ember.computed.map('{content,optionLabelPath,optionValuePath}', function(item) {
+    options: Ember.computed.map(null, function(item) {
         var optionLabelPath = this.get('optionLabelPath'),
             optionValuePath = this.get('optionValuePath'),
             selected = (item === this.get('selection')),
@@ -22,7 +22,7 @@ export default Ember.Component.extend({
             });
         if (selected) {this.set('selectedObj', obj);}
         return obj;
-    }),
+    }).property('content','optionLabelPath','optionValuePath'),
 
     updateSelected: function() {
         var selection = this.get('selection'),
@@ -49,10 +49,9 @@ export default Ember.Component.extend({
         var selectedValue = this.get('selectedObj.value');
 
         if (value !== selectedValue) {
+            var option = this.get('options').findBy('value', value);
             this.set('selection',
-                     Ember.get(this.get('options')
-                               .findBy('value', value),
-                               'content'));
+                     Ember.isNone(option) ? null : Ember.get(option, 'content'));
         }
     },
 
