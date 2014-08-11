@@ -2,7 +2,7 @@
   thead: with resultTableHead
     tr
       th
-      each label in first: th colspan=resultTableHead.no_levels
+      each label in first: th colspan=no_levels
         = label
     tr
       th SERVICE

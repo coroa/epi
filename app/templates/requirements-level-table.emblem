@@ -33,13 +33,13 @@ if tableLines
   if isSIA
     .table-responsive: form.has-feedback role="form"
       table.table.table-condensed.table-bordered.vaccine-table
-        thead
+        thead: with resultTableHead
           tr
             td
-            each label in resultTableHead.first: th colspan=resultTableHead.no_levels = label
+            each label in first: th colspan=no_levels = label
           tr
             td
-            each label in resultTableHead.second: th = label
+            each label in second: th = label
         tbody
           each resultTableSIA: tr
             th = label
@@ -53,9 +53,9 @@ if tableLines
                 span.glyphicon.glyphicon-remove.form-control-feedback
   else
     .table-responsive: table.table.table-condensed.table-bordered.vaccine-table
-      thead
-        tr: each label in resultTableHead.first: th colspan=resultTableHead.no_levels = label
-        tr: each label in resultTableHead.second: th = label
+      thead: with resultTableHead
+        tr: each label in first: th colspan=no_levels = label
+        tr: each label in second: th = label
       tbody: tr
         each resultTableLine.content
           td class={isAffected:danger}
