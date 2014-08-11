@@ -1,6 +1,7 @@
 import Em from 'ember';
 
 export default Em.Object.create({
+    loginForm: "http://localhost/dhis-web-commons/security/login.action",
     baseURL: "http://localhost/api",
     pathForType: {
         level: "organisationUnitLevels",

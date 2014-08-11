@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import DHIS from '../utils/dhis';
 
 export default Ember.Route.extend({
     controllerName: 'requirement-sets',
@@ -24,6 +25,27 @@ export default Ember.Route.extend({
     actions: {
         updateRequirementSet: function(id) {
             this.transitionTo('requirement-set.index', id);
+        },
+
+        error: function(error, transition) {
+            if (error &&
+                (error.getResponseHeader &&
+                 error.responseText &&
+                 // this is a jqXHR object
+                 error.getResponseHeader('content-type')
+                 .search('text/html') !== -1 &&
+                 error.responseText
+                 .search('dhis-web-commons-security/login.action')
+                 // and it's the login form we got back
+                ))
+            {
+                // error substate and parent routes do not handle this error
+                window.location.replace(DHIS.loginForm);
+                return false;
+            }
+
+            // Return true to bubble this event to any parent route.
+            return true;
         }
     }
 });
