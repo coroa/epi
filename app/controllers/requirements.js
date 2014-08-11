@@ -140,7 +140,7 @@ export default Em.ArrayController.extend({
                 var f = function(key) { return item.get(key); };
 
                 if ([ f('service'), f('temperature'), f('level'), accum ]
-                    .any(Em.isNone)) {
+                    .any(Em.isEmpty)) {
                     return accum;
                 }
                 console.log('resultTable addedItem for',
@@ -177,7 +177,7 @@ export default Em.ArrayController.extend({
                 var f = function(key) {return item.get(key);};
 
                 if ([ f('service'), f('temperature'), f('level'), accum ]
-                    .any(Em.isNone)) {
+                    .any(Em.isEmpty)) {
                     return accum;
                 }
 
