@@ -12,7 +12,8 @@ export default Ember.Route.extend({
     afterModel: function(model) {
         // retrieve the async hasMany relations before entering the
         // route
-        return Ember.RSVP.hash(model);
+        return Ember.RSVP.all([model.get('requirements'),
+                               model.get('siaStorageVolumes')]);
     },
     model: function(params) {
         return this.store.find('requirement-set',
