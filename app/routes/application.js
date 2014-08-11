@@ -3,14 +3,14 @@ import DHIS from '../utils/dhis';
 
 export default Ember.Route.extend({
     controllerName: 'requirement-sets',
-    setupController: function() {
+    setupController: function(controller, model) {
         // this.controllerFor('requirements').set('model',
         //                                        this.store.find('requirement'));
-        console.log('setup application controller');
-        this._super.apply(this, arguments);
+        console.log('application router setupController');
+        this._super(controller, model.requirementSets);
 
         this.controllerFor('levels')
-            .set('model', this.store.find('level'));
+            .set('model', model.levels);
         this.controllerFor('vaccines')
             .set('model', this.store.find('vaccine'));
         // this.controllerFor('requirement-sets')
@@ -19,7 +19,11 @@ export default Ember.Route.extend({
         // this.store.find('facility');
     },
     model: function() {
-        return this.store.find('requirement-set');
+        console.log('application router model');
+        return Ember.RSVP.hash(
+            { requirementSets: this.store.find('requirement-set'),
+              levels: this.store.find('level') }
+        );
     },
 
     actions: {

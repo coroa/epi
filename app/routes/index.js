@@ -1,16 +1,16 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
-    afterModel: function() {
+    redirect: function(model) {
         var store = this.store,
-            sets = this.controllerFor('requirement-sets'),
+            sets = model.requirementSets,
             set;
 
         if (sets.get('length') > 0) {
             set = sets.objectAt(0);
         } else {
             set = store.createRecord('requirement-set',
-                                    {name: 'Unnamed 1'})
+                                     {name: 'Unnamed 1'})
                 .save();
         }
 

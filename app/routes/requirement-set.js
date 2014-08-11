@@ -6,10 +6,13 @@ export default Ember.Route.extend({
 
         this.controllerFor('requirements')
             .set('model', model.get('requirements'));
-        // this.controllerFor('level-paramsets')
-        //     .set('model', this.store.find('level-paramset'));
         this.controllerFor('sia-storage-volumes')
             .set('model', model.get('siaStorageVolumes'));
+    },
+    afterModel: function(model) {
+        // retrieve the async hasMany relations before entering the
+        // route
+        return Ember.RSVP.hash(model);
     },
     model: function(params) {
         return this.store.find('requirement-set',
