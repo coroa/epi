@@ -72,6 +72,7 @@ export default MergedArray.extend(ArrayMergerMixin, {
         // If paramset is an array, call ourselves repeatedly
         if (Em.isArray(paramset)) {
             paramset.forEach(function(p) {this.setAffected(p,affected);}, this);
+            return;
         }
 
         var index = findIndexBy(this, 'paramsetId', paramset.get('id')),

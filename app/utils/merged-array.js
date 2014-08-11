@@ -56,12 +56,14 @@ export default Ember.ArrayProxy.extend({
     /**
      * Call this method to add a source to be merged into this array.
      *
+     * @method addSource
      * @param {Object} sourceObj The object that holds the source as a property.
      * @param {String} sourceKey The name of the property that holds the source.
      * @param {Function|null} mapFn A function that maps a source
      *        record into a uniform object so that all items in this
      *        array are compatible. If not set, the real source record
      *        will be used, i.e. no mapping will take place.
+     * @public
      */
     addSource: function(sourceObj, sourceKey, mapFn) {
         //If mapFn is unset we default to a function that simply returns the same item
@@ -76,18 +78,22 @@ export default Ember.ArrayProxy.extend({
             sourceKey: sourceKey,
             mapFn: mapFn
         };
+
+        this._sourceDidChange(sourceObj, sourceKey);
+
         //Observe `sourceObj` for when the `sourceKey` property changes.
         sourceObj.addBeforeObserver(sourceKey, this._getObserverProxy('_sourceWillChange', sourceObj, sourceKey));
         sourceObj.addObserver(sourceKey, this._getObserverProxy('_sourceDidChange', sourceObj, sourceKey));
         //Trigger that the source did change, so we can add items from the source right away and array content observers
-        this._sourceDidChange(sourceObj, sourceKey);
     },
 
     /**
      * Call this method to remove a source from this array.
      *
+     * @method removeSource
      * @param {Object} sourceObj The object that holds the source as a property.
      * @param {String} sourceKey The name of the property that holds the source.
+     * @public
      */
     removeSource: function(sourceObj, sourceKey) {
         //Remove observers on `sourceObj`
@@ -118,7 +124,7 @@ export default Ember.ArrayProxy.extend({
         var k = method + Ember.guidFor(sourceObj) + sourceKey,
             proxy = this._observerProxies[k];
         if (!proxy) {
-            proxy = this._observerProxies[k] = Ember.$.proxy(this[method], this, sourceObj, sourceKey);
+            proxy = this._observerProxies[k] = Ember.run.bind(this, this[method], sourceObj, sourceKey);
         }
         return proxy;
     },
@@ -126,9 +132,11 @@ export default Ember.ArrayProxy.extend({
     /**
      * When we're done using an observer function we should forget about it.
      *
+     * @method _removeObserverProxy
      * @param {String} method
      * @param {Object} sourceObj
      * @param {String} sourceKey
+     * @private
      */
     _removeObserverProxy: function(method, sourceObj, sourceKey) {
         var k = method + Ember.guidFor(sourceObj) + sourceKey;
@@ -138,6 +146,8 @@ export default Ember.ArrayProxy.extend({
     /**
      * When this array is destroyed we need to clean up all the
      * observers we've setup on the source arrays.
+     *
+     * @method willDestroy
      */
     willDestroy: function() {
         this._super();
@@ -158,6 +168,7 @@ export default Ember.ArrayProxy.extend({
      * changes, but when the whole array is replaced) we need to
      * remove content observers from the old source array.
      *
+     * @method _sourceWillChange
      * @param {Object} sourceObj
      * @param {String} sourceKey
      * @private
@@ -165,7 +176,6 @@ export default Ember.ArrayProxy.extend({
     _sourceWillChange: function(sourceObj, sourceKey) {
         var sourceArray = Ember.get(sourceObj, sourceKey);
         if (Ember.isArray(sourceArray)) {
-            this._removePosition(sourceObj, sourceKey);
 
             //Remove array observers
             sourceArray.removeArrayObserver(this, {
@@ -175,12 +185,16 @@ export default Ember.ArrayProxy.extend({
             //Forget about observer proxies - we don't need them anymore
             this._removeObserverProxy('_sourceContentWillChange', sourceObj, sourceKey);
             this._removeObserverProxy('_sourceContentDidChange', sourceObj, sourceKey);
+
+            Ember.run.schedule('actions', this, this._removePosition, sourceObj, sourceKey);
         }
     },
 
     /**
-     * When a source array did change (the whole array was replaced) we need to add content observers to the new array.
+     * When a source array did change (the whole array was replaced)
+     * we need to add content observers to the new array.
      *
+     * @method _sourceDidChange
      * @param {Object} sourceObj
      * @param {String} sourceKey
      * @private
@@ -188,13 +202,13 @@ export default Ember.ArrayProxy.extend({
     _sourceDidChange: function(sourceObj, sourceKey) {
         var sourceArray = Ember.get(sourceObj, sourceKey);
         if (Ember.isArray(sourceArray)) {
-            this._addPosition(sourceObj, sourceKey);
-
             //Add array observers. These will get called every time an item is added to or removed from the source array
             sourceArray.addArrayObserver(this, {
                 willChange: this._getObserverProxy('_sourceContentWillChange', sourceObj, sourceKey),
                 didChange: this._getObserverProxy('_sourceContentDidChange', sourceObj, sourceKey)
             });
+
+            Ember.run.schedule('actions', this, this._addPosition, sourceObj, sourceKey);
         }
     },
 
@@ -206,6 +220,7 @@ export default Ember.ArrayProxy.extend({
      * `_coalesceAndDoUpdates` function will interpret and execute in
      * due time.
      *
+     * @method _sourceContentWillChange
      * @param {Object} sourceObj
      * @param {String} sourceKey
      * @param {Object} sourceArray
@@ -235,6 +250,7 @@ export default Ember.ArrayProxy.extend({
      *
      * We add the newValues and schedule the coalescing function.
      *
+     * @method _sourceContentDidChange
      * @param {Object} sourceObj
      * @param {String} sourceKey
      * @param {Object} sourceArray
@@ -265,6 +281,7 @@ export default Ember.ArrayProxy.extend({
      * content array, AFTER trying to merge multiple different changes
      * into one.
      *
+     * @method _coalesceAndDoUpdates
      * @private
      */
     _coalesceAndDoUpdates: function() {
@@ -326,6 +343,7 @@ export default Ember.ArrayProxy.extend({
     /**
      * Helper method to remove a position entry
      *
+     * @method _removePosition
      * @param {Object} position The entry in positions to be removed
      * @private
      */
@@ -344,6 +362,7 @@ export default Ember.ArrayProxy.extend({
     /**
      * Helper method to add a position entry
      *
+     * @method _addPosition
      * @param {Object} position The entry to be added to _positions
      * @private
      */
