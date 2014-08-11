@@ -1,0 +1,3 @@
+[submodule "vendor/ember-localstorage-adapter"]
+	path = vendor/ember-localstorage-adapter
+	url = https://github.com/coroa/ember-localstorage-adapter.git

@@ -29,13 +29,5 @@ export default DS.LSAdapter.extend({
                                  JSON.stringify(ret));
         }
         return ret;
-    },
-
-    // patch to use loadData
-    _namespaceForType: function (type) {
-        var namespace = this.modelNamespace(type),
-            storage   = this.loadData();
-
-        return storage[namespace] || {records: {}};
     }
 });
