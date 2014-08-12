@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import DHIS from '../utils/dhis';
+import uploadJSON from '../utils/upload-file';
 
 export default Ember.Route.extend({
     controllerName: 'requirement-sets',
@@ -27,11 +28,30 @@ export default Ember.Route.extend({
     },
 
     actions: {
+        newRequirementSet: function() {
+            var names = this.controllerFor('requirement-sets')
+                    .mapBy('name'),
+                set, i = 1;
+            while (names.contains("Unnamed " + i)) {i ++;}
+
+            set = this.store.createRecord('requirement-set',
+                                          {name: "Unnamed " + i})
+                .save();
+
+            this.transitionTo('requirement-set.index', set);
+        },
+        uploadRequirementSet: function() {
+            var _this = this;
+            uploadJSON().then(function(payload) {
+                var set = _this.store.loadRecordFromPayloadRecursively('requirement-set', payload);
+                _this.send('updateRequirementSet', set);
+            });
+        },
         updateRequirementSet: function(id) {
             this.transitionTo('requirement-set.index', id);
         },
 
-        error: function(error, transition) {
+        error: function(error) {
             if (error &&
                 (error.getResponseHeader &&
                  error.responseText &&

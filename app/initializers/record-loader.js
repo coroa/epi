@@ -59,10 +59,6 @@ export default {
                             hasManyObjects.map(function(hasMany) {
                                 return Ember.RSVP.Promise.cast(rec.get(hasMany.key))
                                     .then(function(x) {
-                                        console.log('adding to',
-                                                    type.typeKey,
-                                                    'records of type',
-                                                    hasMany.records[0].type);
                                         x.pushObjects(hasMany.records);
                                     });
                             }))

@@ -1,4 +1,5 @@
 import Ember from 'ember';
+/* global saveAs */
 
 export default Ember.Route.extend({
     setupController: function(controller, model) {
@@ -87,17 +88,14 @@ export default Ember.Route.extend({
                 hasMany.setObjects(items);
             });
         },
-        newRequirementSet: function() {
-            alert('addRequirementSet');
-        },
         deleteRequirementSet: function() {
             alert('deleteRequirementSet');
         },
-        uploadRequirementSet: function() {
-            alert('uploadRequirementSet');
-        },
         downloadRequirementSet: function() {
-            alert('downloadRequirementSet');
+            var model = this.get('controller.model'),
+                serialization = window.JSON.stringify(this.store.serializeRecursively(model)),
+                blob = new Blob([serialization], {type: "text/plain;charset=utf-8"});
+            saveAs(blob, model.get('name') + ".json");
         }
 
     }

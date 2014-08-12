@@ -20,7 +20,7 @@ var app = new EmberApp();
 // along with the exports of each module as its value.
 
 app.import("vendor/ember-localstorage-adapter/localstorage_adapter.js");
-
+app.import("vendor/file-saver/FileSaver.js");
 app.import("vendor/ember-debug/ember-debug.js");
 app.import("vendor/ember-group-helper-dist/group-helper.js");
 app.import("vendor/d3/d3.js", { exports: { d3: ['default'] } });
