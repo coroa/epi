@@ -314,17 +314,17 @@ export default Ember.ArrayProxy.extend({
 
             // ch contains all the changes, pos where to update them
 
-            // check if anything did change, at all
-            if (ch.oldValues.length === ch.newValues.length) {
-                var j;
-                for (j=0; j<ch.oldValues.length; j++) {
-                    if (ch.oldValues[j] !== ch.newValues[j]) { break; }
-                }
-                if (j === ch.oldValues.length) {
-                    // nothing did change
-                    continue;
-                }
-            }
+            // // check if anything did change, at all
+            // if (ch.oldValues.length === ch.newValues.length) {
+            //     var j;
+            //     for (j=0; j<ch.oldValues.length; j++) {
+            //         if (ch.oldValues[j] !== ch.newValues[j]) { break; }
+            //     }
+            //     if (j === ch.oldValues.length) {
+            //         // nothing did change
+            //         continue;
+            //     }
+            // }
 
             var newValues = ch.newValues.map(ch.source.mapFn);
             console.log('Accumulated changed array at', pos.index
