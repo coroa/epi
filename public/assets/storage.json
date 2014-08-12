@@ -3,28 +3,23 @@
         "records": {
             "1": {
                 "id": 1,
-                "name": "Level 1",
-                "paramsets": []
+                "name": "Level 1"
             },
             "2": {
                 "id": 2,
-                "name": "Level 2",
-                "paramsets": []
+                "name": "Level 2"
             },
             "3": {
                 "id": 3,
-                "name": "Level 3",
-                "paramsets": []
+                "name": "Level 3"
             },
             "4": {
                 "id": 4,
-                "name": "Level 4",
-                "paramsets": []
+                "name": "Level 4"
             },
             "5": {
                 "id": 5,
-                "name": "Level 5",
-                "paramsets": []
+                "name": "Level 5"
             }
         }
     },
