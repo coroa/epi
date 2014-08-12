@@ -1,5 +1,9 @@
 import Ember from 'ember';
+import d3 from 'd3';
 import BarChart from '../utils/bar-chart';
+
+// Ignore the d3 style of invoking constructors without new
+/* jshint -W064 */
 
 export default Ember.Component.extend({
     classNames: ['chart'],

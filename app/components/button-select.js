@@ -38,7 +38,7 @@ export default Ember.Component.extend({
     label: Ember.computed.alias('selectedObj.label'),
     value: Ember.computed(function(key, value, oldValue) {
         if (arguments.length !== 1) {
-            if (value != oldValue) {
+            if (value != oldValue) { // jshint ignore:line
                 this.updateSelectionFromValue(value);
             }
             return value;

@@ -45,7 +45,7 @@ var Requirement = DS.Model.extend({
 
     didCreate: function() {
         if (Em.isEmpty(this.get('levelParamsets'))) {
-            Ember.run.schedule("actions", this, this._addLevelParamsets);
+            Em.run.schedule("actions", this, this._addLevelParamsets);
         }
     },
     _addLevelParamsets: function() {
@@ -55,7 +55,7 @@ var Requirement = DS.Model.extend({
         console.log('Will create a levelParamset per level for ' +
                     _this + ': ');
 
-        all(levels.map(function(lvl) {
+        all(levels.map(function() {
             return _this.store
                 .createRecord('level-paramset')
                 .save();

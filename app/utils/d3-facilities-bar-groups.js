@@ -1,5 +1,9 @@
+import d3 from 'd3';
 import D3EmberComputed from './d3-ember-computed';
 import Enums from '../enums';
+
+// Ignore the d3 style of invoking constructors without new
+/* jshint -W064 */
 
 var BarGroup = D3EmberComputed(
         'capacity',

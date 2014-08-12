@@ -27,7 +27,7 @@ export default DHISBaseAdapter.extend({
                 return { ids: ids, data: json };
             });
     },
-    findAll: function(store, _) {
+    findAll: function(store) {
         var no_level = store.all('level').get('length'),
             levels = [],
             periods = DHIS.getPeriods(),

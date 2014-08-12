@@ -156,7 +156,7 @@ export default Ember.ArrayProxy.extend({
 
         //remove each registered source
         for (var k in sources) {
-            if (!sources.hasOwnProperty(k)) continue;
+            if (!sources.hasOwnProperty(k)) { continue; }
             source = sources[k];
             this.removeSource(source.sourceKey, source.sourceObj);
         }
@@ -335,7 +335,7 @@ export default Ember.ArrayProxy.extend({
                 var delta = ch.added - ch.removed;
                 pos.length += delta;
                 positions.slice(positions.indexOf(pos) + 1)
-                    .forEach(function(p) { p.index += delta; });
+                    .forEach(function(p) { p.index += delta; }); // jshint ignore:line
             }
         }
     },

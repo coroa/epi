@@ -3,7 +3,7 @@
 `import Ember from 'ember'`
 
 #A simple tree object structure consists of parent->child relationship.
-Node = Ember.Object.extend
+EmNode = Ember.Object.extend
     #References for the children of current node
     children: undefined
     parent: undefined
@@ -11,22 +11,22 @@ Node = Ember.Object.extend
     addChild: (node) ->
         @emptyChildren() if not @get('children')
         node.set 'parent', @
-        @children.addObject node object
+        @children.addObject node
         node
 
     createChild: (object) ->
         @emptyChildren() if not @get('children')
         
-        c = Node.create(object)
+        c = EmNode.create(object)
         c.set 'parent', @
         @get('children').pushObject c
 
-        c1 = Node.create()
+        c1 = EmNode.create()
         c
 
     removeChild: (node) ->
         node.set 'parent', undefined
-        children.removeObject node
+        @get('children').removeObject node
         node
 
     hasChildren: (->
@@ -34,7 +34,7 @@ Node = Ember.Object.extend
     ).property('children.length')
 
     emptyChildren: (->
-        @set 'children', Em.A()
+        @set 'children', Ember.A()
     )
 
     hasParent: (->
@@ -67,7 +67,7 @@ Node = Ember.Object.extend
     findChildBy: (key, name) ->
         findChildrenOfNodeBy @, key, name
 
-`export default Node`
+`export default EmNode`
 
 findChildrenOfNodeBy = (currChild, key, value) ->
         if currChild.get(key) is value

@@ -1,7 +1,7 @@
 #(c) 2014 Indexia, Inc.
 # adapted by removing all WithConfigMixin by coroa
 
-`import Ember from 'ember';`
+`import Ember from 'ember'`
 
 ###*
 # A node of a tree.
@@ -138,4 +138,5 @@ TreeNode = Ember.Component.extend
     #     if not @get('loading')
     #         @toggleProperty 'expanded'
     # ).observes('loading')
-`export default TreeNode;`
+
+`export default TreeNode`

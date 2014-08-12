@@ -1,7 +1,7 @@
 #(c) 2014 Indexia, Inc.
 # adapted by removing all WithConfigMixin by coroa
 
-`import Ember from 'ember';`
+`import Ember from 'ember'`
 
 ###*
 # An icon action of a tree node

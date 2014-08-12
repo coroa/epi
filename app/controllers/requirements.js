@@ -71,9 +71,9 @@ export default Em.ArrayController.extend({
     storage_volume: function() {
         return AffectedArrayMerger.create({
             _replace_nan: function(item) {
-                if (isNaN(Ember.get(item, 'storage_volume'))) {
+                if (isNaN(Em.get(item, 'storage_volume'))) {
                     console.log('Replacing NaN by 0 in storage_volume');
-                    Ember.set(item, 'storage_volume', 0);
+                    Em.set(item, 'storage_volume', 0);
                 }
             },
             mapFn: [ '_replace_nan' ],

@@ -86,7 +86,7 @@ export default Ember.Mixin.create({
      * @param {Number} added Number of items that are about to be added
      * @private
      */
-    _arrayRemoveSource: function(topArray, start, removed, added) {
+    _arrayRemoveSource: function(topArray, start, removed) {
         var sourcePath = this.get('_sourcePath'),
             sourceKey = this.get('_sourceKey');
         topArray.slice(start, start+removed)

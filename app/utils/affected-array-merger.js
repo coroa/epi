@@ -1,18 +1,6 @@
 import Ember from 'ember';
 import MergedArray from '../utils/merged-array';
 import ArrayMergerMixin from '../mixins/array-merger';
-import compose from '../utils/compose';
-
-function findIndexByBounded(arr, key, value, from, to) {
-    var i = from;
-    while(i < to) {
-        if (arr.objectAt(i).get(key) === value) {
-            return i;
-        }
-        i++;
-    }
-    return -1;
-}
 
 function findIndexBy(arr, key, value) {
     var i = 0, to = arr.get('length');
@@ -70,7 +58,7 @@ export default MergedArray.extend(ArrayMergerMixin, {
      */
     setAffected: function(paramset, affected) {
         // If paramset is an array, call ourselves repeatedly
-        if (Em.isArray(paramset)) {
+        if (Ember.isArray(paramset)) {
             paramset.forEach(function(p) {this.setAffected(p,affected);}, this);
             return;
         }

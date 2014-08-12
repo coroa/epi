@@ -1,7 +1,7 @@
 #(c) 2014 Indexia, Inc.
 # adapted by removing all WithConfigMixin by coroa
 
-`import Ember from 'ember';`
+`import Ember from 'ember'`
 
 
 ###*
@@ -29,4 +29,4 @@ TreeBranch = Ember.Component.extend
 
     styleClasses: ['em-tree-branch', 'fa-ul'].join " "
 
-`export default TreeBranch;`
+`export default TreeBranch`

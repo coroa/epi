@@ -7,7 +7,7 @@ export default function(path, fallbackPath) {
             var val = this.get(path);
             return !Em.isNone(val) ? val
                 : this.get(fallbackPath);
-        } else if(newValue != cachedValue) {
+        } else if(newValue != cachedValue) { // jshint ignore:line
             // setter
             this.set(path, newValue);
             return newValue;
