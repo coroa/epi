@@ -45,31 +45,35 @@ var Requirement = DS.Model.extend({
 
     didCreate: function() {
         if (Em.isEmpty(this.get('levelParamsets'))) {
-            var _this = this,
-                all = Em.RSVP.all,
-                levels = _this.store.all('level');
-            console.log('Will create a levelParamset per level for ' +
-                        _this + ': ');
-
-            all(levels.map(function() {
-                return _this.store
-                    .createRecord('level-paramset')
-                    .save();
-            })).then(function(paramsets) {
-                return all(paramsets.map(function(ps, i) {
-                    var level = levels.objectAt(i);
-                    ps.set('level', level);
-                    return ps.save();
-                })).then(function() {
-                    _this.get('levelParamsets')
-                        .pushObjects(paramsets);
-                    return all(paramsets.invoke('save')
-                               .concat([_this.save()]));
-                }).then(function() {
-                    console.log('all saved');
-                });
-            });
+            Ember.run.schedule("actions", this, this._addLevelParamsets);
         }
+    },
+    _addLevelParamsets: function() {
+        var _this = this,
+            all = Em.RSVP.all,
+            levels = _this.store.all('level');
+        console.log('Will create a levelParamset per level for ' +
+                    _this + ': ');
+
+        all(levels.map(function(lvl) {
+            return _this.store
+                .createRecord('level-paramset')
+                .save();
+        })).then(function(paramsets) {
+            // _this.get('levelParamsets').pushObjects(paramsets);
+            return all(paramsets.map(function(ps, i) {
+                var level = levels.objectAt(i);
+                ps.set('level', level);
+                return ps.save();
+            })).then(function() {
+                _this.get('levelParamsets')
+                    .pushObjects(paramsets);
+                return all([ _this.save(),
+                             paramsets.invoke('save') ]);
+            }).then(function() {
+                console.log('all saved');
+            });
+        });
     },
     didDelete: function() {
         // Em.assert("levelParamsets must not be deleted yet",
