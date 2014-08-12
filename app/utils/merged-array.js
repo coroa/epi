@@ -186,7 +186,8 @@ export default Ember.ArrayProxy.extend({
             this._removeObserverProxy('_sourceContentWillChange', sourceObj, sourceKey);
             this._removeObserverProxy('_sourceContentDidChange', sourceObj, sourceKey);
 
-            Ember.run.schedule('actions', this, this._removePosition, sourceObj, sourceKey);
+            var position = this._sources[Ember.guidFor(sourceObj)+sourceKey].position;
+            Ember.run.schedule('actions', this, this._removePosition, position);
         }
     },
 
@@ -270,7 +271,7 @@ export default Ember.ArrayProxy.extend({
                      change.removed === removed &&
                      change.added === added);
         change.newValues = sourceArray.slice(start, start+added);
-        Ember.run.scheduleOnce('actions', this, '_coalesceAndDoUpdates');
+        Ember.run.scheduleOnce('actions', this, this._coalesceAndDoUpdates);
     },
 
     /**
@@ -347,9 +348,8 @@ export default Ember.ArrayProxy.extend({
      * @param {Object} position The entry in positions to be removed
      * @private
      */
-    _removePosition: function(sourceObj, sourceKey) {
-        var position = this._sources[Ember.guidFor(sourceObj)+sourceKey].position,
-            index = this._positions.indexOf(position);
+    _removePosition: function(position) {
+        var index = this._positions.indexOf(position);
         this._positions.replace(index, 1, []);
         // adapt all the indices after position
         this._positions.slice(index)
