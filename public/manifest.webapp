@@ -5,12 +5,13 @@
     "launch_path": "/index.html",
     "icons": {
         "16": "/assets/fridge16.png",
+        "48": "/assets/fridge48.png",
         "64": "/assets/fridge64.png",
         "128": "/assets/fridge128.png"
     },
     "developer": {
         "name": "Jonas Hörsch",
-        "url": ""
+        "url": "https://github.com/coroa/epi"
     },
     "default_locale": "en",
     "activities": {

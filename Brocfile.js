@@ -36,7 +36,5 @@ var fontawesomeFonts = pickFiles('vendor/font-awesome/fonts', {
     destDir: '/fonts'
 });
 
-var manifest = pickFiles('public/manifest', { srcDir: '/', destDir: '/' });
-
 // Merge the app tree and our new font assets.
-module.exports = mergeTrees([app.toTree(), manifest, bootstrapFonts, fontawesomeFonts]);
+module.exports = mergeTrees([app.toTree(), bootstrapFonts, fontawesomeFonts]);
