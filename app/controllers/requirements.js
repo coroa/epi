@@ -190,8 +190,10 @@ export default Em.ArrayController.extend({
                     var value = f('storage_volume'),
                         id = this.get('siaServiceIds').indexOf(item.get('requirementId')),
                         siaObj = obj.get('values').objectAt(id);
-                    Em.set(siaObj, 'value', value);
-                    Em.set(siaObj, 'isAffected', f('isAffected'));
+                    if (!Em.isNone(siaObj)) {
+                        Em.set(siaObj, 'value', value);
+                        Em.set(siaObj, 'isAffected', f('isAffected'));
+                    }
                     if (value > obj.get('value')) {
                         obj.set('value', value);
                     }
@@ -223,8 +225,10 @@ export default Em.ArrayController.extend({
                     var value = f('storage_volume'),
                         id = this.get('siaServiceIds').indexOf(item.get('requirementId')),
                         siaObj = obj.get('values').objectAt(id);
-                    Em.set(siaObj, 'value', 0);
-                    Em.set(siaObj, 'isAffected', false);
+                    if (!Em.isNone(siaObj)) {
+                        Em.set(siaObj, 'value', 0);
+                        Em.set(siaObj, 'isAffected', false);
+                    }
                     if (value >= obj.get('value')) {
                         // was the maximum, we need to find the new one
                         obj.set('value', Math.max.apply(0, obj.get('values').mapBy('value')));
