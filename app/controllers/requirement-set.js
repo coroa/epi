@@ -2,7 +2,14 @@ import Ember from 'ember';
 
 export default Ember.ObjectController.extend({
     needs: [ 'requirements', 'level-paramsets', 'requirement-sets' ],
-    selectedRequirementSet: Ember.computed.oneWay('id'),
+    selectedRequirementSet: function(key, value) {
+        if (arguments.length > 1) {
+            // setter
+            // don't send changes to the id, but reflect them here
+            return value;
+        }
+        return this.get('id');
+    }.property('id'),
     doUpdateRequirementSet: function() {
         this.send('updateRequirementSet',
                   this.get('selectedRequirementSet'));
