@@ -1,13 +1,11 @@
 import Em from 'ember';
 import DHISBaseAdapter from './dhis-base';
 
-import DHIS from '../utils/dhis';
-
 export default DHISBaseAdapter.extend({
     findAllinProcess: {},
     buildURL: function(type, id) {
-        var url = [ DHIS.baseURL,
-                    DHIS.getPathFor(type) ];
+        var url = [ this.dhis.baseURL,
+                    this.dhis.getPathFor(type) ];
         if (id) { url.push(id); }
         return url.join('/');
     },
@@ -37,7 +35,8 @@ export default DHISBaseAdapter.extend({
             // We have to either fire a findAll or already know there
             // is one in process and return the right data as soon as
             // it returns
-            var findAllinProcess = Em.get(this, 'findAllinProcess');
+            var adapter = this,
+                findAllinProcess = Em.get(this, 'findAllinProcess');
             if (Em.get(findAllinProcess, type.typeKey) === null) {
                 // it's not running, hmm have the store kick it off
                 store.find(type.typeKey);
@@ -48,7 +47,7 @@ export default DHISBaseAdapter.extend({
                 .then(function(json) {
                     // the level number returned by DHIS is an integer,
                     // while Ember uses string ids
-                    var result = json[DHIS.getPathFor(type.typeKey)]
+                    var result = json[adapter.dhis.getPathFor(type.typeKey)]
                             .findBy(Em.get(store.serializerFor(type),'primaryKey'),
                                     parseInt(id));
                     return result;

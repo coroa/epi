@@ -1,5 +1,4 @@
 import DS from 'ember-data';
-import DHIS from '../utils/dhis';
 
 export default DS.JSONSerializer.extend({
     extractFindMany: function(store, type, payload) {
@@ -21,7 +20,7 @@ export default DS.JSONSerializer.extend({
         return this.normalize(type, payload["rows"]);
     },
     normalize: function(type, payload) {
-        return { id: DHIS.buildIdFromQuery.apply(DHIS, payload.slice(0,3)),
+        return { id: this.dhis.buildIdFromQuery.apply(this.dhis, payload.slice(0,3)),
                  value: payload[3] };
     }
 });

@@ -1,8 +1,6 @@
 import DS from 'ember-data';
 import Em from 'ember';
 
-import DHIS from '../utils/dhis';
-
 export default DS.JSONSerializer.extend({
     extractMeta: function(store, type, payload) {
         if (payload && payload.pager) {
@@ -11,10 +9,10 @@ export default DS.JSONSerializer.extend({
         }
     },
     extractFindAll: function(store, type, payload) {
-        return this.extractArray(store, type, payload[DHIS.getPathFor(type.typeKey)]);
+        return this.extractArray(store, type, payload[this.dhis.getPathFor(type.typeKey)]);
     },
     extractFindQuery: function(store, type, payload) {
-        return this.extractArray(store, type, payload[DHIS.getPathFor(type.typeKey)]);
+        return this.extractArray(store, type, payload[this.dhis.getPathFor(type.typeKey)]);
     },
     extractArray: function(store, type, arrayPayload) {
         var serializer = this;
@@ -39,12 +37,12 @@ export default DS.JSONSerializer.extend({
                 Em.assert('data-value relationships may only be of'
                           + ' kind hasMany', r.kind === 'hasMany');
 
-                var periods = DHIS.getPeriods(),
-                    dataelement = DHIS.getDEfor(r.name);
+                var periods = this.dhis.getPeriods(),
+                    dataelement = this.dhis.getDEfor(r.name);
 
                 Em.set(payload, r.name,
                        periods.map(function(p) {
-                           return DHIS.buildIdFromQuery(p, payload.id, dataelement);
+                           return this.dhis.buildIdFromQuery(p, payload.id, dataelement);
                        }, this));
             }, this);
         return this._super(store, type, payload);
