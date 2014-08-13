@@ -59,15 +59,36 @@ export default Em.ArrayController.extend({
     }.property('routineService', 'schoolService',
                'siaService', 'otherService'),
 
-    // Aggregation of all storage_volume parameters as an array of
-    // { level: ps.get('level'),
-    //   temperature: ps.get('temperature'),
-    //   service: service,
-    //   vaccine: vaccine,
-    //   storage_volume: ps.get('storage_volume'),
-    //   requirementId: this.get('id'),
-    //   paramsetId: ps.get('id') })
 
+    /**
+     * `storage_volume` gives a flat array of all relevant
+     * parameters. Each element of the array directly corresponds to
+     * one level paramset in one of the requirements.
+     *
+     * It can be thought of as the main data stream into which the
+     * `resultTable` and the `chart2` hook into to get all the
+     * changes.
+     *
+     * The elements look like:
+     *
+     * ```javascript
+     * { level: ps.get('level'),
+     *   temperature: ps.get('temperature'),
+     *   service: service,
+     *   vaccine: vaccine,
+     *   storage_volume: ps.get('storage_volume'),
+     *   requirementId: this.get('id'),
+     *   paramsetId: ps.get('id'),
+     *   isAffected: true/false })
+     * ```
+     *
+     * By calling setAffected on the property, one sets a list of
+     * paramsets, which should have isAffected set to true.
+     *
+     * @property storage_volume
+     * @type {Array}
+     * @public
+     */
     storage_volume: function() {
         return AffectedArrayMerger.create({
             _replace_nan: function(item) {
@@ -82,6 +103,14 @@ export default Em.ArrayController.extend({
         });
     }.property(),
 
+    /**
+     * Proxy method to call setAffected on the `storage_volume`
+     * property.
+     *
+     * @method setAffectedParamset
+     * @param {LevelParamset or Array of LevelParamset} ps
+     * @param {Boolean} affected
+     */
     setAffectedParamset: function(ps, affected) {
         this.get('storage_volume').setAffected(ps, affected);
     },
@@ -156,7 +185,7 @@ export default Em.ArrayController.extend({
                 if (Em.isNone(obj)) { return accum; }
 
                 if (Enums.service.SIA === f('service')) {
-                    // we need to take the maximum value rather that
+                    // we need to take the maximum value rather than
                     // the sum for SIA, and it is possible to overwrite
                     var value = f('storage_volume'),
                         id = this.get('siaServiceIds').indexOf(item.get('requirementId')),
