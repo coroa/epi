@@ -1,10 +1,10 @@
 .row
   .col-sm-3
-    em-tree model=country itemController="facility" selected=selected
+    em-tree model=country itemController="facility" selected=selected expand-depth=1
   .col-sm-9
     with selected
-      h2 = name
+      = name
 
     .row
-      .col-sm-3: surplus-chart data=selectedAsArray
-      .col-sm-9: surplus-chart data=selectedChildren
+      .col-sm-3.chart-col: surplus-chart data=selectedAsArray
+      .col-sm-9.chart-col: surplus-chart data=selectedChildren
