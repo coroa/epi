@@ -75,8 +75,8 @@ export default Ember.Route.extend({
                 console.log('pushed and saved sia-storage-volumes');
             });
         },
-        deleteRequirementSet: function() {
-            alert('deleteRequirementSet');
+        deleteThisRequirementSet: function() {
+            this.send('deleteRequirementSet', this.get('controller.model'));
         },
         downloadRequirementSet: function() {
             var model = this.get('controller.model'),

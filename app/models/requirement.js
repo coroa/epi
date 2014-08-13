@@ -1,10 +1,11 @@
 import DS from 'ember-data';
 import Em from 'ember';
 import fallback from '../utils/fallback';
+import DestroyRecursivelyMixin from '../mixins/destroy-recursively';
 
 var attr = DS.attr;
 
-var Requirement = DS.Model.extend({
+var Requirement = DS.Model.extend(DestroyRecursivelyMixin, {
     service: attr('number'),
     vaccine: DS.belongsTo('vaccine'),
     vaccine_volume: attr('number'),

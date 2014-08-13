@@ -41,6 +41,28 @@ export default Ember.Route.extend({
                 _this.send('updateRequirementSet', set);
             });
         },
+        deleteRequirementSet: function(oldSet) {
+            // find another set to transition to
+            var newSet = this.controllerFor('requirement-sets')
+                    .find(function(set) {
+                        return set.get('model') !== oldSet;
+                    });
+            if (newSet !== undefined) {
+                newSet = newSet.get('model');
+            } else {
+                // there is no other one, create one with the name
+                // Unnamed 1
+                newSet = this.store.createRecord('requirement-set',
+                                                 {name: "Unnamed 1"})
+                    .save();
+            }
+
+            // schedule the deletion for the render batch, which
+            // comes right after the routerTransitions
+            Ember.run.schedule("render", oldSet, "destroyRecordRecursively");
+
+            this.send('updateRequirementSet', newSet);
+        },
         updateRequirementSet: function(id) {
             this.transitionTo('requirement-set.index', id);
         },
