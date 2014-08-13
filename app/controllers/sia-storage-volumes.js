@@ -2,6 +2,9 @@ import Ember from 'ember';
 import Enums from '../enums';
 import DirtyModelsMixin from '../mixins/dirty-models';
 
+var RSVP = Ember.RSVP,
+    a_concat = [].concat;
+
 export default Ember.ArrayController.extend(DirtyModelsMixin, {
     needs: ['levels'],
     guaranteeLength: function() {
@@ -16,8 +19,8 @@ export default Ember.ArrayController.extend(DirtyModelsMixin, {
 
         if (this.get('length') !== N*M) {
             // purge all and refill
-            Ember.RSVP.all(
-                [].concat.apply([], temperatures.map(function(t) {
+            RSVP.all(
+                a_concat.apply([], temperatures.map(function(t) {
                     return levels.map(function(l) {
                         return store
                             .createRecord('sia-storage-volume',
@@ -27,10 +30,10 @@ export default Ember.ArrayController.extend(DirtyModelsMixin, {
                             .save();
                     });
                 })))
-            .then(function(items) {
-                controller.set('model', items);
-                controller.send('setSiaStorageVolumes', items);
-            });
+                .then(function(items) {
+                    controller.set('model', items);
+                    controller.send('setSiaStorageVolumes', items);
+                });
         }
-    }.observes('controllers.levels.[]').on('init')
+    }.observes('controllers.levels.[]', 'model')
 });

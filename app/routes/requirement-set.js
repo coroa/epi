@@ -69,6 +69,8 @@ export default Ember.Route.extend({
             set.get('siaStorageVolumes').then(function(hasMany) {
                 hasMany.invoke('destroyRecord');
                 hasMany.setObjects(items);
+                set.save();
+                console.log('pushed and saved sia-storage-volumes');
             });
         },
         deleteRequirementSet: function() {
