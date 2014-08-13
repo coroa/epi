@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import DHIS from '../utils/dhis';
 import uploadJSON from '../utils/upload-file';
 
 export default Ember.Route.extend({
@@ -75,12 +74,14 @@ export default Ember.Route.extend({
                  error.getResponseHeader('content-type')
                  .search('text/html') !== -1 &&
                  error.responseText
-                 .search('dhis-web-commons-security/login.action')
+                 .search('dhis-web-commons-security/login.action') !== -1
                  // and it's the login form we got back
                 ))
             {
                 // error substate and parent routes do not handle this error
-                window.location.replace(DHIS.loginForm);
+                this.dhis.loginForm.then(function(url) {
+                    window.location.replace(url);
+                });
                 return false;
             }
 

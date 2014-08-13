@@ -1,13 +1,10 @@
-import Ember from 'ember';
-import DS from 'ember-data';
-
-var all = Ember.RSVP.all;
+import Em from 'ember';
 
 export default {
     name: 'dhis',
 
     initialize: function(container, application) {
-        var dhis = Ember.Object.create({
+        var dhis = Em.Object.create({
             loginForm: "http://localhost/dhis-web-commons/security/login.action",
             baseURL: "http://localhost/api",
             pathForType: {
@@ -57,6 +54,21 @@ export default {
                 Em.assert('id must not be undefined', !Em.isNone(id));
                 var params = id.split(':');
                 return { pe: params[0], ou: params[1], de: params[2] };
+            },
+            // parseManifest: function(json) {
+            //     var baseUrl = json.activities.dhis.href;
+            //     this.set('baseURL', baseUrl + "/api");
+            //     this.set('loginForm', baseUrl + "/dhis-web-commons/security/login.action");
+            // },
+            init: function() {
+                var baseUrl = new Em.RSVP.Promise(function(resolve) {
+                    Em.$.getJSON("manifest.webapp", resolve);
+                }).then(function(manifest) {
+                    var baseUrl = manifest.activities.dhis.href;
+                    return baseUrl !== "*" ? baseUrl : "http://localhost";
+                });
+                this.set('baseURL', baseUrl.then(function(url) { return url + '/api'; }));
+                this.set('loginForm', baseUrl.then(function(url) { return url + "/dhis-web-commons/security/login.action"; }));
             }
         });
 
@@ -64,5 +76,6 @@ export default {
                              {instantiate: false});
         application.inject('adapter', 'dhis', 'dhis:current');
         application.inject('serializer', 'dhis', 'dhis:current');
+        application.inject('route:application', 'dhis', 'dhis:current');
     }
 };

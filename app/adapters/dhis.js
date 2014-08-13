@@ -1,42 +1,51 @@
 import Em from 'ember';
-import DHISBaseAdapter from './dhis-base';
+import DS from 'ember-data';
+import AjaxHelperMixin from '../mixins/ajax-helper';
 
-export default DHISBaseAdapter.extend({
+export default DS.Adapter.extend(AjaxHelperMixin, {
     findAllinProcess: {},
     buildURL: function(type, id) {
-        var url = [ this.dhis.baseURL,
-                    this.dhis.getPathFor(type) ];
-        if (id) { url.push(id); }
-        return url.join('/');
+        var adapter = this;
+        return this.dhis.baseURL.then(function(baseURL) {
+            var url = [ baseURL, adapter.dhis.getPathFor(type) ];
+            if (id) { url.push(id); }
+            return url.join('/');
+        });
     },
     findAll: function(store, type, sinceToken) {
-        var query, findAllinProcess = Em.get(this, 'findAllinProcess');
+        var adapter = this, query,
+            findAllinProcess = Em.get(this, 'findAllinProcess');
 
         if (sinceToken) {
           query = { since: sinceToken };
         }
 
         console.log('findAll for', type.typeKey);
-        var promise = this.ajax(this.buildURL(type.typeKey), 'GET',
-                                { data: query })
-                .then(function(json) {
-                    delete findAllinProcess[type.typeKey];
-                    return json;
-                });
+        var promise = adapter.buildURL(type.typeKey)
+            .then(function(url) {
+                return adapter.ajax(url, 'GET', { data: query });
+            })
+            .then(function(json) {
+                delete findAllinProcess[type.typeKey];
+                return json;
+            });
         Em.set(findAllinProcess, type.typeKey, promise);
         return promise;
     },
     findQuery: function(store, type, query) {
-        return this.ajax(this.buildURL(type.typeKey), 'GET',
-                         { data: query });
+        var adapter = this;
+        return adapter.buildURL(type.typeKey)
+            .then(function(url) {
+                return adapter.ajax(url, 'GET', { data: query });
+            });
     },
     find: function(store, type, id) {
+        var adapter = this;
         if (type.typeKey === 'level') {
             // We have to either fire a findAll or already know there
             // is one in process and return the right data as soon as
             // it returns
-            var adapter = this,
-                findAllinProcess = Em.get(this, 'findAllinProcess');
+            var findAllinProcess = Em.get(this, 'findAllinProcess');
             if (Em.get(findAllinProcess, type.typeKey) === null) {
                 // it's not running, hmm have the store kick it off
                 store.find(type.typeKey);
@@ -53,7 +62,10 @@ export default DHISBaseAdapter.extend({
                     return result;
                 });
         } else {
-            return this.ajax(this.buildURL(type.typeKey, id), 'GET');
+            return adapter.buildURL(type.typeKey, id)
+                .then(function(url) {
+                    return adapter.ajax(url, 'GET');
+                });
         }
     }
 });

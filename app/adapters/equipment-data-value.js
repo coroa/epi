@@ -1,7 +1,8 @@
 import Em from 'ember';
-import DHISBaseAdapter from './dhis-base';
+import DS from 'ember-data';
+import AjaxHelperMixin from '../mixins/ajax-helper';
 
-export default DHISBaseAdapter.extend({
+export default DS.Adapter.extend(AjaxHelperMixin, {
     buildURL: function() {return this.baseURL + "/dataValues";},
     parseQueryFromId: function(id) {
         Em.assert('id must not be undefined', !Em.isNone(id));

@@ -1,7 +1,6 @@
-import DS from 'ember-data';
 import Em from 'ember';
 
-export default DS.Adapter.extend({
+export default Ember.Mixin.create({
     headers: {
         Accept: 'application/json'
     },
@@ -50,23 +49,5 @@ export default DS.Adapter.extend({
         }
 
         return hash;
-    },
-    createRecord: function(_, type) {
-        Em.assert('createRecord for', type.typeKey, 'not implemented yet', false);
-    },
-    updateRecord: function(_, type) {
-        Em.assert('updateRecord for', type.typeKey, 'not implemented yet', false);
-    },
-    deleteRecord: function(_, type) {
-        Em.assert('deleteRecord for', type.typeKey, 'not implemented yet', false);
-    },
-    find: function(_, type) {
-        Em.assert('find for', type.typeKey, 'not implemented yet', false);
-    },
-    findAll: function(_, type) {
-        Em.assert('findAll for', type.typeKey, 'not implemented yet', false);
-    },
-    findQuery: function(_, type) {
-        Em.assert('findQuery for', type.typeKey, 'not implemented yet', false);
     }
 });

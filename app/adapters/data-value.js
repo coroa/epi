@@ -1,14 +1,19 @@
-import DHISBaseAdapter from './dhis-base';
+import DS from 'ember-data';
+import AjaxHelperMixin from '../mixins/ajax-helper';
 
-export default DHISBaseAdapter.extend({
-    buildURL: function() {return this.dhis.baseURL + "/analytics";},
+export default DS.Adapter.extend(AjaxHelperMixin, {
+    buildURL: function() {return this.dhis.baseURL.then(function(url) { return url + "/analytics" });},
     find: function(store, _, id) {
-        return this.ajax(this.buildURL(), 'GET', {
-            data: this.dhis.buildQueryFromId(id)
+        var adapter = this;
+        return this.buildURL().then(function(url) {
+            return adapter.ajax(url, 'GET', {
+                data: adapter.dhis.buildQueryFromId(id)
+            });
         });
     },
     findMany: function(store, _, ids) {
-        var query = {pe: [], ou: [], de: []},
+        var adapter = this,
+            query = {pe: [], ou: [], de: []},
             fields = ['pe', 'ou', 'de'];
         ids.forEach(function(id) {
             var q = this.dhis.parseId(id);
@@ -19,21 +24,27 @@ export default DHISBaseAdapter.extend({
         fields.forEach(function(field) {
             query[field] = query[field].join(';');
         });
-        return this.ajax(this.buildURL(), 'GET',
-                         { data: this.dhis.buildQuery(query) })
+        return this.buildURL()
+            .then(function(url) {
+                return adapter.ajax(url, 'GET',
+                                    { data: adapter.dhis.buildQuery(query)});
+            })
             .then(function(json) {
                 return { ids: ids, data: json };
             });
     },
     findAll: function(store) {
-        var no_level = store.all('level').get('length'),
+        var adapter = this,
+            no_level = store.all('level').get('length'),
             levels = [],
             periods = this.dhis.getPeriods(),
             DEs = this.dhis.getDEs();
         for (var i=1; i<=no_level; i++) { levels.push('LEVEL-' + i); }
-        return this.ajax(this.buildURL(), 'GET',
-                         { data: this.dhis.buildQuery(periods.join(';'),
-                                                 levels.join(';'),
-                                                 DEs.join(';')) });
+        return this.buildURL().then(function(url) {
+            return this.ajax(url, 'GET',
+                             { data: this.dhis.buildQuery(periods.join(';'),
+                                                          levels.join(';'),
+                                                          DEs.join(';'))});
+        });
     }
 });

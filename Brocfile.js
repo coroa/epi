@@ -4,7 +4,11 @@ var EmberApp = require('ember-cli/lib/broccoli/ember-app'),
     mergeTrees = require('broccoli-merge-trees'),
     pickFiles = require('broccoli-static-compiler');
 
-var app = new EmberApp();
+var app = new EmberApp({
+    fingerprint: {
+        exclude: ['fridge']
+    }
+});
 
 // Use `app.import` to add additional libraries to the generated
 // output files.
