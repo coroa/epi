@@ -1,8 +1,8 @@
 import Ember from 'ember';
-import d3 from 'd3';
 import d3_empty from './d3-empty';
 import d3_facilities_bar_groups from './d3-facilities-bar-groups';
 
+/* global d3 */
 
 export default function SurplusChart() {
 

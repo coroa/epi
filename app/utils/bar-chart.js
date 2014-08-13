@@ -1,6 +1,7 @@
-import d3 from 'd3';
 import d3_empty from './d3-empty';
 import d3_scale_weighted_ordinal from './d3-scale-weighted-ordinal';
+
+/* global d3 */
 
 export default function BarChart() {
 

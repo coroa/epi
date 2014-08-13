@@ -1,4 +1,4 @@
-import d3 from 'd3';
+/* global d3 */
 
 function d3_scale_weighted_ordinal(domain, ranger) {
   var index,

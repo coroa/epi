@@ -1,6 +1,7 @@
 import Ember from 'ember';
-import d3 from 'd3';
 import SurplusChart from '../utils/surplus-chart';
+
+/* global d3 */
 
 // Ignore the d3 style of invoking constructors without new
 /* jshint -W064 */

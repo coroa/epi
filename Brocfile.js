@@ -23,7 +23,7 @@ app.import("vendor/ember-localstorage-adapter/localstorage_adapter.js");
 app.import("vendor/file-saver/FileSaver.js");
 app.import("vendor/ember-debug/ember-debug.js");
 app.import("vendor/ember-group-helper-dist/group-helper.js");
-app.import("vendor/d3/d3.js", { exports: { d3: ['default'] } });
+app.import("vendor/d3/d3.js");
 app.import("vendor/bootstrap-sass/dist/js/bootstrap.js");
 
 var bootstrapFonts = pickFiles('vendor/bootstrap-sass/dist/fonts', {
