@@ -11,10 +11,10 @@ export default Ember.ObjectController.extend({
         return this.get('id');
     }.property('id'),
     interactions: [
-        { label: 'Delete', event: 'del' },
-        { label: 'Download', event: 'down' },
-        { label: 'New Table', event: 'new' },
-        { label: 'Upload', event: 'up' }
+        { label: 'New Table', event: 'new', iconClass: 'fa-table' },
+        { label: 'Load from file', event: 'up', iconClass: 'fa-upload' },
+        { label: 'Save to file', event: 'down', iconClass: 'fa-download' },
+        { label: 'Delete', event: 'del', iconClass: 'fa-trash-o' }
     ],
     steps: [ { name: 'Step 1',
                route: 'requirement-set.step1' },
