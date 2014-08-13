@@ -1,6 +1,8 @@
 import Ember from 'ember';
 /* global saveAs */
 
+var RSVP = Ember.RSVP;
+
 export default Ember.Route.extend({
     setupController: function(controller, model) {
         this._super.apply(this, arguments);
@@ -14,8 +16,8 @@ export default Ember.Route.extend({
     afterModel: function(model) {
         // retrieve the async hasMany relations before entering the
         // route
-        return Ember.RSVP.all([model.get('requirements'),
-                               model.get('siaStorageVolumes')]);
+        return RSVP.all([model.get('requirements'),
+                         model.get('siaStorageVolumes')]);
     },
     model: function(params) {
         return this.store.find('requirement-set',
@@ -32,15 +34,15 @@ export default Ember.Route.extend({
 
     actions: {
         doSave: function() {
-            Ember.RSVP.all(this._collectDirtyModels().invoke('save'))
-            .then(
-                function() {
-                    console.log('saved successfully');
-                },
-                function() {
-                    console.log('saving errored out');
-                }
-            );
+            RSVP.all(this._collectDirtyModels().invoke('save'))
+                .then(
+                    function() {
+                        console.log('saved successfully');
+                    },
+                    function() {
+                        console.log('saving errored out');
+                    }
+                );
         },
         addRequirement: function(req) {
             var set = this.get('controller.model');

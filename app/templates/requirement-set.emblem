@@ -15,12 +15,13 @@ nav.navbar.navbar-default.navbar-fixed-top role="navigation"
           link-to route tagName="li" href=false
             a href="#" = name
 
+      button-select content=controllers.requirement-sets optionValuePath="content.id" optionLabelPath="content.name" value=selectedRequirementSet interactions=interactions down="downloadRequirementSet" up="uploadRequirementSet" del="deleteThisRequirementSet" new="newRequirementSet" save="save"
+
       ul.nav.navbar-nav.navbar-right
         li: a href="#" click="doSave"
             span.glyphicon class=isDirty:glyphicon-floppy-save:glyphicon-floppy-saved
-            if isDirty: ' Unsaved changes
+            if isDirty: ' &nbsp;Unsaved changes
 
-      button-select content=controllers.requirement-sets optionValuePath="content.id" optionLabelPath="content.name" value=selectedRequirementSet interactions=interactions down="downloadRequirementSet" up="uploadRequirementSet" del="deleteRequirementSet" new="newRequirementSet" save="save"
 
 #main.container
   outlet
