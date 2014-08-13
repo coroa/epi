@@ -1,7 +1,8 @@
 import Ember from 'ember';
 import Enums from '../enums';
+import DirtyModelsMixin from '../mixins/dirty-models';
 
-export default Ember.ArrayController.extend({
+export default Ember.ArrayController.extend(DirtyModelsMixin, {
     needs: ['levels'],
     guaranteeLength: function() {
         var controller = this,

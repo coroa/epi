@@ -1,5 +1,6 @@
 import Em from 'ember';
 import Enums from '../enums';
+import DirtyModelsMixin from '../mixins/dirty-models';
 import AffectedArrayMerger from '../utils/affected-array-merger';
 import fallback from '../utils/fallback';
 
@@ -37,7 +38,7 @@ var requirementTableCell = Em.Object.extend({
 
 
 
-export default Em.ArrayController.extend({
+export default Em.ArrayController.extend(DirtyModelsMixin, {
     needs: ['levels','sia-storage-volumes'],
     itemController: 'requirement',
     routineService: Em.computed.filterBy('@this', 'service',
@@ -242,9 +243,15 @@ export default Em.ArrayController.extend({
             }
     }),
 
-    // dirty: Em.computed.filterBy('@this', 'isDirty', true),
+    /**
+     * The dirty models belonging to all the requirements.  includes
+     * requirement and their respective level-paramset models.
+     *
+     * @property dirty
+     * @type {Array of DS.Model}
+     * @public
+     */
     dirty: function() {
-        return this.filterBy('isDirty');
-    }.property('@each.isDirty'),
-    isDirty: Em.computed.notEmpty('dirty')
+        return [].concat.apply([], this.mapBy('dirty'));
+    }.property('@each.dirty')
 });

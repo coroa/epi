@@ -1,19 +1,16 @@
 import Ember from 'ember';
 
 export default Ember.ObjectController.extend({
-    needs: [ 'requirements', 'level-paramsets', 'requirement-sets' ],
+    needs: [ 'requirements', 'sia-storage-volumes', 'requirement-sets' ],
     selectedRequirementSet: function(key, value) {
         if (arguments.length > 1) {
             // setter
-            // don't send changes to the id, but reflect them here
+            this.send('updateRequirementSet',
+                      this.get('selectedRequirementSet'));
             return value;
         }
         return this.get('id');
     }.property('id'),
-    doUpdateRequirementSet: function() {
-        this.send('updateRequirementSet',
-                  this.get('selectedRequirementSet'));
-    }.observes('selectedRequirementSet'),
     interactions: [
         { label: 'Delete', event: 'del' },
         { label: 'Download', event: 'down' },
@@ -27,7 +24,7 @@ export default Ember.ObjectController.extend({
              { name: 'Step 3',
                route: 'requirement-set.step3' } ],
     isDirty: Ember.computed.or('controllers.requirements.isDirty',
-                               'controllers.level-paramsets.isDirty'),
+                               'controllers.sia-storage-volumes.isDirty'),
     actions: {
         save: function() {
             this.get('model').save();

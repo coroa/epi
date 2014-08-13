@@ -4,9 +4,10 @@ import Ember from 'ember';
 export default Ember.Route.extend({
     setupController: function(controller, model) {
         this._super.apply(this, arguments);
+        var requirements = model.get('requirements');
 
         this.controllerFor('requirements')
-            .set('model', model.get('requirements'));
+            .set('model', requirements);
         this.controllerFor('sia-storage-volumes')
             .set('model', model.get('siaStorageVolumes'));
     },
@@ -23,10 +24,10 @@ export default Ember.Route.extend({
 
     _collectDirtyModels: function() {
         return [].concat.apply([], ['requirements',
-                                    'level-paramsets']
+                                    'sia-storage-volumes']
                                .map(function(cntrl) {
                                    return this.controllerFor(cntrl).get('dirty');
-                               }, this)).mapBy('model');
+                               }, this));
     },
 
     actions: {
@@ -40,24 +41,6 @@ export default Ember.Route.extend({
                     console.log('saving errored out');
                 }
             );
-        },
-        doClear: function() {
-            Ember.RSVP.all(this._collectDirtyModels().invoke('rollback'))
-                .then(
-                    function() {
-                        console.log('rollback successfully');
-                    },
-                    function() {
-                        console.log('rollback errored out');
-                    });
-        },
-        doTrash: function() {
-            Ember.RSVP.all(this.controllerFor('requirements')
-                           .mapBy('model')
-                           .invoke('destroyRecord'))
-                .then(function() {
-                    console.log('all cleared');
-                });
         },
         addRequirement: function(req) {
             var set = this.get('controller.model');

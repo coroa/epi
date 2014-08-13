@@ -16,9 +16,9 @@ nav.navbar.navbar-default.navbar-fixed-top role="navigation"
             a href="#" = name
 
       ul.nav.navbar-nav.navbar-right
-        li: a href="#" click="doSave": span.glyphicon class=isDirty:glyphicon-floppy-save:glyphicon-floppy-saved
-        li: a href="#" click="doClear": span.glyphicon.glyphicon-floppy-remove
-        li: a href="#" click="doTrash": span.glyphicon.glyphicon-trash
+        li: a href="#" click="doSave"
+            span.glyphicon class=isDirty:glyphicon-floppy-save:glyphicon-floppy-saved
+            if isDirty: ' Unsaved changes
 
       button-select content=controllers.requirement-sets optionValuePath="content.id" optionLabelPath="content.name" value=selectedRequirementSet interactions=interactions down="downloadRequirementSet" up="uploadRequirementSet" del="deleteRequirementSet" new="newRequirementSet" save="save"
 

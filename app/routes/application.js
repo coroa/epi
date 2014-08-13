@@ -5,8 +5,6 @@ import uploadJSON from '../utils/upload-file';
 export default Ember.Route.extend({
     controllerName: 'requirement-sets',
     setupController: function(controller, model) {
-        // this.controllerFor('requirements').set('model',
-        //                                        this.store.find('requirement'));
         console.log('application router setupController');
         this._super(controller, model.requirementSets);
 
@@ -14,10 +12,6 @@ export default Ember.Route.extend({
             .set('model', model.levels);
         this.controllerFor('vaccines')
             .set('model', this.store.find('vaccine'));
-        // this.controllerFor('requirement-sets')
-        //     .set('model', this.store.find('requirement-set'));
-
-        // this.store.find('facility');
     },
     model: function() {
         console.log('application router model');
@@ -38,7 +32,7 @@ export default Ember.Route.extend({
                                           {name: "Unnamed " + i})
                 .save();
 
-            this.transitionTo('requirement-set.index', set);
+            this.send('updateRequirementSet', set);
         },
         uploadRequirementSet: function() {
             var _this = this;

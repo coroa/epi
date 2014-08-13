@@ -96,6 +96,18 @@ export default Em.ObjectController.extend({
         'reset': function(field) {
             this.set(field, null);
         }
-    }
+    },
 
+    /**
+     * The dirty models of this requirement and level-paramsets
+     *
+     * @property dirty
+     * @type {Array of DS.model}
+     */
+    dirty: function() {
+        var models = [];
+        if (this.get('isDirty')) { models.push(this.get('model')); }
+        return models.concat(this.get('levelParamsets')
+                             .filterBy('isDirty'));
+    }.property('isDirty', 'levelParamsets.@each.isDirty')
 });
