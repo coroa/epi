@@ -16,7 +16,10 @@ var TemperatureCell = Ember.Object.extend({
         }.property('services.@each.value2', 'facility.population.@each.value'),
         capacity: function() {
             return this.get('requirement') * 0.8;
-        }.property('requirement')
+        }.property('requirement'),
+        difference: function() {
+            return this.get('requirement') - this.get('capacity');
+        }.property('capacity', 'requirement')
     });
 
 export default Ember.ObjectController.extend({
@@ -30,6 +33,8 @@ export default Ember.ObjectController.extend({
 
     data: function() {
         var controller = this;
+
+        // Suspend all the property update events until population has arrived
         controller.beginPropertyChanges();
         this.get('population').then(function() {
             controller.endPropertyChanges();
@@ -61,7 +66,7 @@ export default Ember.ObjectController.extend({
     hasValue: Ember.computed.gt('maxValue', 0),
     totalDifference: function() {
         return this.get('data').map(function(d) {
-            return Math.max(0, d.get('requirement') - d.get('capacity'));
+            return Math.max(0, d.get('difference'));
         }).reduce(function(a,b) { return a+b; });
-    }.property('data.@each.{requirement,capacity}')
+    }.property('data.@each.difference')
 });

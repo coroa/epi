@@ -11,6 +11,10 @@ html, body {
 /////////
 // workaround
 
+.form-inline select {
+    width: 100px;
+}
+
 .has-feedback td {
     position: relative;
 }
