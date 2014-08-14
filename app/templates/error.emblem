@@ -1,0 +1,9 @@
+i.fa.fa-exclamation-triangle.fa-5x.pull-left
+
+p An error of considerable magnitude has hit.
+p = model
+p
+  ' If refreshing doesn't help,
+  link-to 'reset'
+    ' clear the data from the browser
+  ' .
