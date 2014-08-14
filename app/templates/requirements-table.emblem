@@ -21,7 +21,7 @@ h2 = label
         each requirements: tr
           td.delete: button.btn.btn-default click="delete"
             span.glyphicon.glyphicon-remove
-          td: unbound-select content=controllers.vaccines.vaccineInitials class="form-control" value=vaccineInitials prompt="Antigen ..."
+          td: unbound-select content=controllers.vaccines.vaccineInitials value=vaccineInitials prompt="Antigen ..."
           td: vaccine-picker vaccines=vaccines vaccine=vaccine action="setAffected" requirement=this
           td: affecting-text value=elligible_percent action="setAffected" requirement=this
           td
@@ -41,7 +41,7 @@ h2 = label
           td: rounded-number number=diluent_volume_per_course
         tr
           td.delete
-          td: unbound-select content=controllers.vaccines.vaccineInitials class="form-control" value=vaccineInitials prompt="Antigen ..."
+          td: unbound-select content=controllers.vaccines.vaccineInitials value=vaccineInitials prompt="Antigen ..."
           td: vaccine-picker vaccines=vaccines vaccine=vaccine
           td: input class="form-control" disabled="1"
           td: input class="form-control" disabled="1"
