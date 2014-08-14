@@ -5,7 +5,9 @@ export default Ember.ObjectController.extend({
     selectedRequirementSet: function(key, value) {
         if (arguments.length > 1) {
             // setter
-            this.send('updateRequirementSet', value);
+            if (this.get('selectedRequirementSet') !== value) {
+                this.send('updateRequirementSet', value);
+            }
             return value;
         }
         return this.get('id');
