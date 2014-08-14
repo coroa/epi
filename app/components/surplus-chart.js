@@ -40,7 +40,7 @@ export default Ember.Component.extend({
     update: function() {
         var $el = this.$();
         if ($el) {
-            console.log('Doing an update. maxValue is at', this.get('maxValue'));
+            // console.log('Doing an update. maxValue is at', this.get('maxValue'));
             d3.select($el[0])
                 .data([ { maxValue: this.get('maxValue'),
                           data: this.get('sortedData') } ])

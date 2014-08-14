@@ -174,8 +174,10 @@ export default Ember.ArrayProxy.extend({
      * @private
      */
     _sourceWillChange: function(sourceObj, sourceKey) {
-        var sourceArray = Ember.get(sourceObj, sourceKey);
-        if (Ember.isArray(sourceArray)) {
+        var sourceArray = Ember.get(sourceObj, sourceKey),
+            source = this._sources[Ember.guidFor(sourceObj)+sourceKey];
+        if (Ember.isArray(sourceArray) && !Ember.isNone(source)) {
+            // it's no stray event
 
             //Remove array observers
             sourceArray.removeArrayObserver(this, {
@@ -186,8 +188,7 @@ export default Ember.ArrayProxy.extend({
             this._removeObserverProxy('_sourceContentWillChange', sourceObj, sourceKey);
             this._removeObserverProxy('_sourceContentDidChange', sourceObj, sourceKey);
 
-            var position = this._sources[Ember.guidFor(sourceObj)+sourceKey].position;
-            Ember.run.schedule('actions', this, this._removePosition, position);
+            Ember.run.schedule('actions', this, this._removePosition, source.position);
         }
     },
 
@@ -201,8 +202,11 @@ export default Ember.ArrayProxy.extend({
      * @private
      */
     _sourceDidChange: function(sourceObj, sourceKey) {
-        var sourceArray = Ember.get(sourceObj, sourceKey);
-        if (Ember.isArray(sourceArray)) {
+        var sourceArray = Ember.get(sourceObj, sourceKey),
+            source = this._sources[Ember.guidFor(sourceObj)+sourceKey];
+        if (Ember.isArray(sourceArray) && !Ember.isNone(source)) {
+            console.log('_sourceDidChange in',
+                        sourceObj.toString(), 'adding observers');
             //Add array observers. These will get called every time an item is added to or removed from the source array
             sourceArray.addArrayObserver(this, {
                 willChange: this._getObserverProxy('_sourceContentWillChange', sourceObj, sourceKey),

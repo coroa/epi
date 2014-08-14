@@ -2,7 +2,7 @@ import DS from 'ember-data';
 import AjaxHelperMixin from '../mixins/ajax-helper';
 
 export default DS.Adapter.extend(AjaxHelperMixin, {
-    buildURL: function() {return this.dhis.baseURL.then(function(url) { return url + "/analytics" });},
+    buildURL: function() {return this.dhis.baseURL.then(function(url) { return url + "/analytics"; });},
     find: function(store, _, id) {
         var adapter = this;
         return this.buildURL().then(function(url) {
@@ -41,10 +41,10 @@ export default DS.Adapter.extend(AjaxHelperMixin, {
             DEs = this.dhis.getDEs();
         for (var i=1; i<=no_level; i++) { levels.push('LEVEL-' + i); }
         return this.buildURL().then(function(url) {
-            return this.ajax(url, 'GET',
-                             { data: this.dhis.buildQuery(periods.join(';'),
-                                                          levels.join(';'),
-                                                          DEs.join(';'))});
+            return adapter.ajax(url, 'GET',
+                             { data: adapter.dhis.buildQuery(periods.join(';'),
+                                                             levels.join(';'),
+                                                             DEs.join(';'))});
         });
     }
 });

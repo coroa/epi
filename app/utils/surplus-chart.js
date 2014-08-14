@@ -22,7 +22,7 @@ export default function SurplusChart() {
         hoverDataLabels  = 'top',
         fadeOnHover      = true,
         noTicks          = false,
-        threshold        = 10,
+        threshold        = 5,
         xSubScale        = d3.scale.ordinal();
 
     function chart(selection) {

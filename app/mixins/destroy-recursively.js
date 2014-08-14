@@ -14,11 +14,11 @@ var RSVP = Ember.RSVP,
  */
 var invoke = function(array, methodNames) {
     var args, ret = Ember.A();
-    if (arguments.length>2) args = a_slice.call(arguments, 2);
+    if (arguments.length>2) { args = a_slice.call(arguments, 2); }
 
     array.forEach(function(x, idx) {
         var methodName = methodNames.find(function(name) {
-            var method = x && x[methodName];
+            var method = x && x[name];
             return typeof method === 'function';
         });
         if (methodName !== undefined) {
