@@ -1,5 +1,6 @@
 import Ember from 'ember';
 
 export default Ember.ArrayController.extend({
-    itemController: 'level'
+    itemController: 'level',
+    sortProperties: ['id']
 });
