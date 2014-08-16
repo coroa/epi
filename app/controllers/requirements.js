@@ -4,33 +4,79 @@ import DirtyModelsMixin from '../mixins/dirty-models';
 import AffectedArrayMerger from '../utils/affected-array-merger';
 import fallback from '../utils/fallback';
 
-var requirementTableCell = Em.Object.extend({
+/**
+ * `requirementTableCell` and `amendableRequirementTableCell` make up
+ * the table cells of the resultTable, which sorts the flat array of
+ * parameters belonging to a specific levelParamset on the
+ * `storage_volume` key.
+ *
+ * Both have a property `value` and a property `value2`. The former is
+ * the input property, where the sum or maximum is aggregated, while
+ * the latter is displayed in the requirement-level-table und
+ * volume-table templates.
+ *
+ * This layer of indirection allows to amend the `value2` dependent on
+ * an element of the sia-storage-volume model referenced in the
+ * `_amendObj` property.
+ *
+ * @class requirementTableCell
+ * @property value2 Value displayed in table templates
+ * @property value  Aggregated value from `storage_volume`
+ *
+ * @class amendableRequirementTableCell
+ * @property value2 Value displayed in table templates
+ * @property value  Aggregated value from `storage_volume`
+ * @property values The storage_volume values of all SIA requirements
+ * @property _amendObj Element of the sia-storage-volume model
+ */
+var a_concat = [].concat,
+    requirementTableCell = Em.Object.extend({
         value2: Em.computed.alias('value')
     }),
     amendableRequirementTableCell = Em.Object.extend({
         value2: fallback('_amendObj.storage_volume', 'value'),
         isCustom: Em.computed.notEmpty('_amendObj.storage_volume')
     }),
-
-    make_array = function(n, amends, no_of_sia) {
-        var a = [],
-            baseObj = (amends == null
-                       ? requirementTableCell
-                       : amendableRequirementTableCell);
-
-        for(var i=0; i<n; i++) {
-            var obj = baseObj.create({
+    /**
+     * Build a table row of empty `requirementTableCell` elements
+     *
+     * @function make_table_row
+     * @param {Int} columns
+     * @return {Array} of `requirementTableCell`s
+     */
+    make_table_row = function(columns) {
+        var a = [];
+        for (var i=0; i<columns; i++) {
+            a.push(requirementTableCell.create({
                 isAffected: false,
                 value: 0
+            }));
+        }
+        return a;
+    },
+    /**
+     * Build a table row of empty `amendableRequirementTableCell`
+     * elements
+     *
+     * @function make_table_row_sia
+     * @param {Int} columns
+     * @param {Array} of sia-storage-volume model elements
+     * @param {Int} no_of_sia Number of SIA requirements
+     */
+    make_table_row_sia = function(columns, amends, no_of_sia) {
+        var a = [];
+        for(var i=0; i<columns; i++) {
+            var obj = amendableRequirementTableCell.create({
+                isAffected: false,
+                value: 0,
+                _amendObj: amends.objectAt(i)
             });
-            if (amends != null) {
-                obj.set('_amendObj', amends.objectAt(i));
-                var values = Em.A();
-                for(var j=0; j<no_of_sia; j++) {
-                    values.push(Em.Object.create({value: 0}));
-                }
-                obj.set('values', values);
+
+            var values = Em.A();
+            for(var j=0; j<no_of_sia; j++) {
+                values.push(Em.Object.create({value: 0}));
             }
+            obj.set('values', values);
             a.push(obj);
         }
         return a;
@@ -41,6 +87,10 @@ var requirementTableCell = Em.Object.extend({
 export default Em.ArrayController.extend(DirtyModelsMixin, {
     needs: ['levels','sia-storage-volumes'],
     itemController: 'requirement',
+
+    /*
+     * We split up the requirements in lists of the different types
+     */
     routineService: Em.computed.filterBy('@this', 'service',
                                          Enums.service.ROUTINE),
     schoolService: Em.computed.filterBy('@this', 'service',
@@ -50,6 +100,13 @@ export default Em.ArrayController.extend(DirtyModelsMixin, {
     otherService: Em.computed.filterBy('@this', 'service',
                                        Enums.service.OTHER),
 
+    /*
+     * And collect them all together in a list of
+     * ```javascript
+     * { id: <id>, label: <label>, requirements: <requirements> }
+     * ```
+     * objects.
+     */
     services: function() {
         return  ['routine','school','sia','other'].map(function(service) {
             var id = Enums.service[service.toUpperCase()];
@@ -127,7 +184,6 @@ export default Em.ArrayController.extend(DirtyModelsMixin, {
     //     }),
 
     // the full table is constructed in resultTableLines
-    // resultTableLineForService(id) returns a service specific one
     resultTableHead: function() {
         var levels = this.get('controllers.levels').mapBy('name');
         return Em.Object.create({
@@ -135,7 +191,7 @@ export default Em.ArrayController.extend(DirtyModelsMixin, {
             first: Enums.temperature.options.map(function(el) {
                 return 'Lts net storage requirement @ ' + el.label;
             }),
-            second: [].concat.apply([], Enums.temperature.options.map(function() {
+            second: a_concat.apply([], Enums.temperature.options.map(function() {
                 return levels;
             }))
         });
@@ -152,16 +208,15 @@ export default Em.ArrayController.extend(DirtyModelsMixin, {
                 var no_levels = this.get('controllers.levels.length'),
                     no_temperatures = Enums.temperature.options.length,
                     no_of_sia = this.get('siaServiceIds.length'),
+                    columns = no_levels * no_temperatures,
                     amends = this.get('controllers.sia-storage-volumes');
                 initialValue.setObjects(
                     Enums.service.options.map(function(opt) {
                         return Em.Object.create({
                             label: opt.word,
-                            content: make_array(
-                                no_levels * no_temperatures,
-                                opt.id === Enums.service.SIA ? amends : null,
-                                no_of_sia
-                            )
+                            content: (opt.id === Enums.service.SIA
+                                      ? make_table_row_sia(columns, amends, no_of_sia)
+                                      : make_table_row(columns))
                         });
                     })
                 );
@@ -252,6 +307,6 @@ export default Em.ArrayController.extend(DirtyModelsMixin, {
      * @public
      */
     dirty: function() {
-        return [].concat.apply([], this.mapBy('dirty'));
+        return a_concat.apply([], this.mapBy('dirty'));
     }.property('@each.dirty')
 });
