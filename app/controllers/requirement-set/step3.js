@@ -58,7 +58,7 @@ export default Ember.Controller.extend({
         }
         var levels = this.get('controllers.levels').mapBy('model'),
             index = levels.indexOf(this.get('selected.level'));
-        if (index !== -1) {
+        if (index !== -1 && index !== levels.get('length') - 1) {
             return levels.objectAt(Math.min(index + 2, levels.get('length')-1));
         } else {
             return null;

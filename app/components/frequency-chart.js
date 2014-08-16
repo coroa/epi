@@ -11,7 +11,7 @@ var RSVP = Ember.RSVP,
                 return a_concat.apply([], listOfChildren.invoke('toArray'));
             })
             .then(function(facilities) {
-                if (facilities[0].get('level') === level) {
+                if (facilities.length === 0 || facilities[0].get('level') === level) {
                     return facilities;
                 } else {
                     return traverseToLevel(level, facilities);
