@@ -27,19 +27,31 @@ export default Ember.ObjectController.extend({
 
     title: Ember.computed.oneWay('name'),
 
+    init: function() {
+        var controller = this;
+
+        // Suspend all the property update events until population and
+        // children has arrived
+        controller.beginPropertyChanges();
+        controller.get('population').finally(function() {
+            controller.endPropertyChanges();
+        });
+
+        controller.beginPropertyChanges();
+        controller.get('children')
+            // .then(function() {
+            //     controller.get('wrappedChildren');
+            // })
+            .finally(function() {
+                controller.endPropertyChanges();
+            });
+    },
+
     wrappedChildren: Ember.computed.map('children', function(child) {
         return this.get('controllers.facilities').findBy('id', child.get('id'));
     }),
 
     data: function() {
-        var controller = this;
-
-        // Suspend all the property update events until population has arrived
-        controller.beginPropertyChanges();
-        this.get('population').then(function() {
-            controller.endPropertyChanges();
-        });
-
         var levels = this.get('controllers.levels').mapBy('id'),
             levelOffset = levels.indexOf(this.get('level.id')),
             resultTable = this.get('controllers.requirements.resultTable'),
