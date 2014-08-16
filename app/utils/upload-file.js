@@ -1,9 +1,15 @@
 import Ember from 'ember';
 
 export default function uploadJSON() {
-    var $body = Ember.$(window.document.body),
+    // Try to reuse a previously cancelled file dialog
+    var $input = Ember.$('#uploadJSON-input');
+    if ($input.length === 0) {
+        var $body = Ember.$(window.document.body);
         $input = Ember.$('<input type="file" accept=".json">')
+            .attr('id', 'uploadJSON-input')
+            .css('display', 'none')
             .appendTo($body);
+    }
 
     return new Ember.RSVP.Promise(function(resolve) {
         $input
