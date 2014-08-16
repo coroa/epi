@@ -3,6 +3,11 @@ import DS from 'ember-data';
 
 import FrequencyChart from '../utils/frequency-chart';
 
+/* global d3 */
+
+// Ignore the d3 style of invoking constructors without new
+/* jshint -W064 */
+
 var RSVP = Ember.RSVP,
     a_concat = [].concat,
     traverseToLevel = function(level, facilities) {
@@ -98,57 +103,19 @@ export default Ember.Component.extend({
     differences: Ember.computed.mapBy('temperatureCells', 'difference'),
 
     /**
-     * The `binNumber` attribute holds the number of bins.
+     * The `values` property zips the differences with their
+     * respective facilities. This is the data-basis for the d3 part
+     * of the frequency-chart.
      *
-     * @property binNumber
-     * @type Integer
-     * @default 10
-     */
-    binNumber: 10,
-
-    min: Ember.computed.min('differences'),
-    max: Ember.computed.max('differences'),
-
-    /**
-     * The `data` attribute is fed into d3. It has approximately the
-     * following structure:
+     * An element looks like
      * ```javascript
-     * { maxValue: <highest count number>,
-     *   binSize: <size of a bin>,
-     *   start: <value a bit left of the minimum>,
-     *   end: <value a bit right of the maximum>,
-     *   bins: [
-     *     { from: <left>, to: <right>, count: <number in bin>,
-     *       facilities: <facilities in bin> },
-     *     ....
-     *   ] }
+     * { difference: <difference>,
+     *   facility: <facility controller> }
      * ```
      *
-     * @property data
-     * @type Object (see above)
+     * @property values
+     * @type Array of Objects
      */
-
-    // data: function() {
-    //     var binNumber = this.get('binNumber'),
-    //         max = this.get('max'), min = this.get('min'),
-    //         binSize = (max - min)*1.1/binNumber,
-    //         facilities = this.get('facilities'),
-    //         start = min - (max - min)*0.05, bins = [],
-    //         maxValue = 0;
-    //     for (var i=0; i<binNumber; i++) {
-    //         bins.push({ from: start, to: start+binSize, count: 0,
-    //                     facilities: [] });
-    //     }
-    //     this.get('differences').forEach(function(diff, i) {
-    //         var bin = bins[(diff - start) % binSize];
-    //         bin.count ++;
-    //         bin.facilities.push(facilities.objectAt(i));
-    //     });
-    //     maxValue = Math.max.apply(null, bins.mapBy('count'));
-    //     return { bins: bins, maxValue: maxValue, binSize: binSize,
-    //              start: start, end: start + binSize * binNumber };
-    // }.property('differences', 'binsSpread', 'binSize', 'binNumber'),
-
     values: function() {
         var facilities = this.get('facilities');
         if (! facilities.get('isFulfilled')) { return []; }
