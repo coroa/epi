@@ -40,5 +40,13 @@ export default Em.ObjectController.extend({
             }, this);
     }.property('resultTableLine.[]',
                'controllers.requirements.siaServiceIds.[]'),
-    isSIA: Em.computed.equal('id', Enums.service.SIA)
+    isSIA: Em.computed.equal('id', Enums.service.SIA),
+    actions: {
+        resetSIA: function(siaObj) {
+            var amendObj = siaObj.get('_amendObj');
+            if (amendObj) {
+                Em.set(amendObj, 'storage_volume', null);
+            }
+        }
+    }
 });
