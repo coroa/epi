@@ -1,6 +1,6 @@
 import Em from 'ember';
 
-export default Ember.Mixin.create({
+export default Em.Mixin.create({
     headers: {
         Accept: 'application/json'
     },
