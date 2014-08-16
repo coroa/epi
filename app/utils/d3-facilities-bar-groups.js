@@ -18,7 +18,7 @@ var BarGroup = D3EmberComputed(
                             var width = xSubScale.rangeBand()/3,
                                 requirement = d.get('requirement') || 0,
                                 capacity = d.get('capacity') || 0,
-                                difference = requirement - capacity;
+                                difference = d.get('difference');
 
                             return [ { x: 0*width, width: width,
                                        label: "Requirement",
@@ -220,7 +220,7 @@ export default D3EmberComputed(
                             + ",0)";
                     });
                 facilities
-                    .order()
+                    .sort(function(a,b) { return a.get('totalDifference') - b.get('totalDifference'); })
                     .transition().duration(duration)
                     .attr("transform", function(d) {
                         return "translate(" +
