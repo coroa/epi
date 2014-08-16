@@ -7,7 +7,7 @@ var LevelParamset = DS.Model.extend({
     requirement: DS.belongsTo('requirement', {embedded:'drop'}),
     level: DS.belongsTo('level'),
     temperature: attr('number',
-                      { defaultValue: Enums.temperature.MINUS25 }),
+                      { defaultValue: Enums.temperature.PLUS5 }),
     warm_diluent: attr('boolean'),
     packing: attr('number',
                   { defaultValue: Enums.packing.SECONDARY }),
