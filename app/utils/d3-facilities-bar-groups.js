@@ -218,9 +218,8 @@ export default D3EmberComputed(
                         return "translate(" +
                             xScale(d.get('name'))
                             + ",0)";
-                    });
+                    });;
                 facilities
-                    .sort(function(a,b) { return a.get('totalDifference') - b.get('totalDifference'); })
                     .transition().duration(duration)
                     .attr("transform", function(d) {
                         return "translate(" +

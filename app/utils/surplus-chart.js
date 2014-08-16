@@ -53,8 +53,11 @@ export default function SurplusChart() {
             }
 
             // Update the x-scale.
+            var facs = data.data.toArray();
+            facs.sort(function(a,b) { return (b.get('totalDifference') -
+                                  a.get('totalDifference')); });
             xScale
-                .domain(data.data.mapBy('name'))
+                .domain(facs.mapBy('name'))
                 .rangeRoundBands([0, width], 0.1);
 
             xSubScale
