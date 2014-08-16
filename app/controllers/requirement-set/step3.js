@@ -51,7 +51,7 @@ export default Ember.Controller.extend({
             return levels;
         }
     }.property('controllers.levels', 'selected'),
-    subTemperature: Enums.temperature.MINUS25,
+    subTemperature: Enums.temperature.PLUS5,
     subLevel: function(key, value) {
         if (arguments.length > 1) {
             return value;
