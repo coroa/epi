@@ -60,6 +60,7 @@ export default {
                                 return Ember.RSVP.Promise.cast(rec.get(hasMany.key))
                                     .then(function(x) {
                                         x.pushObjects(hasMany.records);
+                                        return all(hasMany.records.invoke('save'));
                                     });
                             }))
                             .then(function() {
