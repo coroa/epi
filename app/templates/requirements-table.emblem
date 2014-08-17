@@ -37,8 +37,8 @@ h2 = label
             if diluent_volume_isCustom
               span.glyphicon.glyphicon-remove.form-control-feedback click="reset 'diluent_volume'"
           td: affecting-text value=doses_course action="setAffected" requirement=this
-          td: rounded-number number=vaccine_volume_per_course
-          td: rounded-number number=diluent_volume_per_course
+          td: rounded-number content=vaccine_volume_per_course
+          td: rounded-number content=diluent_volume_per_course
         tr
           td.delete
           td: unbound-select content=controllers.vaccines.vaccineInitials value=vaccineInitials prompt="Antigen ..."

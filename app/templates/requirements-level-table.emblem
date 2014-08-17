@@ -27,8 +27,8 @@ if tableLines
             td: = input type="checkbox" class="form-control" checked=warm_diluent
             td: affecting-text value=safety_stock action="setAffected" paramset=this
             td: affecting-text value=supply_interval action="setAffected" paramset=this
-            td: rounded-number number=reorder_freq
-            td: rounded-number number=storage_volume
+            td: rounded-number content=reorder_freq
+            td: rounded-number content=storage_volume
             / td: isDirty
   if isSIA
     .table-responsive: form.has-feedback role="form"
@@ -44,7 +44,7 @@ if tableLines
           each resultTableSIA: tr
             th = label
             each content: td class={isAffected:danger}
-              rounded-number number=value
+              rounded-number content=value
           tr
             th Max
             each resultTableLine.content: td class={isAffected:danger}
@@ -59,7 +59,7 @@ if tableLines
       tbody: tr
         each resultTableLine.content
           td class={isAffected:danger}
-            rounded-number number=value2
+            rounded-number content=value2
 
 else
   p No vaccines chosen for this service.

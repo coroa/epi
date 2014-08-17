@@ -16,7 +16,7 @@ button.btn.btn-default.dropdown-toggle.form-control type="button" data-toggle="d
           each generics itemController="vaccine-picker-item" groupedRows=true
             tr click="choose this" class=isActive:active
               td = doses_per_vial
-              td: rounded-number number=vaccine_volume
+              td: rounded-number content=vaccine_volume
     .col-sm-7: .panel.panel-default style="overflow:auto; max-height: 400px;"
       .panel-heading: strong Choose a specific product
       table.table.table-condensed.table-hover.panel-body
@@ -29,7 +29,7 @@ button.btn.btn-default.dropdown-toggle.form-control type="button" data-toggle="d
           each products itemController="vaccine-picker-item" groupedRows=true
             tr click="choose this" class=isActive:active
               td = doses_per_vial
-              td: rounded-number number=vaccine_volume
+              td: rounded-number content=vaccine_volume
               td = presentation
               td = manufacturer
     .col-sm-2

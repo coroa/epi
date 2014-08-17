@@ -11,4 +11,4 @@
     th: = label
     each content
       td class={isAffected:danger}
-        rounded-number number=value2
+        rounded-number content=value2
