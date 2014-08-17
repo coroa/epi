@@ -1,7 +1,6 @@
 import Ember from 'ember';
 import Enums from '../enums';
 import d3_empty from './d3-empty';
-import d3_facilities_bar_groups from './d3-facilities-bar-groups';
 
 /* global d3 */
 
@@ -9,7 +8,6 @@ export default function SurplusChart() {
 
     var margin           = {top: 50, right: 40, bottom: 50, left: 40},
         empty            = d3_empty('main'),
-        facilities       = d3_facilities_bar_groups('main'),
         xScale           = d3.scale.ordinal(),
         yScale           = d3.scale.linear(),
         xAxis            = d3.svg.axis().scale(xScale).innerTickSize(0).tickPadding(15).orient("bottom"),
@@ -109,14 +107,146 @@ export default function SurplusChart() {
             // Update the y-axis.
             g.select(".y.axis").transition().duration(duration).call(yAxis);
 
-            // Main Plot
+            // Update the facilities
+            var facilities = g.selectAll(".category")
+                    .data(function(d) {return d.data;},
+                          function(d) {return d.get('id');});
+            facilities.enter()
+                .append("g").attr("class", "category")
+                .attr("transform", function(d) {
+                    return "translate(" +
+                        xScale(d.get('name'))
+                        + ",0)";
+                });;
             facilities
-                .xScale(xScale).yScale(yScale).xSubScale(xSubScale)
-                .duration(duration).color(color)
-                .staticDataLabels(myStaticDataLabels)
-                .highlightedFacility(highlightedFacility)
-                .emberComponent(emberComponent);
-            g.call(facilities);
+                .transition().duration(duration)
+                .attr("transform", function(d) {
+                    return "translate(" +
+                        xScale(d.get('name'))
+                        + ",0)";
+                });
+
+            // Update the temperatures
+            var temperatures = facilities.selectAll(".temperature")
+                    .data(function(d) {return d.get('data');},
+                          function(d) { return d.get('temperature'); });
+            temperatures.enter()
+                .append("g").attr("class", "temperature")
+                .attr("transform", function(d) {
+                    return "translate(" + xSubScale(d.get('temperature')) + ",0)";
+                });
+            temperatures
+                .transition()
+                .duration(duration)
+                .attr("transform", function(d) {
+                    return "translate(" + xSubScale(d.get('temperature')) + ",0)";
+                });
+
+            var bars = temperatures.selectAll(".bar")
+                    .data(function(d) {
+                        var width = xSubScale.rangeBand()/3,
+                            requirement = d.get('requirement') || 0,
+                            capacity = d.get('capacity') || 0,
+                            difference = d.get('difference'),
+                            isHighlighted = d.get('facility.id') === highlightedFacility,
+                            base = d.getProperties('facility',
+                                                   'temperature');
+                        return [ { label: "Required", value: requirement },
+                                 { label: "Actual", value: capacity },
+                                 { label: (difference > 0
+                                           ? "Missing" : "Surplus"),
+                                   value: difference } ]
+                            .map(function(obj, i) {
+                                return Ember.$.extend(obj, base, {
+                                    x: i*width, width: width,
+                                    isHighlighted: isHighlighted
+                                });
+                            });
+                    });
+            bars.enter()
+                .append("rect")
+                .attr("class", "bar")
+                .attr("stroke", "black")
+                .attr("height", 0)
+                .attr("width", function(d) {return d.width;})
+                .attr("x", function(d) {return d.x; })
+                .attr("y", yScale(0));
+            bars // update
+                .attr("stroke-width", function(d) {return d.isHighlighted ? 2:0;})
+                .attr("fill", function(d) {return color(d.label);})
+                .transition()
+                .duration(duration)
+                .attr("width", function(d) {return d.width;})
+                .attr("y", function(d) {return yScale(Math.abs(d.value));})
+                .attr("height", function(d) {
+                    return yScale(0) - yScale(Math.abs(d.value));
+                });
+
+            bars.exit()
+                .transition()
+                .duration(duration)
+                .attr("y", yScale(0))
+                .attr("height", 0)
+                .remove();
+
+
+            temperatures.exit()
+                .remove();
+
+            facilities.exit()
+                .remove();
+
+            facilities.on('click', function(facility) {
+                emberComponent.send('clickFacility', facility);
+            });
+
+            // Static data labels
+            if (staticDataLabels) {
+                var dataLabels = temperatures.selectAll(".dataLabel")
+                        .data(function(d) {
+                            return [{temperature: d.get('temperature'),
+                                     label: Enums.temperature.options[d.get('temperature')].label,
+                                     max: Math.max(d.get('requirement'),
+                                                   d.get('capacity')),
+                                     width: xSubScale.rangeBand()}]; });
+                var dataLabelsEnter = dataLabels.enter()
+                        .append("g")
+                        .attr("class", "dataLabel")
+                        .attr("transform",
+                              function(d) { return "translate(" + d.width/2 + "," +
+                                     (yScale(0) - 30) + ")"; });
+
+                dataLabelsEnter.append("text")
+                    .attr("class", "static_label")
+                    .attr("text-anchor", "middle");
+
+                // dataLabelsEnter.append("text")
+                //     .attr("class", "value")
+                //     .attr("text-anchor", "middle")
+                //     .attr("transform", "translate(0,20)")
+                //     .style("font-weight", "bold")
+                //     .style("fill", '#1f77b4');
+
+                dataLabels
+                    .transition()
+                    .duration(duration)
+                    .attr("transform",
+                          function(d) { return "translate(" + d.width/2 + "," +
+                                 (yScale(d.max) - 20) + ")"; });
+
+                dataLabels
+                    .select(".static_label")
+                    .text(function(d) {return d.label;});
+                // dataLabels
+                //     .select(".value")
+                //     .text(function(d) {return d3.format(".2f")(d.);});
+
+                dataLabels.exit()
+                    .transition()
+                    .duration(duration)
+                    .style("opacity", 0)
+                    .remove();
+            }
 
             // Hover labels
             if (hoverDataLabels) {
@@ -130,7 +260,7 @@ export default function SurplusChart() {
                 hoverLabelEnter.append("div").attr("class", "hover-label-content");
 
                 hoverLabel.style('display', 'none');
-                sel.selectAll(".bar")
+                bars
                     .on("mouseover.labels", function(d) {
                         hoverLabel.style("display", "initial");
                         hoverLabel.select(".hover-label-content")
@@ -153,25 +283,6 @@ export default function SurplusChart() {
                     .on("mouseout.labels", function() { hoverLabel.style("display", "none"); });
             }
 
-            // if (fadeOnHover) {
-            //     selection.selectAll(".bar")
-            //         .on("mouseout.fade", function() {
-            //             selection.selectAll(".bar")
-            //                 // .transition()
-            //                 // .duration(200)
-            //                 .style("opacity", "1");
-            //         })
-            //         .on("mouseover.fade", function(d, i) {
-            //             selection.selectAll(".bar").filter(function(d, j){return i!==j;})
-            //                 // .transition()
-            //                 // .duration(200)
-            //                 .style("opacity", ".7");
-            //             selection.selectAll(".bar").filter(function(d, j){return i===j;})
-            //                 // .transition()
-            //                 // .duration(200)
-            //                 .style("opacity", "1");
-            //         });
-            // }
         });
     }
 
@@ -275,7 +386,6 @@ export default function SurplusChart() {
         emberComponent = _;
         return chart;
     };
-
 
     return chart;
 }
