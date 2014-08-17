@@ -10,7 +10,7 @@ var BarGroup = D3EmberComputed(
         'capacity',
         'requirement',
         function() {
-            var duration, yScale, xSubScale, color;
+            var duration, yScale, xSubScale, color, highlightedFacility;
 
             function exports(selection) {
                 var bars = selection.selectAll(".bar")
@@ -18,27 +18,32 @@ var BarGroup = D3EmberComputed(
                             var width = xSubScale.rangeBand()/3,
                                 requirement = d.get('requirement') || 0,
                                 capacity = d.get('capacity') || 0,
-                                difference = d.get('difference');
-
-                            return [ { x: 0*width, width: width,
-                                       label: "Requirement",
-                                       value: requirement },
-                                     { x: 1*width, width: width,
-                                       label: "Capacity",
-                                       value: capacity },
-                                     { x: 2*width, width: width,
-                                       label: (difference > 0
+                                difference = d.get('difference'),
+                                isHighlighted = d.get('facility.id') === highlightedFacility,
+                                base = d.getProperties('facility',
+                                                       'temperature');
+                            return [ { label: "Required", value: requirement },
+                                     { label: "Actual", value: capacity },
+                                     { label: (difference > 0
                                                ? "Missing" : "Surplus"),
-                                       value: difference } ];
+                                       value: difference } ]
+                                .map(function(obj, i) {
+                                    return Ember.$.extend(obj, base, {
+                                        x: i*width, width: width,
+                                        isHighlighted: isHighlighted
+                                    });
+                                });
                         });
                 bars.enter()
                     .append("rect")
                     .attr("class", "bar")
+                    .attr("stroke", "black")
                     .attr("height", 0)
                     .attr("width", function(d) {return d.width;})
                     .attr("x", function(d) {return d.x; })
                     .attr("y", yScale(0));
                 bars // update
+                    .attr("stroke-width", function(d) {return d.isHighlighted ? 2:0;})
                     .attr("fill", function(d) {return color(d.label);})
                     .transition()
                     .duration(duration)
@@ -80,6 +85,13 @@ var BarGroup = D3EmberComputed(
                 return exports;
             };
 
+            exports.highlightedFacility = function(_) {
+                if (!arguments.length) { return highlightedFacility; }
+                highlightedFacility = _;
+                return exports;
+            };
+
+
             return exports;
         }),
     TemperatureBarGroup = D3EmberComputed(
@@ -92,7 +104,7 @@ var BarGroup = D3EmberComputed(
             function exports(selection) {
                 // Update the temperatures
                 var temperatures = selection.selectAll(".temperature")
-                        .data(function(d) { return d.get('data'); },
+                        .data(function(d) {return d.get('data');},
                               function(d) { return d.get('temperature'); });
                 temperatures.enter()
                     .append("g").attr("class", "temperature")
@@ -195,13 +207,20 @@ var BarGroup = D3EmberComputed(
                 return exports;
             };
 
+            exports.highlightedFacility = function(_) {
+                if (!arguments.length) { return highlightedFacility; }
+                bars.highlightedFacility(_);
+                return exports;
+            };
+
+
             return exports;
         });
 
 export default D3EmberComputed(
     'data.[]',
     function() {
-        var xScale, yScale, duration,
+        var xScale, yScale, duration, emberComponent,
             temperatures = TemperatureBarGroup('main');
 
         function exports(selection) {
@@ -210,7 +229,7 @@ export default D3EmberComputed(
 
                 // Update the facilities
                 var facilities = g.selectAll(".category")
-                        .data(function(d) {return d.data; },
+                        .data(function(d) {return d.data;},
                               function(d) {return d.get('id');});
                 facilities.enter()
                     .append("g").attr("class", "category")
@@ -231,6 +250,10 @@ export default D3EmberComputed(
 
                 facilities.exit()
                     .remove();
+
+                facilities.on('click', function(facility) {
+                    emberComponent.send('clickFacility', facility);
+                });
             });
         }
 
@@ -271,6 +294,19 @@ export default D3EmberComputed(
             temperatures.color(_);
             return exports;
         };
+
+        exports.highlightedFacility = function(_) {
+            if (!arguments.length) { return highlightedFacility; }
+            temperatures.highlightedFacility(_);
+            return exports;
+        };
+
+        exports.emberComponent = function(_) {
+            if (!arguments.length) { return emberComponent; }
+            emberComponent = _;
+            return exports;
+        };
+
 
         return exports;
     });

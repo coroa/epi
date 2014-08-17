@@ -47,6 +47,18 @@ export default Ember.Controller.extend({
         return this.get('controllers.facilities').findBy('level.id', '1');
     }.property('controllers.facilities.@each.level'),
 
+
+    /**
+     * `detailedFacility` is a property, which makes a panel with
+     * detailed information on the equipment in a facilty appear, when
+     * set. A value of `null` hides the panel.
+     *
+     * @property detailedFacility
+     * @type FacilityController|null
+     * @default null
+     */
+    detailedFacility: null,
+
     /**
      * `temperatureChoices` lists the available temperatures, defined
      * in the temperature Enum. Used by the temperature select box for

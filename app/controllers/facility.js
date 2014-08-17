@@ -38,11 +38,7 @@ export default Ember.ObjectController.extend({
         });
 
         controller.beginPropertyChanges();
-        controller.get('children')
-            // .then(function() {
-            //     controller.get('wrappedChildren');
-            // })
-            .finally(function() {
+        controller.get('children').finally(function() {
                 controller.endPropertyChanges();
             });
     },

@@ -6,9 +6,11 @@
       = name
 
     .row
-      .col-sm-3.chart-col: surplus-chart data=selectedAsArray
-      .col-sm-9.chart-col: surplus-chart data=selectedChildren
+      .col-sm-3.chart-col: surplus-chart data=selectedAsArray highlightedFacility=detailedFacility
+      .col-sm-9.chart-col: surplus-chart data=selectedChildren highlightedFacility=detailedFacility
 
+    facility-equipment content=detailedFacility
+      
     frequency-chart parent=selected level=freqLevel temperature=freqTemperature
     form.form-inline role="form"
       p

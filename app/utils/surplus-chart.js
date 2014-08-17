@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import Enums from '../enums';
 import d3_empty from './d3-empty';
 import d3_facilities_bar_groups from './d3-facilities-bar-groups';
 
@@ -6,7 +7,7 @@ import d3_facilities_bar_groups from './d3-facilities-bar-groups';
 
 export default function SurplusChart() {
 
-    var margin           = {top: 50, right: 40, bottom: 30, left: 40},
+    var margin           = {top: 50, right: 40, bottom: 50, left: 40},
         empty            = d3_empty('main'),
         facilities       = d3_facilities_bar_groups('main'),
         xScale           = d3.scale.ordinal(),
@@ -23,7 +24,9 @@ export default function SurplusChart() {
         fadeOnHover      = true,
         noTicks          = false,
         threshold        = 5,
-        xSubScale        = d3.scale.ordinal();
+        xSubScale        = d3.scale.ordinal(),
+        highlightedFacility = null,
+        emberComponent = null;
 
     function chart(selection) {
         selection.each(function(data)
@@ -110,7 +113,9 @@ export default function SurplusChart() {
             facilities
                 .xScale(xScale).yScale(yScale).xSubScale(xSubScale)
                 .duration(duration).color(color)
-                .staticDataLabels(myStaticDataLabels);
+                .staticDataLabels(myStaticDataLabels)
+                .highlightedFacility(highlightedFacility)
+                .emberComponent(emberComponent);
             g.call(facilities);
 
             // Hover labels
@@ -129,7 +134,10 @@ export default function SurplusChart() {
                     .on("mouseover.labels", function(d) {
                         hoverLabel.style("display", "initial");
                         hoverLabel.select(".hover-label-content")
-                            .html("<p>" + d.label + " : <strong>" +
+                            .html("<p><strong>" + d.label + "</strong> capacity<br/>of "
+                                  + d.facility.get('name') + " @ " +
+                                  Enums.temperature.options[d.temperature].label
+                                  + " :<br/> <strong>" +
                                   d3.format(".2f")(d.value) + "</strong></p>");
 
                         var $hoverLabel = hoverLabel[0][0],
@@ -255,6 +263,19 @@ export default function SurplusChart() {
         }
         return chart;
     };
+
+    chart.highlightedFacility = function(_) {
+        if (!arguments.length) { return highlightedFacility; }
+        highlightedFacility = _;
+        return chart;
+    };
+
+    chart.emberComponent = function(_) {
+        if (!arguments.length) { return emberComponent; }
+        emberComponent = _;
+        return chart;
+    };
+
 
     return chart;
 }

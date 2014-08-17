@@ -12,8 +12,10 @@ export default Ember.Component.extend({
 
     chart: function() {
         return SurplusChart()
-            .staticDataLabels(this.get('staticDataLabels'));
-    }.property('staticDataLabels'),
+            .staticDataLabels(this.get('staticDataLabels'))
+            .highlightedFacility(this.get('highlightedFacility.id'))
+            .emberComponent(this);
+    }.property('staticDataLabels', 'highlightedFacility'),
 
     filteredData: function() {
         var data = this.get('data');
@@ -37,6 +39,14 @@ export default Ember.Component.extend({
                 .data([ { maxValue: this.get('maxValue'),
                           data: this.get('filteredData') } ])
                 .call(this.get('chart'));
+        }
+    },
+
+    actions: {
+        clickFacility: function(facility) {
+            this.set('highlightedFacility',
+                     this.get('highlightedFacility') === facility ?
+                     null : facility);
         }
     }
 });

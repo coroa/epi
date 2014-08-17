@@ -1,0 +1,7 @@
+if isVisible: with content
+  .panel-heading.clearfix
+    ' Equipment of
+    = name
+    a.btn.btn-default.btn-xs.pull-right href="#" click="close": i.fa.fa-times
+  .panel-body
+    ' Population and stuff
