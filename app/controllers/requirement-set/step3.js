@@ -4,7 +4,6 @@ import Enums from '../../enums';
 export default Ember.Controller.extend({
     needs: ['requirements', 'facilities', 'levels'],
 
-
     /**
      * `selectedAsArray` wraps the selected facility into an array, so
      * it can be fed into a surplus-chart. This shows the left of the
@@ -37,11 +36,37 @@ export default Ember.Controller.extend({
      */
     selected: Ember.computed.oneWay('country'),
 
+    /**
+     * finds the controller associated with the top-level country
+     *
+     * @property country
+     * @type FacilityController
+     * @default Facility on level with id 1
+     */
     country: function() {
         return this.get('controllers.facilities').findBy('level.id', '1');
     }.property('controllers.facilities.@each.level'),
 
+    /**
+     * `temperatureChoices` lists the available temperatures, defined
+     * in the temperature Enum. Used by the temperature select box for
+     * the frequency chart.
+     *
+     * @property temperatureChoices
+     * @type Array of mainly { id: <id>, label: <label> }
+     */
     temperatureChoices: Enums.temperature.options,
+
+    /**
+     * `levelChoices` lists the levels, which the level select box of
+     * the temperature should show. As the frequency chart only means
+     * to show descendants of the facility in `selected`, only levels
+     * below that of `selected` are included.
+     *
+     * @property levelChoices
+     * @type Array of Level
+     * @default Levels below the one of `selected.level`
+     */
     levelChoices: function() {
         var levels = this.get('controllers.levels').mapBy('model'),
             index = levels.indexOf(this.get('selected.level'));
@@ -50,9 +75,29 @@ export default Ember.Controller.extend({
         } else {
             return levels;
         }
-    }.property('controllers.levels', 'selected'),
-    subTemperature: Enums.temperature.PLUS5,
-    subLevel: function(key, value) {
+    }.property('controllers.levels.[]', 'selected'),
+
+    /**
+     * `freqTemperature` is bound to the temperature select box for
+     * the frequency chart.
+     *
+     * @property freqTemperature
+     * @type Enum from Enums.temperature
+     * @default Enums.temperature.PLUS5
+     */
+    freqTemperature: Enums.temperature.PLUS5,
+
+    /**
+     * `freqLevel` is bound to the level select box for the frequency
+     * chart.
+     *
+     * Whenever the `selected` facility changes, it assumes the level
+     * `selected.level` + 2.
+     *
+     * @property freqLevel
+     * @type Level (Model of)
+     */
+    freqLevel: function(key, value) {
         if (arguments.length > 1) {
             return value;
         }

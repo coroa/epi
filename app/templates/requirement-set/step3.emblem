@@ -9,11 +9,11 @@
       .col-sm-3.chart-col: surplus-chart data=selectedAsArray
       .col-sm-9.chart-col: surplus-chart data=selectedChildren
 
-    frequency-chart parent=selected level=subLevel temperature=subTemperature
+    frequency-chart parent=selected level=freqLevel temperature=freqTemperature
     form.form-inline role="form"
       p
         ' Frequency of differences at temperature
-        unbound-select content=temperatureChoices optionValuePath="content.id" optionLabelPath="content.label" value=subTemperature
+        unbound-select content=temperatureChoices optionValuePath="content.id" optionLabelPath="content.label" value=freqTemperature
         '
         ' for facilities at level
-        unbound-select content=levelChoices optionValuePath="content.id" optionLabelPath="content.name" selection=subLevel
+        unbound-select content=levelChoices optionValuePath="content.id" optionLabelPath="content.name" selection=freqLevel
