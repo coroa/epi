@@ -1,5 +1,12 @@
 import Em from 'ember';
 
+/**
+ * Provides a convenient promised-based ajax function wrapping
+ * jQuery's ajax, used by the DHISAdapter classes.
+ *
+ * @class AjaxHelperMixin
+ */
+
 export default Em.Mixin.create({
     headers: {
         Accept: 'application/json'
@@ -24,7 +31,7 @@ export default Em.Mixin.create({
             };
 
             Em.$.ajax(hash);
-        }, "DS: DHISAdapter#ajax " + type + " to " + url);
+        }, "DS: AjaxHelperMixin#ajax " + type + " to " + url);
     },
     ajaxOptions: function(url, type, hash) {
         hash = hash || {};

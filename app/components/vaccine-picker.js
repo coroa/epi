@@ -12,7 +12,7 @@ export default Ember.Component.extend(AffectingMixin, {
      * Whether to render the inside of the dropdown. Adjusted by
      * bootstrap calling the onDropdownToggle callback.
      *
-     * @property isOpen
+     * @property isShown
      * @type Boolean
      * @default false
      */

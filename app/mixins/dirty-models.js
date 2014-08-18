@@ -1,7 +1,12 @@
 import Ember from 'ember';
 
+/**
+ * Adds the properties `dirty` and `isDirty` to an ArrayController, to
+ * access the dirty models present in the Controller.
+ *
+ * @class DirtyModelMixin
+ */
 export default Ember.Mixin.create({
-    // dirty: Ember.computed.filterBy('@each', 'isDirty', true),
     dirty: function() {
         var models = this.filterBy('isDirty');
         if (Ember.isNone(this.itemController)) {
