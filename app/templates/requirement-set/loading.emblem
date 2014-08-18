@@ -1,19 +1,6 @@
 .center-block
   i.fa.fa-spinner.fa-spin.fa-3x.pull-left
   p
-    ' Nie mehr müde stille stehn,<br>
-      willst du die Vollendung sehn,<br>
-      mußt ins Breite dich entfalten,<br>
-      soll sich dir die Welt gestalten.
-  p
-    ' Nur Beharrung führt zum Ziel,<br>
-      nur die Fülle führt zur Klarheit,<br>
-      und im Abgrund wohnt die Wahrheit.
-
-
-  / ' ...tomorrow we will run faster,<br>
-    stretch out our arms farther...<br>
-    And then one fine morning—<br>
-    So we beat on, boats against the current,<br>
-    borne back ceaselessly into the past.
+    ' Loading facilities from the DHIS database and building them up as a tree ...<br/>
+      Hang on this might take a minute.
 
