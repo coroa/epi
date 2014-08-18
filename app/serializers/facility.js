@@ -22,6 +22,17 @@ export default DHISSerializer.extend({
                        }, this));
             }, this);
 
+        /*
+         * Referencing the equipments of a facility works in a
+         * two-layered approach: Each facility has a one-to-one
+         * relationship to a virtual equipment-list, which is
+         * referenced by the same id as the facility and is
+         * asynchronously loaded. This equipment-list has a hasMany
+         * relationship with the actual equipments (on the `items`
+         * key)
+         */
+        payload['equipments'] = payload["id"];
+
         return this._super(store, type, payload);
     }
 });

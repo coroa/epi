@@ -10,7 +10,8 @@ export default {
             pathForType: {
                 level: "organisationUnitLevels",
                 facility: "organisationUnits",
-                dataElement: "dataElements"
+                dataElement: "dataElements",
+                equipmentList: "equipments"
             },
             periods: [ '2013' ],
             dataelements: {

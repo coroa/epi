@@ -3,5 +3,6 @@ if isVisible: with content
     ' Equipment of
     = name
     a.btn.btn-default.btn-xs.pull-right href="#" click="close": i.fa.fa-times
-  .panel-body
-    ' Population and stuff
+  / .panel-body
+  ul.list-group
+    each equipments.items: li.list-group-item: name
