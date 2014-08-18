@@ -89,6 +89,10 @@ export default Ember.Mixin.create({
     _arrayRemoveSource: function(topArray, start, removed) {
         var sourcePath = this.get('_sourcePath'),
             sourceKey = this.get('_sourceKey');
+        // console.log('_arrayRemoveSource, removing',
+        //             topArray.slice(start, start+removed).map(function(item) {
+        //                 return item.toString();
+        //             }).join(","));
         topArray.slice(start, start+removed)
             .forEach(function(item) {
                 this.removeSource(Ember.get(item, sourcePath), sourceKey);
@@ -111,6 +115,10 @@ export default Ember.Mixin.create({
         var sourcePath = this.get('_sourcePath'),
             sourceKey = this.get('_sourceKey'),
             mapFn = this.get('composedMapFn');
+        // console.log('_arrayAddSource, adding',
+        //             topArray.slice(start, start+added).map(function(item) {
+        //                 return item.toString();
+        //             }).join(","));
         topArray.slice(start, start+added)
             .forEach(function(item) {
                 this.addSource(Ember.get(item, sourcePath), sourceKey, mapFn);

@@ -178,6 +178,8 @@ export default Ember.ArrayProxy.extend({
             source = this._sources[Ember.guidFor(sourceObj)+sourceKey];
         if (Ember.isArray(sourceArray) && !Ember.isNone(source)) {
             // it's no stray event
+            // console.log('_sourceWillChange in',
+            //             sourceObj.toString(), 'removing observers');
 
             //Remove array observers
             sourceArray.removeArrayObserver(this, {
@@ -205,8 +207,8 @@ export default Ember.ArrayProxy.extend({
         var sourceArray = Ember.get(sourceObj, sourceKey),
             source = this._sources[Ember.guidFor(sourceObj)+sourceKey];
         if (Ember.isArray(sourceArray) && !Ember.isNone(source)) {
-            console.log('_sourceDidChange in',
-                        sourceObj.toString(), 'adding observers');
+            // console.log('_sourceDidChange in',
+            //             sourceObj.toString(), 'adding observers');
             //Add array observers. These will get called every time an item is added to or removed from the source array
             sourceArray.addArrayObserver(this, {
                 willChange: this._getObserverProxy('_sourceContentWillChange', sourceObj, sourceKey),
@@ -235,6 +237,8 @@ export default Ember.ArrayProxy.extend({
      * @private
      */
     _sourceContentWillChange: function(sourceObj, sourceKey, sourceArray, start, removed, added) {
+        // console.log('_sourceContentWillChange in',
+        //             sourceObj.toString(), 'at', start);
         this.get('_changequeue').push(
             { source: this._sources[Ember.guidFor(sourceObj)+sourceKey],
               sourceArray: sourceArray,
@@ -265,6 +269,8 @@ export default Ember.ArrayProxy.extend({
      * @private
      */
     _sourceContentDidChange: function(sourceObj, sourceKey, sourceArray, start, removed, added) {
+        // console.log('_sourceContentDidChange in',
+        //             sourceObj.toString(), 'at', start);
         var queue = this.get('_changequeue'),
             change = queue.objectAt(queue.length - 1),
             source = this._sources[Ember.guidFor(sourceObj)+sourceKey];
@@ -331,9 +337,9 @@ export default Ember.ArrayProxy.extend({
             // }
 
             var newValues = ch.newValues.map(ch.source.mapFn);
-            console.log('Accumulated changed array at', pos.index
-                        + ch.start, 'we\'re removing',
-                        ch.removed, 'and adding', ch.newValues.length );
+            // console.log('Accumulated changed array at', pos.index
+            //             + ch.start, 'we\'re removing',
+            //             ch.removed, 'and adding', ch.newValues.length );
             this.replace(pos.index + ch.start, ch.removed, newValues);
             if (ch.added !== ch.removed) {
                 var delta = ch.added - ch.removed;
