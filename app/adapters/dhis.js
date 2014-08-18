@@ -3,7 +3,6 @@ import DS from 'ember-data';
 import AjaxHelperMixin from '../mixins/ajax-helper';
 
 export default DS.Adapter.extend(AjaxHelperMixin, {
-    findAllinProcess: {},
     buildURL: function(type, id) {
         var adapter = this;
         return this.dhis.baseURL.then(function(baseURL) {
@@ -13,24 +12,17 @@ export default DS.Adapter.extend(AjaxHelperMixin, {
         });
     },
     findAll: function(store, type, sinceToken) {
-        var adapter = this, query,
-            findAllinProcess = Em.get(this, 'findAllinProcess');
+        var adapter = this, query;
 
         if (sinceToken) {
           query = { since: sinceToken };
         }
 
         console.log('findAll for', type.typeKey);
-        var promise = adapter.buildURL(type.typeKey)
+        return adapter.buildURL(type.typeKey)
             .then(function(url) {
                 return adapter.ajax(url, 'GET', { data: query });
-            })
-            .then(function(json) {
-                delete findAllinProcess[type.typeKey];
-                return json;
-            });
-        Em.set(findAllinProcess, type.typeKey, promise);
-        return promise;
+            }) ;
     },
     findQuery: function(store, type, query) {
         var adapter = this;
@@ -41,31 +33,9 @@ export default DS.Adapter.extend(AjaxHelperMixin, {
     },
     find: function(store, type, id) {
         var adapter = this;
-        if (type.typeKey === 'level') {
-            // We have to either fire a findAll or already know there
-            // is one in process and return the right data as soon as
-            // it returns
-            var findAllinProcess = Em.get(this, 'findAllinProcess');
-            if (Em.get(findAllinProcess, type.typeKey) === null) {
-                // it's not running, hmm have the store kick it off
-                store.find(type.typeKey);
-                Em.assert('store.find must put it in findAllinProcess',
-                          Em.get(findAllinProcess, type.typeKey) !== null);
-            }
-            return Em.get(findAllinProcess, type.typeKey)
-                .then(function(json) {
-                    // the level number returned by DHIS is an integer,
-                    // while Ember uses string ids
-                    var result = json[adapter.dhis.getPathFor(type.typeKey)]
-                            .findBy(Em.get(store.serializerFor(type),'primaryKey'),
-                                    parseInt(id));
-                    return result;
-                });
-        } else {
-            return adapter.buildURL(type.typeKey, id)
-                .then(function(url) {
-                    return adapter.ajax(url, 'GET');
-                });
-        }
+        return adapter.buildURL(type.typeKey, id)
+            .then(function(url) {
+                return adapter.ajax(url, 'GET');
+            });
     }
 });
