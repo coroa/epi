@@ -16,7 +16,8 @@
     "d3": "~3.4.8",
     "ember-group-helper-dist": "*",
     "font-awesome": "~4.1.0",
-    "file-saver": "*"
+    "file-saver": "*",
+    "ember-localstorage-adapter": "https://github.com/coroa/ember-localstorage-adapter.git#~0.3.2"
   },
   "devDependencies": {
     "ember-debug": "~0.3.1"
