@@ -2,20 +2,21 @@
   .col-sm-3
     em-tree model=country itemController="facility" selected=selected expand-depth=1
   .col-sm-9
-    with selected
-      = name
+    form.form-inline role="form": p
+      ' Compare the required/actual storage capacity for
+      strong: = selected.name
+      '
+      ' at temperature
+      unbound-select content=temperatureChoices optionValuePath="content.id" optionLabelPath="content.label" value=temperature
 
     .row
-      .col-sm-3.chart-col: surplus-chart data=selectedAsArray highlightedFacility=detailedFacility
-      .col-sm-9.chart-col: surplus-chart data=selectedChildren highlightedFacility=detailedFacility
+      .col-sm-3.chart-col: surplus-chart data=selectedAsArray highlightedFacility=detailedFacility temperature=temperature
+      .col-sm-9.chart-col: surplus-chart data=selectedChildren highlightedFacility=detailedFacility temperature=temperature
 
     facility-equipment content=detailedFacility
       
-    frequency-chart parent=selected level=freqLevel temperature=freqTemperature
+    frequency-chart parent=selected level=freqLevel temperature=temperature
     form.form-inline role="form"
       p
-        ' Frequency of differences at temperature
-        unbound-select content=temperatureChoices optionValuePath="content.id" optionLabelPath="content.label" value=freqTemperature
-        '
-        ' for facilities at level
+        ' Frequency of differences for facilities at level
         unbound-select content=levelChoices optionValuePath="content.id" optionLabelPath="content.name" selection=freqLevel

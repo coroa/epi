@@ -16,8 +16,13 @@ export default Ember.Component.extend({
             .staticDataLabels(this.get('staticDataLabels'))
             .highlightedFacility(this.get('highlightedFacility.id'))
             .yUnitLabel(this.get('unit'))
+            .temperature(this.get('temperature'))
             .emberComponent(this);
     }.property('staticDataLabels', 'highlightedFacility', 'unit'),
+
+    updateTemperature: function() {
+        this.get('chart').temperature(this.get('temperature'));
+    }.observes('temperature'),
 
     filteredData: function() {
         var data = this.get('data');
@@ -32,7 +37,7 @@ export default Ember.Component.extend({
 
     scheduleUpdate: function() {
         Ember.run.scheduleOnce('render', this, 'update');
-    }.observes('filteredData.[]', 'maxValue', 'chart').on('didInsertElement'),
+    }.observes('filteredData.[]', 'maxValue', 'chart', 'temperature').on('didInsertElement'),
 
     update: function() {
         var $el = this.$();

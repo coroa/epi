@@ -5,6 +5,6 @@
 .container
   ul.nav.nav-pills
     each chart in charts
-      chart-select-item value=chart.id label=chart.label selected_chart=selected_chart
+      chart-select-item value=chart.id label=chart.label title=chart.title selected_chart=selected_chart
 
   view "chart-panes" selected=selected_chart content=charts

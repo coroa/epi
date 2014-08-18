@@ -5,6 +5,24 @@ export default Ember.Controller.extend({
     needs: ['requirements', 'facilities', 'levels'],
 
     /**
+     * `temperatureChoices` lists the available temperatures, defined
+     * in the temperature Enum. Used by the temperature select box.
+     *
+     * @property temperatureChoices
+     * @type Array of mainly { id: <id>, label: <label> }
+     */
+    temperatureChoices: Enums.temperature.options,
+
+    /**
+     * `temperature` is bound to the temperature select box.
+     *
+     * @property freqTemperature
+     * @type Enum from Enums.temperature
+     * @default Enums.temperature.PLUS5
+     */
+    temperature: Enums.temperature.PLUS5,
+
+    /**
      * `selectedAsArray` wraps the selected facility into an array, so
      * it can be fed into a surplus-chart. This shows the left of the
      * two clustered bar charts.
@@ -60,16 +78,6 @@ export default Ember.Controller.extend({
     detailedFacility: null,
 
     /**
-     * `temperatureChoices` lists the available temperatures, defined
-     * in the temperature Enum. Used by the temperature select box for
-     * the frequency chart.
-     *
-     * @property temperatureChoices
-     * @type Array of mainly { id: <id>, label: <label> }
-     */
-    temperatureChoices: Enums.temperature.options,
-
-    /**
      * `levelChoices` lists the levels, which the level select box of
      * the temperature should show. As the frequency chart only means
      * to show descendants of the facility in `selected`, only levels
@@ -88,16 +96,6 @@ export default Ember.Controller.extend({
             return levels;
         }
     }.property('controllers.levels.[]', 'selected'),
-
-    /**
-     * `freqTemperature` is bound to the temperature select box for
-     * the frequency chart.
-     *
-     * @property freqTemperature
-     * @type Enum from Enums.temperature
-     * @default Enums.temperature.PLUS5
-     */
-    freqTemperature: Enums.temperature.PLUS5,
 
     /**
      * `freqLevel` is bound to the level select box for the frequency

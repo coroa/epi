@@ -13,7 +13,8 @@ export default function SurplusChart() {
         xAxis            = d3.svg.axis().scale(xScale).innerTickSize(0).tickPadding(15).orient("bottom"),
         yAxis            = d3.svg.axis().scale(yScale).ticks(5).orient("left"),
         yUnitLabel       = null,
-        color            = d3.scale.category10(),
+        color            = d3.scale.category10()
+            .domain(['Required', 'Actual', 'Surplus', 'Shortfall']),
         duration         = 500,
         rotateAxisLabels = false,
         hideAxisLabels   = false,
@@ -25,6 +26,7 @@ export default function SurplusChart() {
         threshold        = 5,
         xSubScale        = d3.scale.ordinal(),
         highlightedFacility = null,
+        temperature      = null,
         emberComponent = null;
 
     function chart(selection) {
@@ -136,25 +138,13 @@ export default function SurplusChart() {
                         + ",0)";
                 });
 
-            // Update the temperatures
-            var temperatures = facilities.selectAll(".temperature")
-                    .data(function(d) {return d.get('data');},
-                          function(d) { return d.get('temperature'); });
-            temperatures.enter()
-                .append("g").attr("class", "temperature")
-                .attr("transform", function(d) {
-                    return "translate(" + xSubScale(d.get('temperature')) + ",0)";
-                });
-            temperatures
-                .transition()
-                .duration(duration)
-                .attr("transform", function(d) {
-                    return "translate(" + xSubScale(d.get('temperature')) + ",0)";
-                });
-
-            var bars = temperatures.selectAll(".bar")
-                    .data(function(d) {
-                        var width = xSubScale.rangeBand()/3,
+            var bars = facilities.selectAll(".bar")
+                    .data(function(t) {
+                        var d = t.get('data').objectAt(temperature);
+                        if (Ember.isNone(d)) {
+                            return [];
+                        }
+                        var width = xScale.rangeBand()/3,
                             requirement = d.get('requirement') || 0,
                             capacity = d.get('capacity') || 0,
                             difference = d.get('difference'),
@@ -162,9 +152,9 @@ export default function SurplusChart() {
                             base = d.getProperties('facility',
                                                    'temperature');
                         return [ { label: "Required", value: requirement },
-                                 { label: "Actual", value: capacity },
+                                 { label: "Actual" , value: capacity },
                                  { label: (difference > 0
-                                           ? "Missing" : "Surplus"),
+                                           ? "Shortfall" : "Surplus"),
                                    value: difference } ]
                             .map(function(obj, i) {
                                 return Ember.$.extend(obj, base, {
@@ -182,8 +172,8 @@ export default function SurplusChart() {
                 .attr("x", function(d) {return d.x; })
                 .attr("y", yScale(0));
             bars // update
-                .attr("stroke-width", function(d) {return d.isHighlighted ? 2:0;})
                 .attr("fill", function(d) {return color(d.label);})
+                .attr("stroke-width", function(d) {return d.isHighlighted ? 2:0;})
                 .transition()
                 .duration(duration)
                 .attr("width", function(d) {return d.width;})
@@ -200,9 +190,6 @@ export default function SurplusChart() {
                 .remove();
 
 
-            temperatures.exit()
-                .remove();
-
             facilities.exit()
                 .remove();
 
@@ -211,52 +198,52 @@ export default function SurplusChart() {
             });
 
             // Static data labels
-            if (myStaticDataLabels) {
-                var dataLabels = temperatures.selectAll(".dataLabel")
-                        .data(function(d) {
-                            return [{temperature: d.get('temperature'),
-                                     label: Enums.temperature.options[d.get('temperature')].label,
-                                     max: Math.max(d.get('requirement'),
-                                                   d.get('capacity')),
-                                     width: xSubScale.rangeBand()}]; });
-                var dataLabelsEnter = dataLabels.enter()
-                        .append("g")
-                        .attr("class", "dataLabel")
-                        .attr("transform",
-                              function(d) { return "translate(" + d.width/2 + "," +
-                                     (yScale(0) - 30) + ")"; });
+            // if (myStaticDataLabels) {
+            //     var dataLabels = temperatures.selectAll(".dataLabel")
+            //             .data(function(d) {
+            //                 return [{temperature: d.get('temperature'),
+            //                          label: Enums.temperature.options[d.get('temperature')].label,
+            //                          max: Math.max(d.get('requirement'),
+            //                                        d.get('capacity')),
+            //                          width: xSubScale.rangeBand()}]; });
+            //     var dataLabelsEnter = dataLabels.enter()
+            //             .append("g")
+            //             .attr("class", "dataLabel")
+            //             .attr("transform",
+            //                   function(d) { return "translate(" + d.width/2 + "," +
+            //                          (yScale(0) - 30) + ")"; });
 
-                dataLabelsEnter.append("text")
-                    .attr("class", "static_label")
-                    .attr("text-anchor", "middle");
+            //     dataLabelsEnter.append("text")
+            //         .attr("class", "static_label")
+            //         .attr("text-anchor", "middle");
 
-                // dataLabelsEnter.append("text")
-                //     .attr("class", "value")
-                //     .attr("text-anchor", "middle")
-                //     .attr("transform", "translate(0,20)")
-                //     .style("font-weight", "bold")
-                //     .style("fill", '#1f77b4');
+            //     // dataLabelsEnter.append("text")
+            //     //     .attr("class", "value")
+            //     //     .attr("text-anchor", "middle")
+            //     //     .attr("transform", "translate(0,20)")
+            //     //     .style("font-weight", "bold")
+            //     //     .style("fill", '#1f77b4');
 
-                dataLabels
-                    .transition()
-                    .duration(duration)
-                    .attr("transform",
-                          function(d) { return "translate(" + d.width/2 + "," +
-                                 (yScale(d.max) - 20) + ")"; });
+            //     dataLabels
+            //         .transition()
+            //         .duration(duration)
+            //         .attr("transform",
+            //               function(d) { return "translate(" + d.width/2 + "," +
+            //                      (yScale(d.max) - 20) + ")"; });
 
-                dataLabels
-                    .select(".static_label")
-                    .text(function(d) {return d.label;});
-                // dataLabels
-                //     .select(".value")
-                //     .text(function(d) {return d3.format(".2f")(d.);});
+            //     dataLabels
+            //         .select(".static_label")
+            //         .text(function(d) {return d.label;});
+            //     // dataLabels
+            //     //     .select(".value")
+            //     //     .text(function(d) {return d3.format(".2f")(d.);});
 
-                dataLabels.exit()
-                    .transition()
-                    .duration(duration)
-                    .style("opacity", 0)
-                    .remove();
-            }
+            //     dataLabels.exit()
+            //         .transition()
+            //         .duration(duration)
+            //         .style("opacity", 0)
+            //         .remove();
+            // }
 
             // Hover labels
             if (hoverDataLabels) {
@@ -403,6 +390,12 @@ export default function SurplusChart() {
             ? (_.replace("<sup>", '<tspan dy="-0.5em" font-size="0.7em">')
                .replace("</sup>", '</tspan>'))
             : _;
+        return chart;
+    };
+
+    chart.temperature = function(_) {
+        if (!arguments.length) { return temperature; }
+        temperature = _;
         return chart;
     };
 

@@ -42,13 +42,19 @@ Enums.charts = {
     VOLPERLEVEL: 1,
     VOLTABLE: 2,
     options: [
-        { label: 'Volume per course',
+        { label: 'Volume per course chart',
+          title: 'Volume in secondary packaging of a complete series'
+          + ' of immunization in cubic cms as a chart',
           template: 'chart1',
           controller: 'chart1' },
-        { label: 'Aggregated volume per level',
+        { label: 'Lts. net storage volume chart',
+          title: 'Lts. net storage volume per level, temperature and'
+          + ' service for the reference population as a chart',
           template: 'chart2',
           controller: 'chart2' },
-        { label: 'Volume per level as table',
+        { label: 'Lts. net storage volume table',
+          title: 'Lts. net storage volume per level, temperature and'
+          + ' service for the reference population as a table',
           template: 'volume-table',
           controller: 'volume-table' }
     ]
