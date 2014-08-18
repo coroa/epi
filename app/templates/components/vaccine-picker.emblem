@@ -6,7 +6,7 @@ button.btn.btn-default.dropdown-toggle.form-control type="button" data-toggle="d
   span.caret
 .dropdown-menu.row
   if isShown: group
-    .col-sm-3: .panel.panel-default
+    .col-sm-4: .panel.panel-default
       .panel-heading: strong Choose a generic
       table.table.table-condensed.table-hover.panel-body
         thead: tr
@@ -17,7 +17,7 @@ button.btn.btn-default.dropdown-toggle.form-control type="button" data-toggle="d
             tr click="choose this" class=isActive:active
               td = doses_per_vial
               td: rounded-number content=vaccine_volume
-    .col-sm-7: .panel.panel-default style="overflow:auto; max-height: 400px;"
+    .col-sm-8: .panel.panel-default style="overflow:auto; max-height: 400px;"
       .panel-heading: strong Choose a specific product
       table.table.table-condensed.table-hover.panel-body
         thead: tr
@@ -32,5 +32,5 @@ button.btn.btn-default.dropdown-toggle.form-control type="button" data-toggle="d
               td: rounded-number content=vaccine_volume
               td = presentation
               td = manufacturer
-    .col-sm-2
+    / .col-sm-2
       ' Graphic
