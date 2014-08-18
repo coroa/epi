@@ -19,7 +19,7 @@ h2 = label
           td Diluent
       tbody
         each requirements: tr
-          td.delete: button.btn.btn-default click="delete"
+          td.delete: a.btn.btn-default click="delete"
             i.fa.fa-times
           td: unbound-select content=controllers.vaccines.vaccineInitials value=vaccineInitials prompt="Antigen ..."
           td: vaccine-picker vaccines=vaccines vaccine=vaccine action="setAffected" requirement=this
