@@ -10,8 +10,8 @@
       unbound-select content=temperatureChoices optionValuePath="content.id" optionLabelPath="content.label" value=temperature
 
     .row
-      .col-sm-3.chart-col: surplus-chart data=selectedAsArray highlightedFacility=detailedFacility temperature=temperature
-      .col-sm-9.chart-col: surplus-chart data=selectedChildren highlightedFacility=detailedFacility temperature=temperature
+      .col-sm-2.chart-col: surplus-chart data=selectedAsArray highlightedFacility=detailedFacility temperature=temperature
+      .col-sm-10.chart-col: surplus-chart data=selectedChildren highlightedFacility=detailedFacility temperature=temperature
 
     facility-equipment content=detailedFacility
       
