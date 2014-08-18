@@ -52,7 +52,7 @@ var Requirement = DS.Model.extend(DestroyRecursivelyMixin, {
     _addLevelParamsets: function() {
         var _this = this,
             all = Em.RSVP.all,
-            levels = _this.store.all('level');
+            levels = _this.store.all('level').sortBy('id');
         console.log('Will create a levelParamset per level for ' +
                     _this + ': ');
 
