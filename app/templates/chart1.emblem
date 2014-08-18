@@ -1,1 +1,1 @@
-bar-chart data=data needsUpdate=needsUpdate
+bar-chart data=data needsUpdate=needsUpdate unit="cm<sup>3</sup>"

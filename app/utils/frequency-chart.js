@@ -9,6 +9,7 @@ export default function FrequencyChart() {
         yScale           = d3.scale.linear(),
         xAxis            = d3.svg.axis().scale(xScale).innerTickSize(0).tickPadding(15).orient("bottom"),
         yAxis            = d3.svg.axis().scale(yScale).ticks(5).orient("left"),
+        xUnitLabel       = null,
         color            = d3.scale.category10(),
         duration         = 500,
         oneColor         = false,
@@ -65,6 +66,17 @@ export default function FrequencyChart() {
             var gEnter = svg.enter().append("svg").append("g");
             gEnter.append("g").attr("class", "x axis").call(xAxis);
             gEnter.append("g").attr("class", "y axis").call(yAxis);
+            if (xUnitLabel) {
+                gEnter.append("text")
+                    .attr("class", "x unit-label")
+                    .attr("text-anchor", "start")
+                    .attr("x", width)
+                    .attr("y", height)
+                    .attr("dx", "1.3em")
+                    .attr("dy", "1.3em")
+                    .html(xUnitLabel);
+
+            }
 
             // Update the outer dimensions.
             svg.attr("width", width + margin.left + margin.right)
@@ -270,6 +282,15 @@ export default function FrequencyChart() {
         } else {
             xAxis.tickSize(1);
         }
+        return chart;
+    };
+
+    chart.xUnitLabel = function(_) {
+        if (!arguments.length) { return xUnitLabel; }
+        xUnitLabel = _
+            ? (_.replace("<sup>", '<tspan dy="-0.5em" font-size="0.7em">')
+               .replace("</sup>", '</tspan>'))
+            : _;
         return chart;
     };
 

@@ -14,8 +14,9 @@ export default Ember.Component.extend({
     chart: function() {
         return BarChart()
             .manyColors(true)
-            .staticDataLabels(this.get('staticDataLabels'));
-    }.property('staticDataLabels', 'categories'),
+            .staticDataLabels(this.get('staticDataLabels'))
+            .yUnitLabel(this.get('unit'));
+    }.property('staticDataLabels', 'categories', 'unit'),
 
     scheduleUpdate: function() {
         Ember.run.scheduleOnce('render', this, 'update');

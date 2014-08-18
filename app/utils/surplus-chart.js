@@ -12,6 +12,7 @@ export default function SurplusChart() {
         yScale           = d3.scale.linear(),
         xAxis            = d3.svg.axis().scale(xScale).innerTickSize(0).tickPadding(15).orient("bottom"),
         yAxis            = d3.svg.axis().scale(yScale).ticks(5).orient("left"),
+        yUnitLabel       = null,
         color            = d3.scale.category10(),
         duration         = 500,
         rotateAxisLabels = false,
@@ -77,6 +78,15 @@ export default function SurplusChart() {
             var gEnter = svg.enter().append("svg").append("g");
             gEnter.append("g").attr("class", "x axis").call(xAxis);
             gEnter.append("g").attr("class", "y axis").call(yAxis);
+            if (yUnitLabel) {
+                gEnter.append("text")
+                    .attr("class", "y unit-label")
+                    .attr("text-anchor", "end")
+                    .attr("dx", "-2")
+                    .attr("y", 0)
+                    .attr("dy", "-1em")
+                    .html(yUnitLabel);
+            }
 
             // Update the outer dimensions.
             svg.attr("width", width + myMargin.left + myMargin.right)
@@ -384,6 +394,15 @@ export default function SurplusChart() {
     chart.emberComponent = function(_) {
         if (!arguments.length) { return emberComponent; }
         emberComponent = _;
+        return chart;
+    };
+
+    chart.yUnitLabel = function(_) {
+        if (!arguments.length) { return yUnitLabel; }
+        yUnitLabel = _
+            ? (_.replace("<sup>", '<tspan dy="-0.5em" font-size="0.7em">')
+               .replace("</sup>", '</tspan>'))
+            : _;
         return chart;
     };
 

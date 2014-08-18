@@ -126,9 +126,11 @@ export default Ember.Component.extend({
     }.property('differences', 'facilities.[]'),
 
     classNames: ['chart'],
+    xUnit: 'Lts.',
     chart: function() {
-        return FrequencyChart();
-    }.property(),
+        return FrequencyChart()
+            .xUnitLabel(this.get('xUnit'));
+    }.property('xUnit'),
 
     scheduleUpdate: function() {
         Ember.run.scheduleOnce('render', this, 'update');

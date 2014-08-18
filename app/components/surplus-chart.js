@@ -9,13 +9,15 @@ import SurplusChart from '../utils/surplus-chart';
 export default Ember.Component.extend({
     classNames: ['chart','surplus'],
     staticDataLabels: true,
+    unit: 'Lts.',
 
     chart: function() {
         return SurplusChart()
             .staticDataLabels(this.get('staticDataLabels'))
             .highlightedFacility(this.get('highlightedFacility.id'))
+            .yUnitLabel(this.get('unit'))
             .emberComponent(this);
-    }.property('staticDataLabels', 'highlightedFacility'),
+    }.property('staticDataLabels', 'highlightedFacility', 'unit'),
 
     filteredData: function() {
         var data = this.get('data');
