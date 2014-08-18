@@ -26,6 +26,9 @@ Development continues even after the end of the GSoC in the Github
 repository at https://www.github.com/coroa/epi, feel free to drop
 issues and questions there.
 
+The app is currently installed on a test-instance for DHIS2 CCEI,
+featuring the laos dataset, at http://212.71.248.145:8080/ccei_laos/. 
+
 ## Installation
 
 * `git clone` this repository
