@@ -20,18 +20,18 @@ h2 = label
       tbody
         each requirements: tr
           td.delete: button.btn.btn-default click="delete"
-            span.glyphicon.glyphicon-remove
+            i.fa.fa-times
           td: unbound-select content=controllers.vaccines.vaccineInitials value=vaccineInitials prompt="Antigen ..."
           td: vaccine-picker vaccines=vaccines vaccine=vaccine action="setAffected" requirement=this
           td: affecting-text value=elligible_percent action="setAffected" requirement=this
           td
             affecting-text value=wastage_rate2 classBinding="wastage_rate_isCustom:btn-warning" action="setAffected" requirement=this
             if wastage_rate_isCustom
-              span.glyphicon.glyphicon-remove.form-control-feedback click="reset 'wastage_rate'"
+              i.fa.fa-times.form-control-feedback click="reset 'wastage_rate'"
           td
             affecting-text value=vaccine_volume2 classBinding="vaccine_volume_isCustom:btn-warning" action="setAffected" requirement=this
             if vaccine_volume_isCustom
-              span.glyphicon.glyphicon-remove.form-control-feedback click="reset 'vaccine_volume'"
+              i.fa.fa-times.form-control-feedback click="reset 'vaccine_volume'"
           td
             affecting-text value=diluent_volume2 classBinding="diluent_volume_isCustom:btn-warning" action="setAffected" requirement=this
             if diluent_volume_isCustom

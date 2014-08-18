@@ -50,7 +50,7 @@ if tableLines
             each resultTableLine.content: td class={isAffected:danger}
               = input value=value2 class="form-control" classBinding="isCustom:btn-warning"
               if isCustom
-                span.glyphicon.glyphicon-remove.form-control-feedback click="resetSIA this"
+                i.fa.fa-times.form-control-feedback click="resetSIA this"
   else
     .table-responsive: table.table.table-condensed.table-bordered.vaccine-table
       thead: with resultTableHead
