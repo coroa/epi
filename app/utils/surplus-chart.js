@@ -197,54 +197,6 @@ export default function SurplusChart() {
                 emberComponent.send('clickFacility', facility);
             });
 
-            // Static data labels
-            // if (myStaticDataLabels) {
-            //     var dataLabels = temperatures.selectAll(".dataLabel")
-            //             .data(function(d) {
-            //                 return [{temperature: d.get('temperature'),
-            //                          label: Enums.temperature.options[d.get('temperature')].label,
-            //                          max: Math.max(d.get('requirement'),
-            //                                        d.get('capacity')),
-            //                          width: xSubScale.rangeBand()}]; });
-            //     var dataLabelsEnter = dataLabels.enter()
-            //             .append("g")
-            //             .attr("class", "dataLabel")
-            //             .attr("transform",
-            //                   function(d) { return "translate(" + d.width/2 + "," +
-            //                          (yScale(0) - 30) + ")"; });
-
-            //     dataLabelsEnter.append("text")
-            //         .attr("class", "static_label")
-            //         .attr("text-anchor", "middle");
-
-            //     // dataLabelsEnter.append("text")
-            //     //     .attr("class", "value")
-            //     //     .attr("text-anchor", "middle")
-            //     //     .attr("transform", "translate(0,20)")
-            //     //     .style("font-weight", "bold")
-            //     //     .style("fill", '#1f77b4');
-
-            //     dataLabels
-            //         .transition()
-            //         .duration(duration)
-            //         .attr("transform",
-            //               function(d) { return "translate(" + d.width/2 + "," +
-            //                      (yScale(d.max) - 20) + ")"; });
-
-            //     dataLabels
-            //         .select(".static_label")
-            //         .text(function(d) {return d.label;});
-            //     // dataLabels
-            //     //     .select(".value")
-            //     //     .text(function(d) {return d3.format(".2f")(d.);});
-
-            //     dataLabels.exit()
-            //         .transition()
-            //         .duration(duration)
-            //         .style("opacity", 0)
-            //         .remove();
-            // }
-
             // Hover labels
             if (hoverDataLabels) {
 

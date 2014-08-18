@@ -4,5 +4,5 @@ cd $(dirname $0)
 ember build --environment development
 
 pushd dist
-zip -FS -r ../../apps/epi.zip *
+zip -FS -r ../epi.zip *
 popd
