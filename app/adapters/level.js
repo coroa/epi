@@ -1,3 +1,4 @@
+import Em from 'ember';
 import DHISAdapter from './dhis';
 
 export default DHISAdapter.extend({
@@ -5,7 +6,7 @@ export default DHISAdapter.extend({
     findAll: function(store, type, sinceToken) {
         var findAllinProcess = Em.get(this, 'findAllinProcess'),
             promise = this._super(store, type, sinceToken)
-                .finally(function(json) {
+                .finally(function() {
                     delete findAllinProcess[type.typeKey];
                 });
         Em.set(findAllinProcess, type.typeKey, promise);

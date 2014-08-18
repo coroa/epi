@@ -1,4 +1,3 @@
-import Em from 'ember';
 import DS from 'ember-data';
 import AjaxHelperMixin from '../mixins/ajax-helper';
 

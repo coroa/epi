@@ -9,11 +9,6 @@ export default Ember.Route.extend({
             this.controllerFor('facilities').set('model', model.facilities);
         }
     },
-    // actions: {
-    //     setAffected: function(ps, _, affected) {
-    //         this.controllerFor('requirements').setAffectedParamset(ps, affected);
-    //     }
-    // }
     model: function() {
         var models = {},
             facilities = this.controllerFor('facilities'),

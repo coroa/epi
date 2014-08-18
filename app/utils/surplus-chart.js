@@ -117,7 +117,7 @@ export default function SurplusChart() {
                     return "translate(" +
                         xScale(d.get('name'))
                         + ",0)";
-                });;
+                });
             facilities
                 .transition().duration(duration)
                 .attr("transform", function(d) {
@@ -201,7 +201,7 @@ export default function SurplusChart() {
             });
 
             // Static data labels
-            if (staticDataLabels) {
+            if (myStaticDataLabels) {
                 var dataLabels = temperatures.selectAll(".dataLabel")
                         .data(function(d) {
                             return [{temperature: d.get('temperature'),

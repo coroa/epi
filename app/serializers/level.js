@@ -1,3 +1,4 @@
+import Em from 'ember';
 import DHISSerializer from './dhis';
 
 export default DHISSerializer.extend({
@@ -5,7 +6,7 @@ export default DHISSerializer.extend({
     extractArray: function(store, type, arrayPayload) {
         // we need a deep copy
         arrayPayload = arrayPayload.map(function(p) {
-            return Em.$.extend({}, p);
+            return Em.copy(p);
         });
         return this._super(store, type, arrayPayload);
     }

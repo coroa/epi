@@ -17,9 +17,7 @@ export default function uploadJSON() {
                 var file = this.files[0],
                     reader = new window.FileReader();
                 reader.onload = function(e) {
-                    Ember.run(function() {
-                        resolve(window.JSON.parse(e.target.result));
-                    });
+                    Ember.run(null, resolve, window.JSON.parse(e.target.result));
                 };
                 reader.readAsText(file);
             })
