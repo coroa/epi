@@ -5,7 +5,7 @@ export default Em.ObjectController.extend({
     selected_chart: null,
 
     charts: Enums.charts.options.map(function(x, id) {
-        return Ember.$.extend({ id: id }, x);
+        return Em.$.extend({ id: id }, x);
     }),
     footerCollapsed: Em.computed.none('selected_chart'),
 
